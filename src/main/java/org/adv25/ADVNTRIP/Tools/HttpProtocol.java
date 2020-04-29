@@ -10,36 +10,11 @@ import java.nio.channels.SocketChannel;
 import java.util.HashMap;
 
 
-public class Http {
+public class HttpProtocol {
 
     public static final byte[] HTTP401 = "HTTP/1.0 401 Unauthorized".getBytes();
     public static final byte[] OK_MESSAGE = "ICY 200 OK\r\n".getBytes();
     public static final byte[] BAD_MESSAGE = "ERROR - Bad Password\r\n".getBytes();
-
-
-    public static void parse(String RawMessage, HashMap<String, String> httpHeader) throws IndexOutOfBoundsException {
-        String[] lineArr = RawMessage.split("\r\n");
-
-        String[] splitedLine; //for parse
-
-        //parse http header
-        for (String line : lineArr) {
-            splitedLine = line.split(" ");
-
-            if (line.matches("GET [\\S]+ HTTP[\\S]+")) {
-                httpHeader.put("GET", splitedLine[1].replaceAll("/", ""));
-            }
-
-            if (line.matches("Authorization: Basic [\\S]+")) {
-                httpHeader.put("Authorization", splitedLine[2]);
-            }
-
-            if (line.matches("SOURCE [\\S]+ [\\S]+")) {
-                httpHeader.put("SOURCE", splitedLine[2]);
-                httpHeader.put("PASSWORD", splitedLine[1]);
-            }
-        }
-    }
 
     public static byte[] getOkMessage() {
         return "ICY 200 OK\r\n".getBytes();

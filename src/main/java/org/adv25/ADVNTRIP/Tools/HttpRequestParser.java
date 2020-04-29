@@ -2,8 +2,6 @@ package org.adv25.ADVNTRIP.Tools;
 
 
 
-import org.adv25.ADVNTRIP.Databases.DbManager;
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.StringReader;
@@ -84,4 +82,8 @@ public class HttpRequestParser {
     }
 
 }
-
+class HttpFormatException2 extends Throwable {
+    public HttpFormatException2(String s) {
+        System.out.println(s);
+    }
+}

@@ -1,20 +1,23 @@
 package org.adv25.ADVNTRIP;
 
 import org.adv25.ADVNTRIP.Clients.Client;
-import org.adv25.ADVNTRIP.Databases.DbManager;
+import org.adv25.ADVNTRIP.Databases.DAO.ClientDAO;
+import org.adv25.ADVNTRIP.Databases.DAO.StationDAO;
+import org.adv25.ADVNTRIP.Databases.Models.ClientModel;
+import org.adv25.ADVNTRIP.Databases.Models.StationModel;
 import org.adv25.ADVNTRIP.Servers.GnssStation;
-import org.adv25.ADVNTRIP.Tools.Http;
-import org.adv25.ADVNTRIP.Tools.HttpFormatException;
-import org.adv25.ADVNTRIP.Tools.HttpRequestParser;
+import org.adv25.ADVNTRIP.Tools.*;
 
 import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.channels.SocketChannel;
 import java.util.Base64;
 import java.util.NoSuchElementException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
-import static org.adv25.ADVNTRIP.Tools.Http.BAD_MESSAGE;
-import static org.adv25.ADVNTRIP.Tools.Http.OK_MESSAGE;
+import static org.adv25.ADVNTRIP.Tools.HttpProtocol.BAD_MESSAGE;
+import static org.adv25.ADVNTRIP.Tools.HttpProtocol.OK_MESSAGE;
 
 public class ConnectHandler extends Thread {
 
@@ -22,13 +25,13 @@ public class ConnectHandler extends Thread {
 
     private ByteBuffer buffer = ByteBuffer.allocate(512);
 
-    private GnssStation requestedStation;
-
     public ConnectHandler(SocketChannel socket) {
         socketChannel = socket;
     }
 
     private HttpRequestParser http;
+
+    public static final Logger log = Logger.getLogger(ConnectHandler.class.getName());
 
     @Override
     public void run() {
@@ -36,15 +39,15 @@ public class ConnectHandler extends Thread {
             socketChannel.read(buffer);
 
             String msg = new String(buffer.array());
+            log.log(Level.INFO, socketChannel.getRemoteAddress().toString() + " connected\r\n" + msg);
             http = new HttpRequestParser();
             http.parseRequest(msg);
-            http.setRemoteAddress(socketChannel.getRemoteAddress().toString());
 
-            if (http.getRequestLine().contains("GET")) //client connection
+            if (http.getRequestLine().contains("GET")){//client connection
                 clientHandler();
-
-            else if (http.getRequestLine().contains("SOURCE"))  //station connection
+            }else if (http.getRequestLine().contains("SOURCE")){ //station connection
                 stationHandler();
+            }
 
         } catch (IOException | HttpFormatException | IndexOutOfBoundsException e) {
 
@@ -56,40 +59,92 @@ public class ConnectHandler extends Thread {
 
             e.printStackTrace();
         } catch (NoSuchElementException ex) {
-            Http.sendMessageAndClose(socketChannel, buffer, Caster.GetSourceTable());
+            HttpProtocol.sendMessageAndClose(socketChannel, buffer, Caster.GetSourceTable());
         } catch (SecurityException exx) {
-            Http.sendMessageAndClose(socketChannel, buffer, BAD_MESSAGE);
+            HttpProtocol.sendMessageAndClose(socketChannel, buffer, BAD_MESSAGE);
         }
     }
 
-    void clientHandler() throws NoSuchElementException, SecurityException { //Client handled
+    void clientHandler() throws SecurityException { //Client handled
+        GnssStation requestedStation = Caster.getServer(http.getParam("GET"));
 
-        // if station not exists, will be exception
-        requestedStation = Caster.getServer(http.getParam("GET"));
-
-        if (requestedStation.isAuthentication()) {
-            // if wrong basic authorization, will be exception
-            String[] nameAndPass = basicAuthorizationDecode(http.getParam("Authorization"));
-            DbManager database = DbManager.getInstance();
-            // if wrong password, will be exception SecurityException
-            database.clientAuthorization(nameAndPass[0], nameAndPass[1]);
+        // if station not exists
+        if (requestedStation == null) {
+            log.log(Level.INFO, requestedStation + " is not exist");
+            HttpProtocol.sendMessageAndClose(socketChannel, buffer, Caster.GetSourceTable());
+            return;
         }
-        //Successful authorization! Socket not will be closed.
-        Http.sendMessage(socketChannel, buffer, OK_MESSAGE);
-        requestedStation.addClient(new Client(requestedStation, socketChannel));
+
+        ClientDAO dao = new ClientDAO();
+
+        // if station have a password
+        if (requestedStation.isAuthentication()) {
+            //user [0] and pass [1] decode
+            String[] acc = basicAuthorizationDecode(http.getParam("Authorization"));
+
+            ClientModel clientModel = dao.read(acc[0]);
+
+            //user not a registered
+            if (clientModel == null) {
+                throw new SecurityException("unknown user name or bad password");
+            }
+
+            if (acc[1].equals(clientModel.getPassword())) {
+                HttpProtocol.sendMessage(socketChannel, buffer, OK_MESSAGE);
+                requestedStation.addClient(new Client(requestedStation, socketChannel, clientModel));
+            } else {
+                throw new SecurityException("unknown user name or bad password");
+            }
+
+            return;
+        }
+
+        HttpProtocol.sendMessage(socketChannel, buffer, OK_MESSAGE);
+        requestedStation.addClient(new Client(requestedStation, socketChannel, null));
     }
 
     void stationHandler() throws SecurityException { //GNSS Station handled
+        String password = http.getParam("PASSWORD");
+        String stationName = http.getParam("SOURCE");
+        GnssStation connectedStation = Caster.getServer(stationName);
 
-        Http.sendMessage(socketChannel, buffer, Http.getOkMessage());
+        Config config = Config.getInstance();
+        String generalPassword = config.getProperties("GeneralStationPassword");
 
-        try {
-            //auto reconnect
-            requestedStation = Caster.getServer(http.getParam("SOURCE"));
-            requestedStation.setNewSocket(socketChannel);
-            //add logger
-        } catch (NoSuchElementException e) {
-            new GnssStation(http.getParam("SOURCE"), socketChannel).start();
+        //
+        if (generalPassword != null) {
+
+            if (generalPassword.equals(password)) {
+                HttpProtocol.sendMessage(socketChannel, buffer, HttpProtocol.getOkMessage());
+                if (connectedStation != null) {
+                    connectedStation.setNewSocket(socketChannel);
+                } else {
+                    new GnssStation(socketChannel, stationName);
+                }
+                return;
+            } else {
+                throw new SecurityException("unknown station name or bad password");
+            }
+        }
+
+        StationDAO dao = new StationDAO();
+        StationModel model = dao.read(stationName);
+
+        if (model == null)
+            throw new SecurityException("unknown station name or bad password");
+
+        if (password.equals(model.getPassword())) {
+            HttpProtocol.sendMessage(socketChannel, buffer, HttpProtocol.getOkMessage());
+
+            if (connectedStation != null) {
+                connectedStation.setNewSocket(socketChannel);
+            } else {
+                new GnssStation(socketChannel, model);
+            }
+
+            return;
+        } else {
+            throw new SecurityException("unknown station name or bad password");
         }
     }
 

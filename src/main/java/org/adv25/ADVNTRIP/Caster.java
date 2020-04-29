@@ -17,7 +17,7 @@ public class Caster implements Runnable {
         Config config = Config.getInstance();
 
         String portString = config.getProperties("Port");
-        String ip = config.getProperties("IpAdress");
+        String ip = config.getProperties("IpAddress");
 
         int port;
 
@@ -45,7 +45,7 @@ public class Caster implements Runnable {
     static HashMap<String, GnssStation> ServerList = new HashMap<>();
 
     public static void AddServer(GnssStation server) {
-        ServerList.put(server.getStationName(), server);
+        ServerList.put(server.getMountpoint(), server);
     }
 
     public static HashMap<String, GnssStation> GetServerList() {
@@ -53,9 +53,6 @@ public class Caster implements Runnable {
     }
 
     public static GnssStation getServer(String serverName) {
-        GnssStation response = ServerList.get(serverName);
-        if (response == null)
-            throw new NoSuchElementException("The requested station not exists!");
         return ServerList.get(serverName);
     }
 

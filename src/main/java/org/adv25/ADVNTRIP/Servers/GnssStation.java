@@ -3,6 +3,7 @@ package org.adv25.ADVNTRIP.Servers;
 
 import org.adv25.ADVNTRIP.Caster;
 import org.adv25.ADVNTRIP.Clients.IClient;
+import org.adv25.ADVNTRIP.Databases.Models.StationModel;
 
 import java.io.IOException;
 import java.nio.ByteBuffer;
@@ -18,24 +19,48 @@ public class GnssStation extends Thread {
 
     long timeLastMsg;
 
+    StationModel fields;
+
     private SocketChannel socketChannel;
 
-    public GnssStation(String name, SocketChannel s) {
-        this.Mountpoint = name;
+    public StationModel getModel(){
+        return fields;
+    }
+
+    public GnssStation(SocketChannel s, StationModel model) {
+        fields = model;
+
         this.socketChannel = s;
         Caster.AddServer(this);
-        //new Analyzer(this, 10000);
+        //new Analyzer(this);
+        this.start();
+    }
+
+    public GnssStation(SocketChannel s, String mountpoint ) {
+        fields = new StationModel();
+        fields.setMountpoint(mountpoint);
+
+        this.socketChannel = s;
+        Caster.AddServer(this);
+        //new Analyzer(this);
+        this.start();
     }
 
     public long getTimeLastMsg() {
         return timeLastMsg;
     }
 
-    public String getStationName() {
-        return this.Mountpoint;
+    public String getMountpoint() {
+        return fields.getMountpoint();
     }
 
     public void setNewSocket(SocketChannel newChannel) {
+        try{
+            this.socketChannel.close();
+        }catch (IOException e){
+            e.printStackTrace();
+        }
+
         this.socketChannel = newChannel;
     }
 
@@ -48,10 +73,7 @@ public class GnssStation extends Thread {
     }
 
     public boolean isAuthentication() {
-        if (this.Authentication == 'Y')
-            return true;
-        else
-            return false;
+        return fields.getAuthentication();
     }
 
     public void safeClose() {
@@ -70,34 +92,10 @@ public class GnssStation extends Thread {
         return clients.size();
     }
 
-    //server description
-    private long timeMark = 0; //for garbage collector
-    private String Type = "STR";
-    private String Mountpoint;
-    private String Identifier = "";
-    private String Format = "";
-    private String FormatDetails = "";
-    private String Carrier = "";
-    private String NavSystem = "";
-    private String Network = "";
-    private String Country = "";
-    private Double Latitude = 0.0;
-    private Double Longitude = 0.0;
-    private Boolean Nmea = false;
-    private Boolean Solution = false;
-    private String Generator = "";
-    private String Compression = "";
-    private char Authentication = 'N';
-    private char Fee = 'N';
-    private int Bitrate = 128;
-    private String Misc = "";
-
     //for sourcetable
     @Override
     public String toString() {
-        return Type + ';' + Mountpoint + ';' + Identifier + ';' + Format + ';' + FormatDetails + ';' + Carrier + ';' + NavSystem + ';' + Network + ';' + Country
-                + ';' + Latitude.toString() + ';' + Longitude.toString() + ';' + Nmea.toString() + ';' + Solution.toString() + ';' + Generator + ';' + Compression
-                + ';' + Authentication + ';' + Fee + ';' + Bitrate + ';' + Misc;
+        return fields.toString();
     }
 
     //Send messages

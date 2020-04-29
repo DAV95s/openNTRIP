@@ -36,6 +36,10 @@ public class Config {
     }
 
     public String getProperties(String key) {
-    	return properties.getProperty(key);
+        String prop = properties.getProperty(key);
+        if (prop == null)
+            return null;
+
+    	return prop.replaceAll("\"", "");
     }
 }

@@ -3,11 +3,9 @@ package org.adv25.ADVNTRIP.Tools;
 import org.adv25.ADVNTRIP.Clients.IClient;
 import org.adv25.ADVNTRIP.Servers.GnssStation;
 import org.adv25.ADVNTRIP.Tools.RTCM.IRTCM;
-import org.adv25.ADVNTRIP.Tools.RTCM.MSG1006;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
-
 
 
 import java.io.IOException;
@@ -18,30 +16,65 @@ import java.util.*;
 public class Analyzer implements IClient, Runnable {
     Queue<byte[]> rawData = new LinkedList<byte[]>();
 
+    HashMap<String, byte[]> rawData2 = new HashMap<>();
+
     GnssStation server; //base station
 
     Map<Integer, IRTCM> mapper = new HashMap<>();
-    
-	@Override
-	public void safeClose() throws IOException {
-			
-	}
+
+    Thread thread;
+
+    @Override
+    public void safeClose() throws IOException {
+
+    }
 
     @Override
     public void sendMessage(ByteBuffer bb) throws IOException {
-        rawData.add(bb.array());
+        if (bb.limit () == 0)
+            return;
+
+        int preambleIndex, shift, msgNmb;
+
+        while (bb.hasRemaining()) {
+            if (bb.get() != -45)
+                continue;
+
+            preambleIndex = bb.position();
+            shift = bb.getShort(preambleIndex) + 5;
+            msgNmb = (bb.getShort(preambleIndex + 2) & 0xffff) >> 4;
+            System.out.println(msgNmb);
+            try {
+                byte[] msg = new byte[shift];
+                bb.get(msg, preambleIndex, shift);
+                rawData2.put(String.valueOf(msgNmb), msg);
+                bb.position(preambleIndex);
+                bb.position(preambleIndex + shift);
+            } catch (IllegalArgumentException e) {
+                break;
+            }
+        }
     }
 
-    public Analyzer(GnssStation server, int TimeMilliseconds) {
+    public Analyzer(GnssStation server) {
         this.server = server;
         server.addClient(this);
-        mapper.put(1005, new MSG1006());
-        mapper.put(1006, new MSG1006());
-        System.out.println("1231");
-        new Thread(this).start();
+
+        thread = new Thread(this);
+        thread.start();
     }
 
     public void run() {
+
+        String country = server.getModel().getCountry();
+        String identifier = server.getModel().getIdentifier();
+        if (country == null || identifier == null) {
+
+        }
+
+    }
+
+    private void Parse() {
         while (true) {
             if (rawData.size() == 0)
                 return;
@@ -60,15 +93,7 @@ public class Analyzer implements IClient, Runnable {
                 System.out.println(msgNmb);
                 try {
                     byte[] msg = new byte[shift];
-                    buffer.position(preambleIndex);
-                    switch (msgNmb) {
-                        case 1005:
-                        case 1006:
-                            buffer.get(msg, 0, preambleIndex + shift);
-                            new BasePosition(msg);
-                        default:
-                            break;
-                    }
+                    buffer.get(msg, preambleIndex, shift);
                     buffer.position(preambleIndex);
                     buffer.position(preambleIndex + shift);
                 } catch (IllegalArgumentException e) {
