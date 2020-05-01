@@ -27,9 +27,8 @@ public class MSG1006 implements IRTCM {
         int length = msg.length;
         ByteBuffer bb = ByteBuffer.wrap(msg);
         bb.position(preableIndex);
-        int lastIndex = preableIndex + length;
         String binaryMessage = "";
-        while (bb.position() < lastIndex)
+        while (bb.position() < length)
             binaryMessage += String.format("%8s", Integer.toBinaryString(bb.get() & 0xFF)).replace(' ', '0');
 
         MessageNumber = Integer.parseUnsignedInt(binaryMessage.substring(16, 28), 2);//1005 1006

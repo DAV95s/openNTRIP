@@ -2,7 +2,7 @@ package org.adv25.ADVNTRIP.Databases.Models;
 
 public class StationModel {
     private long id;
-    private String Type;
+    private String Type = "STR";
     private String Mountpoint;
     private String Identifier;
     private String Format;

@@ -1,6 +1,6 @@
 package org.adv25.ADVNTRIP.Tools;
 
-import org.adv25.ADVNTRIP.Databases.DAO.DataSource;
+//import org.adv25.ADVNTRIP.Databases.DAO.DataSource;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -14,30 +14,29 @@ public class Bootstrap {
 
 
     public Bootstrap() {
-        try (Connection connection = DataSource.getConnection()) {
-            log.info("Success database connection!");
-
-            try (Statement statement = connection.createStatement()) {
-                statement.executeUpdate(usersTable);
-                statement.executeUpdate(usersLog);
-                statement.executeUpdate(stations);
-                statement.executeUpdate(stationsInfo);
-                statement.executeUpdate(fail2ban);
-                statement.executeUpdate(config);
-                for (String line : config_insert) {
-                    statement.executeUpdate(line);
-                }
-            } catch (SQLException e) {
-                log.log(Level.WARNING,"Bootstrap", e);
-            }
-
-            //isConfigured = true;
-            log.info("A successful connection to the database!");
-        } catch (SQLException e) {
-            e.printStackTrace();
-            log.warning("Cannot connect to mysql database!");
-            System.out.println("The server is running in limited functionality mode. To access all functions, connect the database.");
-        }
+//        try (Connection connection = DataSource.getConnection()) {
+//
+//            try (Statement statement = connection.createStatement()) {
+//                statement.executeUpdate(usersTable);
+//                statement.executeUpdate(usersLog);
+//                statement.executeUpdate(stations);
+//                statement.executeUpdate(stationsInfo);
+//                statement.executeUpdate(fail2ban);
+//                statement.executeUpdate(config);
+//                for (String line : config_insert) {
+//                    statement.executeUpdate(line);
+//                }
+//            } catch (SQLException e) {
+//                log.log(Level.WARNING,"statement error:", e);
+//            }
+//
+//            //isConfigured = true;
+//            log.log(Level.FINE ,"A successful connection to the database!");
+//        } catch (SQLException e) {
+//            e.printStackTrace();
+//            log.warning("Cannot connect to mysql database!");
+//            System.out.println("The server is running in limited functionality mode. To access all functions, connect the database.");
+//        }
 
     }
 

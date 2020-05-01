@@ -1,8 +1,9 @@
 package org.adv25.ADVNTRIP.Tools;
 
 import org.adv25.ADVNTRIP.Clients.IClient;
+import org.adv25.ADVNTRIP.Databases.Models.StationModel;
 import org.adv25.ADVNTRIP.Servers.GnssStation;
-import org.adv25.ADVNTRIP.Tools.RTCM.IRTCM;
+import org.adv25.ADVNTRIP.Tools.RTCM.MSG1006;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
@@ -11,27 +12,30 @@ import org.json.simple.parser.ParseException;
 import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 
 
 public class Analyzer implements IClient, Runnable {
-    Queue<byte[]> rawData = new LinkedList<byte[]>();
-
-    HashMap<String, byte[]> rawData2 = new HashMap<>();
+    ConcurrentHashMap<Integer, byte[]> rawData = new ConcurrentHashMap<>();
+    ConcurrentHashMap<Integer, Integer> details = new ConcurrentHashMap<>(); // its time mark for "Format-Details"
 
     GnssStation server; //base station
 
-    Map<Integer, IRTCM> mapper = new HashMap<>();
+    StationModel model;
 
     Thread thread;
 
-    @Override
-    public void safeClose() throws IOException {
+    public Analyzer(GnssStation server) {
+        this.server = server;
+        model = server.getModel();
 
+        server.addClient(this);
+        thread = new Thread(this);
     }
 
     @Override
-    public void sendMessage(ByteBuffer bb) throws IOException {
-        if (bb.limit () == 0)
+    public void sendMessage(ByteBuffer bb) {
+        if (bb.limit() == 0)
             return;
 
         int preambleIndex, shift, msgNmb;
@@ -43,91 +47,75 @@ public class Analyzer implements IClient, Runnable {
             preambleIndex = bb.position();
             shift = bb.getShort(preambleIndex) + 5;
             msgNmb = (bb.getShort(preambleIndex + 2) & 0xffff) >> 4;
-            System.out.println(msgNmb);
+
             try {
                 byte[] msg = new byte[shift];
-                bb.get(msg, preambleIndex, shift);
-                rawData2.put(String.valueOf(msgNmb), msg);
+                bb.get(msg, 0, shift);
+                saveRaw(msgNmb, msg);
                 bb.position(preambleIndex);
                 bb.position(preambleIndex + shift);
             } catch (IllegalArgumentException e) {
                 break;
             }
         }
+
+        if (!thread.isAlive())
+            thread.start();
     }
 
-    public Analyzer(GnssStation server) {
-        this.server = server;
-        server.addClient(this);
-
-        thread = new Thread(this);
-        thread.start();
-    }
 
     public void run() {
-
-        String country = server.getModel().getCountry();
-        String identifier = server.getModel().getIdentifier();
-        if (country == null || identifier == null) {
-
-        }
-
-    }
-
-    private void Parse() {
+        System.out.println("Поток запущен");
         while (true) {
-            if (rawData.size() == 0)
-                return;
+            try {
+                Thread.sleep(10000);
+            } catch (InterruptedException ex) {
+                ex.printStackTrace();
+            }
 
-            ByteBuffer buffer = ByteBuffer.wrap(rawData.poll());
+            if (model.getCountry() == null || model.getIdentifier() == null) {
+                int msgNum = 0;
+                if (rawData.contains(1005))
+                    msgNum = 1005;
 
-            int preambleIndex, shift, msgNmb;
+                if (rawData.contains(1006))
+                    msgNum = 1006;
 
-            while (buffer.hasRemaining()) {
-                if (buffer.get() != -45)
-                    continue;
-
-                preambleIndex = buffer.position();
-                shift = buffer.getShort(preambleIndex) + 5;
-                msgNmb = (buffer.getShort(preambleIndex + 2) & 0xffff) >> 4;
-                System.out.println(msgNmb);
-                try {
-                    byte[] msg = new byte[shift];
-                    buffer.get(msg, preambleIndex, shift);
-                    buffer.position(preambleIndex);
-                    buffer.position(preambleIndex + shift);
-                } catch (IllegalArgumentException e) {
-                    buffer.clear();
-                    break;
+                if (msgNum != 0) {
+                    MSG1006 msg = new MSG1006();
+                    msg.parse(rawData.get(msgNum));
+                    System.out.println(msg.getJson());
                 }
             }
         }
     }
 
-    class BasePosition implements Runnable {
+    // This method save raw data and forms the "Format-Details" field. "1004(1), 1005(5)"
+    private HashMap<Integer, Long> temp = new HashMap<>();
 
-        private byte[] msg;
+    private void saveRaw(int numb, byte[] raw) {
+        rawData.put(numb, raw);
+        long curTime = System.currentTimeMillis();
 
-        public BasePosition(byte[] msg) {
-            this.msg = msg;
-            System.out.println("BASE");
+        if (temp.containsKey(numb)) {
+            float deltaSec = (curTime - temp.get(numb)) / 1000.0f;
+
+            if (deltaSec < 1) {
+                deltaSec = 1;
+            }
+            details.put(numb, Math.round(deltaSec));
         }
-
-        @Override
-        public void run() {
-
-        }
+        temp.put(numb, curTime);
     }
 
-    private String rtcmFormatAnalyze() {
+    // Determine the RTCM version from packages name
+    private String determineRtcmFormat() {
         int format30 = 0;
         int format31 = 0;
         int format32 = 0;
+        int format33 = 0;
 
-        /*if (rtcmPack.size() == 0)
-            return "RAW";
-
-        for (Integer k : rtcmPack.keySet()) {
+        for (Integer k : rawData.keySet()) {
             int msg = k.intValue();
 
             if (1001 <= msg && msg <= 1013) {
@@ -138,13 +126,18 @@ public class Analyzer implements IClient, Runnable {
                 format31++;
                 continue;
             }
-            if (1071 <= msg && msg <= 1230) {
+            if (1044 <= msg && msg <= 1045 || 1071 <= msg && msg <= 1230) {
                 format32++;
                 continue;
             }
+            if (1 <= msg && msg <= 100 || msg == 1042 || msg == 1046) {
+                format33++;
+                continue;
+            }
         }
-         */
 
+        if (format33 != 0)
+            return "RTCM 3.3";
         if (format32 != 0)
             return "RTCM 3.2";
         if (format31 != 0)
@@ -185,14 +178,15 @@ public class Analyzer implements IClient, Runnable {
     }
 
     public String osmParser(String raw) {
-        String[] matches = {"suburb", "village", "city", "county", "state", "country"};
+        String[] matches = {"suburb", "village", "city", "county", "state"};
+        String countryCode = "country_code";
         JSONParser parser = new JSONParser();
         try {
             JSONObject json = (JSONObject) parser.parse(raw);
             json = (JSONObject) json.get("address");
             for (String match : matches) {
-                String response;
-                if ((response = (String) json.get(match)) != null) {
+                String response = (String) json.get(match);
+                if (response != null) {
                     return response;
                 }
             }
@@ -202,5 +196,9 @@ public class Analyzer implements IClient, Runnable {
         return "none";
     }
 
+    @Override
+    public void safeClose() throws IOException {
+
+    }
 
 }

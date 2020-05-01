@@ -39,7 +39,7 @@ public class ConnectHandler extends Thread {
             socketChannel.read(buffer);
 
             String msg = new String(buffer.array());
-            log.log(Level.INFO, socketChannel.getRemoteAddress().toString() + " connected\r\n" + msg);
+            log.log(Level.INFO, socketChannel.getRemoteAddress() + " new connection\r\n" + msg);
             http = new HttpRequestParser();
             http.parseRequest(msg);
 
@@ -95,7 +95,6 @@ public class ConnectHandler extends Thread {
             } else {
                 throw new SecurityException("unknown user name or bad password");
             }
-
             return;
         }
 
@@ -116,6 +115,7 @@ public class ConnectHandler extends Thread {
 
             if (generalPassword.equals(password)) {
                 HttpProtocol.sendMessage(socketChannel, buffer, HttpProtocol.getOkMessage());
+
                 if (connectedStation != null) {
                     connectedStation.setNewSocket(socketChannel);
                 } else {

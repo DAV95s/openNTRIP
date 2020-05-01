@@ -18,25 +18,25 @@ public class ClientDAO implements DAO<ClientModel, String> {
     public ClientModel read(String s) {
         ClientModel model = new ClientModel();
 
-        try (Connection con = DataSource.getConnection();
-             PreparedStatement statement = con.prepareStatement(ClientDAO.SQL.GET.QUERY)) {
-
-            statement.setString(1, s);
-
-            try(ResultSet rs = statement.executeQuery()){
-                if (rs.next()) {
-                    model.setId(rs.getLong("id"));
-                    model.setName(rs.getString("Name"));
-                    model.setPassword(rs.getString("password"));
-                    model.setEmail(rs.getString("email"));
-                    model.setRegistration(rs.getDate("registration"));
-                    model.setPermission(rs.getInt("permission"));
-                }
-            }
-
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+//        try (Connection con = DataSource.getConnection();
+//             PreparedStatement statement = con.prepareStatement(ClientDAO.SQL.GET.QUERY)) {
+//
+//            statement.setString(1, s);
+//
+//            try(ResultSet rs = statement.executeQuery()){
+//                if (rs.next()) {
+//                    model.setId(rs.getLong("id"));
+//                    model.setName(rs.getString("Name"));
+//                    model.setPassword(rs.getString("password"));
+//                    model.setEmail(rs.getString("email"));
+//                    model.setRegistration(rs.getDate("registration"));
+//                    model.setPermission(rs.getInt("permission"));
+//                }
+//            }
+//
+//        } catch (SQLException e) {
+//            e.printStackTrace();
+//        }
 
         return model;
     }
