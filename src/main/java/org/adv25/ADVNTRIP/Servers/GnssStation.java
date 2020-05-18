@@ -102,7 +102,7 @@ public class GnssStation extends Thread {
     }
 
 
-    ByteBuffer buffer = ByteBuffer.allocate(4096);
+    ByteBuffer buffer = ByteBuffer.allocate(32768);
     //Send messages
     @Override
     public void run() {

@@ -2,6 +2,8 @@ package org.adv25.ADVNTRIP.Tools;
 
 //import org.adv25.ADVNTRIP.Databases.DAO.DataSource;
 
+import org.adv25.ADVNTRIP.Databases.DAO.DataSource;
+
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
@@ -14,42 +16,33 @@ public class Bootstrap {
 
 
     public Bootstrap() {
-//        try (Connection connection = DataSource.getConnection()) {
-//
-//            try (Statement statement = connection.createStatement()) {
-//                statement.executeUpdate(usersTable);
-//                statement.executeUpdate(usersLog);
-//                statement.executeUpdate(stations);
-//                statement.executeUpdate(stationsInfo);
-//                statement.executeUpdate(fail2ban);
-//                statement.executeUpdate(config);
-//                for (String line : config_insert) {
-//                    statement.executeUpdate(line);
-//                }
-//            } catch (SQLException e) {
-//                log.log(Level.WARNING,"statement error:", e);
-//            }
-//
-//            //isConfigured = true;
-//            log.log(Level.FINE ,"A successful connection to the database!");
-//        } catch (SQLException e) {
-//            e.printStackTrace();
-//            log.warning("Cannot connect to mysql database!");
-//            System.out.println("The server is running in limited functionality mode. To access all functions, connect the database.");
-//        }
+        try (Connection connection = DataSource.getConnection()) {
+
+            try (Statement statement = connection.createStatement()) {
+
+                statement.executeUpdate(usersLog);
+                statement.executeUpdate(stations);
+                statement.executeUpdate(stationsInfo);
+                statement.executeUpdate(fail2ban);
+                statement.executeUpdate(config);
+                for (String line : config_insert) {
+                    statement.executeUpdate(line);
+                }
+            } catch (SQLException e) {
+                log.log(Level.WARNING,"statement error:", e);
+            }
+
+            //isConfigured = true;
+            log.log(Level.FINE ,"A successful connection to the database!");
+        } catch (SQLException e) {
+            e.printStackTrace();
+            log.warning("Cannot connect to mysql database!");
+            System.out.println("The server is running in limited functionality mode. To access all functions, connect the database.");
+        }
 
     }
 
-    String usersTable = "CREATE TABLE IF NOT EXISTS `users` (" +
-            "`id` INT UNSIGNED NOT NULL AUTO_INCREMENT," +
-            "`name` VARCHAR(100) NULL DEFAULT NULL," +
-            "`email` VARCHAR(100) NULL DEFAULT NULL," +
-            "`password` VARCHAR(100) NULL DEFAULT NULL," +
-            "`registration` DATE NULL DEFAULT NULL," +
-            "`permission` TINYINT NULL DEFAULT NULL," +
-            "PRIMARY KEY (`id`)," +
-            "INDEX `name` (`name`))" +
-            "COLLATE='utf8_general_ci';";
+
 
     String usersLog = "CREATE TABLE IF NOT EXISTS `clients_log` (" +
             "`id` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT," +

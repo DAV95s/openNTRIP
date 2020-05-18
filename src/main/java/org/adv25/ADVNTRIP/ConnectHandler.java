@@ -1,5 +1,6 @@
 package org.adv25.ADVNTRIP;
 
+import at.favre.lib.crypto.bcrypt.BCrypt;
 import org.adv25.ADVNTRIP.Clients.Client;
 import org.adv25.ADVNTRIP.Databases.DAO.ClientDAO;
 import org.adv25.ADVNTRIP.Databases.DAO.StationDAO;
@@ -89,6 +90,8 @@ public class ConnectHandler extends Thread {
                 throw new SecurityException("unknown user name or bad password");
             }
 
+            BCrypt.Result rr = BCrypt.verifyer().verify(acc[1].getBytes(), clientModel.getPassword().getBytes());
+            
             if (acc[1].equals(clientModel.getPassword())) {
                 HttpProtocol.sendMessage(socketChannel, buffer, OK_MESSAGE);
                 requestedStation.addClient(new Client(requestedStation, socketChannel, clientModel));

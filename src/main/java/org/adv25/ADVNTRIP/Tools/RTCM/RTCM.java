@@ -1,10 +1,14 @@
 package org.adv25.ADVNTRIP.Tools.RTCM;
 
-public class RTCM {
+public abstract class RTCM {
 
-    public final static char BIT1 = '1';
+    protected byte[] rawMsg;
 
-    public static long toSignedInt(String bits) {
+    protected  String binaryBuffer = "";
+
+    protected final static char BIT1 = '1';
+
+    protected long toSignedInt(String bits) {
         int position = 0;
         long answer = 0;
 
@@ -18,5 +22,14 @@ public class RTCM {
         return answer;
     }
 
+    protected static String toBinaryString(byte n) {
+        StringBuilder sb = new StringBuilder("00000000");
+        for (int bit = 0; bit < 8; bit++) {
+            if (((n >> bit) & 1) > 0) {
+                sb.setCharAt(7 - bit, '1');
+            }
+        }
+        return sb.toString();
+    }
 }
 

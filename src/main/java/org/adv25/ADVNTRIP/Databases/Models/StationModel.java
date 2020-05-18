@@ -142,15 +142,11 @@ public class StationModel {
         return Nmea;
     }
 
-    public void setNmea(String nmea) {
-        if (nmea == null) {
+    public void setNmea(int nmea) {
+        if (nmea == 0) {
             Nmea = false;
         } else {
-            if (nmea.charAt(0) == 'Y') {
-                Nmea = true;
-            } else {
-                Nmea = false;
-            }
+            Nmea = true;
         }
     }
 
@@ -158,15 +154,11 @@ public class StationModel {
         return Solution;
     }
 
-    public void setSolution(String solution) {
-        if (solution == null) {
+    public void setSolution(int solution) {
+        if (solution == 0) {
             Solution = false;
         } else {
-            if (solution.charAt(0) == 'Y') {
-                Solution = true;
-            } else {
-                Solution = false;
-            }
+            Solution = true;
         }
     }
 
@@ -196,32 +188,23 @@ public class StationModel {
         return Authentication;
     }
 
-    public void setAuthentication(String authentication) {
-        if (authentication == null) {
+    public void setAuthentication(int authentication) {
+        if (authentication == 0) {
             Authentication = false;
         } else {
-            if (authentication.charAt(0) == 'Y') {
-                Authentication = true;
-            } else {
-                Authentication = false;
-            }
+            Authentication = true;
         }
-
     }
 
     public boolean getFee() {
         return Fee;
     }
 
-    public void setFee(String fee) {
-        if (fee == null) {
+    public void setFee(int fee) {
+        if (fee == 0) {
             Fee = false;
         } else {
-            if (fee.charAt(0) == 'Y') {
-                Fee = true;
-            } else {
-                Fee = false;
-            }
+            Fee = true;
         }
     }
 
