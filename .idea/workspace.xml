@@ -2,18 +2,14 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="b7aa1f89-fb3e-44e2-a0de-b72c0eae2f41" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/src/test/java/TestAnalyzer.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/test/resources/testRtcm.rtcm3" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/config.ini" beforeDir="false" afterPath="$PROJECT_DIR$/config.ini" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/adv25/ADVNTRIP/Caster.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/adv25/ADVNTRIP/Caster.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/adv25/ADVNTRIP/ConnectHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/adv25/ADVNTRIP/ConnectHandler.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/adv25/ADVNTRIP/Databases/DAO/DataSource.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/adv25/ADVNTRIP/Databases/DAO/DataSource.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/adv25/ADVNTRIP/Databases/DAO/StationDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/adv25/ADVNTRIP/Databases/DAO/StationDAO.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/adv25/ADVNTRIP/Databases/Models/StationModel.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/adv25/ADVNTRIP/Databases/Models/StationModel.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/adv25/ADVNTRIP/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/adv25/ADVNTRIP/Main.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/adv25/ADVNTRIP/Servers/GnssStation.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/adv25/ADVNTRIP/Servers/GnssStation.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/adv25/ADVNTRIP/Databases/DAO/ClientDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/adv25/ADVNTRIP/Databases/DAO/ClientDAO.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/adv25/ADVNTRIP/Tools/Analyzer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/adv25/ADVNTRIP/Tools/Analyzer.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/adv25/ADVNTRIP/Tools/Bootstrap.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/adv25/ADVNTRIP/Tools/Bootstrap.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/adv25/ADVNTRIP/Tools/HttpProtocol.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/adv25/ADVNTRIP/Tools/HttpProtocol.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/adv25/ADVNTRIP/Tools/RTCM/IRTCM.java" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/adv25/ADVNTRIP/Tools/RTCM/MSG1006.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/adv25/ADVNTRIP/Tools/RTCM/MSG1006.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/adv25/ADVNTRIP/Tools/RTCM/RTCM.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/adv25/ADVNTRIP/Tools/RTCM/RTCM.java" afterDir="false" />
     </list>
@@ -68,7 +64,7 @@
       <recent name="C:\Users\Main\Documents\ADVNTRIP\src\main\java\org\adv25\ADVNTRIP" />
     </key>
   </component>
-  <component name="RunManager">
+  <component name="RunManager" selected="Application.Start">
     <configuration name="Start" type="Application" factoryName="Application">
       <option name="MAIN_CLASS_NAME" value="org.adv25.ADVNTRIP.Main" />
       <module name="ADVNTRIP" />
@@ -82,6 +78,64 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
+    <configuration name="TestAnalyzer" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="ADVNTRIP" />
+      <option name="PACKAGE_NAME" value="" />
+      <option name="MAIN_CLASS_NAME" value="TestAnalyzer" />
+      <option name="TEST_OBJECT" value="class" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="TestAnalyzer.TestCrs24" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="ADVNTRIP" />
+      <option name="PACKAGE_NAME" value="" />
+      <option name="MAIN_CLASS_NAME" value="TestAnalyzer" />
+      <option name="METHOD_NAME" value="TestCrs24" />
+      <option name="TEST_OBJECT" value="method" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="TestAnalyzer.TestRtcm3Parser" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="ADVNTRIP" />
+      <option name="PACKAGE_NAME" value="" />
+      <option name="MAIN_CLASS_NAME" value="TestAnalyzer" />
+      <option name="METHOD_NAME" value="TestRtcm3Parser" />
+      <option name="TEST_OBJECT" value="method" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="TestAnalyzer.sasd" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="ADVNTRIP" />
+      <option name="PACKAGE_NAME" value="" />
+      <option name="MAIN_CLASS_NAME" value="TestAnalyzer" />
+      <option name="METHOD_NAME" value="sasd" />
+      <option name="TEST_OBJECT" value="method" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="TestRtcm.TestCrs24" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="ADVNTRIP" />
+      <option name="PACKAGE_NAME" value="" />
+      <option name="MAIN_CLASS_NAME" value="TestRtcm" />
+      <option name="METHOD_NAME" value="TestCrs24" />
+      <option name="TEST_OBJECT" value="method" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="JUnit.TestAnalyzer.TestRtcm3Parser" />
+        <item itemvalue="JUnit.TestAnalyzer.TestCrs24" />
+        <item itemvalue="JUnit.TestAnalyzer" />
+        <item itemvalue="JUnit.TestRtcm.TestCrs24" />
+        <item itemvalue="JUnit.TestAnalyzer.sasd" />
+      </list>
+    </recent_temporary>
   </component>
   <component name="ServiceViewManager">
     <option name="viewStates">
@@ -131,10 +185,10 @@
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="414" y="174" width="1092" height="747" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.0.1920.1040@0.0.1920.1040" timestamp="1586807654902" />
-    <state x="719" y="322" key="#com.intellij.fileTypes.FileTypeChooser" timestamp="1586853989441">
+    <state x="719" y="322" key="#com.intellij.fileTypes.FileTypeChooser" timestamp="1589991578704">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state x="719" y="322" key="#com.intellij.fileTypes.FileTypeChooser/0.0.1920.1040@0.0.1920.1040" timestamp="1586853989441" />
+    <state x="719" y="322" key="#com.intellij.fileTypes.FileTypeChooser/0.0.1920.1040@0.0.1920.1040" timestamp="1589991578704" />
     <state x="765" y="203" key="#com.intellij.ide.util.MemberChooser" timestamp="1588925938923">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
@@ -159,54 +213,58 @@
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="690" y="266" key="#com.intellij.refactoring.typeMigration.ui.FailedConversionsDialog/0.0.1920.1040@0.0.1920.1040" timestamp="1587890876025" />
-    <state width="436" height="466" key="DebuggerActiveHint" timestamp="1588925592855">
+    <state x="881" y="272" width="463" height="558" key="#xdebugger.XInspectDialog" timestamp="1589973277185">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="436" height="466" key="DebuggerActiveHint/0.0.1920.1040@0.0.1920.1040" timestamp="1588925592855" />
+    <state x="881" y="272" width="463" height="558" key="#xdebugger.XInspectDialog/0.0.1920.1040@0.0.1920.1040" timestamp="1589973277185" />
+    <state width="462" height="466" key="DebuggerActiveHint" timestamp="1589991245378">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state width="462" height="466" key="DebuggerActiveHint/0.0.1920.1040@0.0.1920.1040" timestamp="1589991245378" />
     <state x="92" y="92" width="1736" height="856" key="DiffContextDialog" timestamp="1588692144806">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="92" y="92" width="1736" height="856" key="DiffContextDialog/0.0.1920.1040@0.0.1920.1040" timestamp="1588692144806" />
-    <state width="1877" height="264" key="GridCell.Tab.0.bottom" timestamp="1589119005113">
+    <state width="1877" height="348" key="GridCell.Tab.0.bottom" timestamp="1589991514832">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="1877" height="348" key="GridCell.Tab.0.bottom/0.0.1536.824@0.0.1536.824" timestamp="1588324964334" />
-    <state width="1877" height="264" key="GridCell.Tab.0.bottom/0.0.1920.1040@0.0.1920.1040" timestamp="1589119005113" />
-    <state width="1877" height="264" key="GridCell.Tab.0.center" timestamp="1589119005113">
+    <state width="1877" height="348" key="GridCell.Tab.0.bottom/0.0.1536.824@0.0.1536.824" timestamp="1589977757628" />
+    <state width="1877" height="348" key="GridCell.Tab.0.bottom/0.0.1920.1040@0.0.1920.1040" timestamp="1589991514832" />
+    <state width="1877" height="348" key="GridCell.Tab.0.center" timestamp="1589991514831">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="1877" height="348" key="GridCell.Tab.0.center/0.0.1536.824@0.0.1536.824" timestamp="1588324964334" />
-    <state width="1877" height="264" key="GridCell.Tab.0.center/0.0.1920.1040@0.0.1920.1040" timestamp="1589119005113" />
-    <state width="1877" height="264" key="GridCell.Tab.0.left" timestamp="1589119005113">
+    <state width="1877" height="348" key="GridCell.Tab.0.center/0.0.1536.824@0.0.1536.824" timestamp="1589977757628" />
+    <state width="1877" height="348" key="GridCell.Tab.0.center/0.0.1920.1040@0.0.1920.1040" timestamp="1589991514831" />
+    <state width="1877" height="348" key="GridCell.Tab.0.left" timestamp="1589991514831">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="1877" height="348" key="GridCell.Tab.0.left/0.0.1536.824@0.0.1536.824" timestamp="1588324964334" />
-    <state width="1877" height="264" key="GridCell.Tab.0.left/0.0.1920.1040@0.0.1920.1040" timestamp="1589119005113" />
-    <state width="1877" height="264" key="GridCell.Tab.0.right" timestamp="1589119005113">
+    <state width="1877" height="348" key="GridCell.Tab.0.left/0.0.1536.824@0.0.1536.824" timestamp="1589977757628" />
+    <state width="1877" height="348" key="GridCell.Tab.0.left/0.0.1920.1040@0.0.1920.1040" timestamp="1589991514831" />
+    <state width="1877" height="348" key="GridCell.Tab.0.right" timestamp="1589991514831">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="1877" height="348" key="GridCell.Tab.0.right/0.0.1536.824@0.0.1536.824" timestamp="1588324964334" />
-    <state width="1877" height="264" key="GridCell.Tab.0.right/0.0.1920.1040@0.0.1920.1040" timestamp="1589119005113" />
-    <state width="1877" height="348" key="GridCell.Tab.1.bottom" timestamp="1588939959723">
+    <state width="1877" height="348" key="GridCell.Tab.0.right/0.0.1536.824@0.0.1536.824" timestamp="1589977757628" />
+    <state width="1877" height="348" key="GridCell.Tab.0.right/0.0.1920.1040@0.0.1920.1040" timestamp="1589991514831" />
+    <state width="1877" height="348" key="GridCell.Tab.1.bottom" timestamp="1589991514832">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="1877" height="348" key="GridCell.Tab.1.bottom/0.0.1536.824@0.0.1536.824" timestamp="1588324964334" />
-    <state width="1877" height="348" key="GridCell.Tab.1.bottom/0.0.1920.1040@0.0.1920.1040" timestamp="1588939959723" />
-    <state width="1877" height="348" key="GridCell.Tab.1.center" timestamp="1588939959723">
+    <state width="1877" height="348" key="GridCell.Tab.1.bottom/0.0.1536.824@0.0.1536.824" timestamp="1589977757629" />
+    <state width="1877" height="348" key="GridCell.Tab.1.bottom/0.0.1920.1040@0.0.1920.1040" timestamp="1589991514832" />
+    <state width="1877" height="348" key="GridCell.Tab.1.center" timestamp="1589991514832">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="1877" height="348" key="GridCell.Tab.1.center/0.0.1536.824@0.0.1536.824" timestamp="1588324964334" />
-    <state width="1877" height="348" key="GridCell.Tab.1.center/0.0.1920.1040@0.0.1920.1040" timestamp="1588939959723" />
-    <state width="1877" height="348" key="GridCell.Tab.1.left" timestamp="1588939959723">
+    <state width="1877" height="348" key="GridCell.Tab.1.center/0.0.1536.824@0.0.1536.824" timestamp="1589977757629" />
+    <state width="1877" height="348" key="GridCell.Tab.1.center/0.0.1920.1040@0.0.1920.1040" timestamp="1589991514832" />
+    <state width="1877" height="348" key="GridCell.Tab.1.left" timestamp="1589991514832">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="1877" height="348" key="GridCell.Tab.1.left/0.0.1536.824@0.0.1536.824" timestamp="1588324964334" />
-    <state width="1877" height="348" key="GridCell.Tab.1.left/0.0.1920.1040@0.0.1920.1040" timestamp="1588939959723" />
-    <state width="1877" height="348" key="GridCell.Tab.1.right" timestamp="1588939959723">
+    <state width="1877" height="348" key="GridCell.Tab.1.left/0.0.1536.824@0.0.1536.824" timestamp="1589977757628" />
+    <state width="1877" height="348" key="GridCell.Tab.1.left/0.0.1920.1040@0.0.1920.1040" timestamp="1589991514832" />
+    <state width="1877" height="348" key="GridCell.Tab.1.right" timestamp="1589991514832">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="1877" height="348" key="GridCell.Tab.1.right/0.0.1536.824@0.0.1536.824" timestamp="1588324964334" />
-    <state width="1877" height="348" key="GridCell.Tab.1.right/0.0.1920.1040@0.0.1920.1040" timestamp="1588939959723" />
+    <state width="1877" height="348" key="GridCell.Tab.1.right/0.0.1536.824@0.0.1536.824" timestamp="1589977757629" />
+    <state width="1877" height="348" key="GridCell.Tab.1.right/0.0.1920.1040@0.0.1920.1040" timestamp="1589991514832" />
     <state x="749" y="230" key="RollbackChangesDialog" timestamp="1588692104271">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
@@ -227,5 +285,26 @@
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="623" y="225" width="672" height="678" key="search.everywhere.popup/0.0.1920.1040@0.0.1920.1040" timestamp="1588921376213" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/org/adv25/ADVNTRIP/ConnectHandler.java</url>
+          <line>81</line>
+          <option name="timeStamp" value="4" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/org/adv25/ADVNTRIP/ConnectHandler.java</url>
+          <line>88</line>
+          <option name="timeStamp" value="5" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
+    <watches-manager>
+      <configuration name="JUnit">
+        <watch expression="((byte[])this.hb)[0]" custom="byte[]" />
+      </configuration>
+    </watches-manager>
   </component>
 </project>

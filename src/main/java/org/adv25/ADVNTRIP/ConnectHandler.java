@@ -44,9 +44,9 @@ public class ConnectHandler extends Thread {
             http = new HttpRequestParser();
             http.parseRequest(msg);
 
-            if (http.getRequestLine().contains("GET")){//client connection
+            if (http.getRequestLine().contains("GET")) {//client connection
                 clientHandler();
-            }else if (http.getRequestLine().contains("SOURCE")){ //station connection
+            } else if (http.getRequestLine().contains("SOURCE")) { //station connection
                 stationHandler();
             }
 
@@ -86,13 +86,30 @@ public class ConnectHandler extends Thread {
             ClientModel clientModel = dao.read(acc[0]);
 
             //user not a registered
-            if (clientModel == null) {
+            if (clientModel.getName() == null) {
                 throw new SecurityException("unknown user name or bad password");
             }
 
-            BCrypt.Result rr = BCrypt.verifyer().verify(acc[1].getBytes(), clientModel.getPassword().getBytes());
-            
-            if (acc[1].equals(clientModel.getPassword())) {
+            // config hash function
+            Config config = Config.getInstance();
+            String algorithm = config.getProperties("passwordHashAlgorithm");
+
+            boolean response = false;
+
+            if ("BCrypt".equals(algorithm)) {
+                byte[] password = acc[1].getBytes();
+                byte[] dbPassword = clientModel.getPassword().getBytes();
+
+                BCrypt.Result rr = BCrypt.verifyer().verify(password, dbPassword);
+                if (rr.verified)
+                    response = true;
+            }
+
+            if ("None".equals(algorithm)) {
+                response = acc[1].equals(clientModel.getPassword());
+            }
+
+            if (response) {
                 HttpProtocol.sendMessage(socketChannel, buffer, OK_MESSAGE);
                 requestedStation.addClient(new Client(requestedStation, socketChannel, clientModel));
             } else {
@@ -113,7 +130,7 @@ public class ConnectHandler extends Thread {
         Config config = Config.getInstance();
         String generalPassword = config.getProperties("GeneralStationPassword");
 
-        //
+
         if (generalPassword != null) {
 
             if (generalPassword.equals(password)) {

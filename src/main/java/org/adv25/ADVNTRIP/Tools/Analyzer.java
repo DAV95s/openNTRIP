@@ -11,6 +11,7 @@ import org.json.simple.parser.ParseException;
 
 
 import java.io.IOException;
+import java.nio.BufferUnderflowException;
 import java.nio.ByteBuffer;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
@@ -21,7 +22,7 @@ import java.util.logging.Logger;
 public class Analyzer implements IClient, Runnable {
     private static Logger log = Logger.getLogger(Analyzer.class.getName());
 
-    ConcurrentHashMap<Integer, byte[]> rawData = new ConcurrentHashMap<>();
+    protected ConcurrentHashMap<Integer, byte[]> rawData = new ConcurrentHashMap<>();
     Map<Integer, Integer> details = new TreeMap<>();
 
     //ConcurrentHashMap<Integer, Integer> details = new ConcurrentHashMap<>(); // its time mark for "Format-Details"
@@ -35,9 +36,11 @@ public class Analyzer implements IClient, Runnable {
     long StartPackageTimeMark = 0;
 
     StationDAO stationDAO = new StationDAO();
-    public Analyzer(){
+
+    public Analyzer() {
 
     }
+
     public Analyzer(GnssStation server) {
         this.server = server;
         model = server.getModel();
@@ -60,12 +63,14 @@ public class Analyzer implements IClient, Runnable {
             if (bb.get() != -45)
                 continue;
 
-            preambleIndex = bb.position();
-            shift = bb.getShort(preambleIndex) + 5;
-            msgNmb = (bb.getShort(preambleIndex + 2) & 0xffff) >> 4;
+            preambleIndex = bb.position() - 1;
+            shift = bb.getShort(preambleIndex + 1) + 6;
+            msgNmb = (bb.getShort(preambleIndex + 3) & 0xffff) >> 4;
 
             try {
+                bb.position(preambleIndex);
                 byte[] msg = new byte[shift];
+
                 bb.get(msg, 0, shift);
 
                 rawData.put(msgNmb, msg);
@@ -76,18 +81,20 @@ public class Analyzer implements IClient, Runnable {
 
                 bb.position(preambleIndex);
                 bb.position(preambleIndex + shift);
-            } catch (IllegalArgumentException e) {
+            } catch (IllegalArgumentException | BufferUnderflowException e) {
                 break;
             }
         }
 
-        if (!thread.isAlive())
+        if (thread != null && !thread.isAlive()) {
             thread.start();
+        }
+
     }
 
     public void run() {
         stationDAO.setOnline(model);
-        log.log(Level.FINE, model.getMountpoint() + " Analyzer is running!");
+        log.log(Level.FINE, model.getMountpoint() + " analyzer is running!");
         double[] lla; // save position stations
         boolean apiRequest = true;
 
@@ -118,7 +125,7 @@ public class Analyzer implements IClient, Runnable {
     // bitrate
     long bitContainer = 0;
 
-    private void bitrateMeter(int data) {
+    void bitrateMeter(int data) {
         bitContainer += data;
         long deltaT = System.currentTimeMillis() - StartPackageTimeMark;
         deltaT /= 1000;
@@ -126,8 +133,9 @@ public class Analyzer implements IClient, Runnable {
     }
 
     // forms the "Format-Details" field. "1004(1), 1005(5)"
-    private HashMap<Integer, Long> temp = new HashMap<>();
-    private void saveRaw(int numb) {
+    HashMap<Integer, Long> temp = new HashMap<>();
+
+    void saveRaw(int numb) {
         long curTime = System.currentTimeMillis();
 
         if (temp.containsKey(numb)) {
@@ -141,7 +149,7 @@ public class Analyzer implements IClient, Runnable {
         temp.put(numb, curTime);
     }
 
-    private void determineFormatDetails() {
+    void determineFormatDetails() {
         String formatDetails = "";
 
         for (Map.Entry<Integer, Integer> entry : details.entrySet()) {
@@ -152,7 +160,7 @@ public class Analyzer implements IClient, Runnable {
     }
 
     // Determine the RTCM version from packages name
-    private void determineRtcmVersion() {
+    void determineRtcmVersion() {
         int format30 = 0;
         int format31 = 0;
         int format32 = 0;
@@ -196,7 +204,7 @@ public class Analyzer implements IClient, Runnable {
         }
     }
 
-    private void determineNav_System() {
+    void determineNav_System() {
         String navSystems = "";
         int[] GPS = {1001, 1002, 1003, 1004, 1015, 1016, 1017, 1019, 1030, 1034, 1057, 1058, 1059, 1060, 1061, 1062, 1071, 1072, 1073,
                 1074, 1075, 1076, 1077};
@@ -232,7 +240,7 @@ public class Analyzer implements IClient, Runnable {
         }
     }
 
-    private void determineCarrier() {
+    void determineCarrier() {
         int carrier = 0;
         int[] L1 = {1001, 1002, 1009, 1010, 1071, 1081, 1091};
         for (int i : L1) {
@@ -252,7 +260,7 @@ public class Analyzer implements IClient, Runnable {
         model.setCarrier(carrier);
     }
 
-    private void determinePosition() {
+    void determinePosition() {
         int msgNum = 0;
 
         if (rawData.containsKey(1005))

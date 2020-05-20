@@ -18,25 +18,23 @@ public class ClientDAO implements DAO<ClientModel, String> {
     public ClientModel read(String s) {
         ClientModel model = new ClientModel();
 
-//        try (Connection con = DataSource.getConnection();
-//             PreparedStatement statement = con.prepareStatement(ClientDAO.SQL.GET.QUERY)) {
-//
-//            statement.setString(1, s);
-//
-//            try(ResultSet rs = statement.executeQuery()){
-//                if (rs.next()) {
-//                    model.setId(rs.getLong("id"));
-//                    model.setName(rs.getString("Name"));
-//                    model.setPassword(rs.getString("password"));
-//                    model.setEmail(rs.getString("email"));
-//                    model.setRegistration(rs.getDate("registration"));
-//                    model.setPermission(rs.getInt("permission"));
-//                }
-//            }
-//
-//        } catch (SQLException e) {
-//            e.printStackTrace();
-//        }
+        try (Connection con = DataSource.getConnection();
+             PreparedStatement statement = con.prepareStatement(ClientDAO.SQL.GET.QUERY)) {
+
+            statement.setString(1, s);
+
+            try(ResultSet rs = statement.executeQuery()){
+                if (rs.next()) {
+                    model.setId(rs.getLong("id"));
+                    model.setName(rs.getString("username"));
+                    model.setPassword(rs.getString("password"));
+                    model.setEmail(rs.getString("email"));
+                }
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
 
         return model;
     }
@@ -52,17 +50,11 @@ public class ClientDAO implements DAO<ClientModel, String> {
     }
 
     enum SQL {
-        GET("SELECT `id`, `name`, `email`, `password`, `registration`, `permission` FROM `users` WHERE `name` = ?"),
-        CREATE("sd"),
-        UPDATE("213123"),
-        DELETE ("123");
-
+        GET("SELECT `id`, `username`, `email`, `password` FROM `users` WHERE `username` = ?");
 
         String QUERY;
         SQL(String s){
             this.QUERY = s;
         }
-
     }
-
 }

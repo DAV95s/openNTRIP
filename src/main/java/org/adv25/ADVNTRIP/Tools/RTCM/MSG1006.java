@@ -21,21 +21,13 @@ public class MSG1006 extends RTCM {
     private double ECEFZ;
     private double AntennaHeight;
 
-
+    //byte array with preamble(0xD3)
     public MSG1006(byte[] msg) {
         rawMsg = msg;
 
-        for (int i = 0; i < msg.length; i++) {
+        for (int i = 1; i < msg.length; i++) {
             binaryBuffer += toBinaryString(msg[i]);
         }
-//        int preableIndex = 0;
-//        int length = msg.length;
-//        ByteBuffer bb = ByteBuffer.wrap(msg);
-//        bb.position(preableIndex);
-//        String binaryMessage = "";
-//        while (bb.position() < length)
-//            binaryMessage += toBinaryString(bb.get());
-//                    //String.format("%8s", Integer.toBinaryString(bb.get() & 0xFF)).replace(' ', '0');
 
         MessageNumber = Integer.parseUnsignedInt(binaryBuffer.substring(16, 28), 2);//1005 1006
         StationID = Integer.parseUnsignedInt(binaryBuffer.substring(28, 40), 2);
