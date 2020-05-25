@@ -23,7 +23,7 @@ public class Analyzer implements IClient, Runnable {
     private static Logger log = Logger.getLogger(Analyzer.class.getName());
 
     protected ConcurrentHashMap<Integer, byte[]> rawData = new ConcurrentHashMap<>();
-    Map<Integer, Integer> details = new TreeMap<>();
+    protected Map<Integer, Integer> details = new TreeMap<>();
 
     //ConcurrentHashMap<Integer, Integer> details = new ConcurrentHashMap<>(); // its time mark for "Format-Details"
 
@@ -33,7 +33,8 @@ public class Analyzer implements IClient, Runnable {
 
     Thread thread;
 
-    long StartPackageTimeMark = 0;
+    long StartPackageTimeMark = 0; //Time of start stream. For bit rate
+    long LastPackageTimeMark = 0; //Time of last data send. For check up alive
 
     StationDAO stationDAO = new StationDAO();
 
@@ -53,6 +54,8 @@ public class Analyzer implements IClient, Runnable {
     public void sendMessage(ByteBuffer bb) {
         if (StartPackageTimeMark == 0)
             StartPackageTimeMark = System.currentTimeMillis();
+
+        LastPackageTimeMark = System.currentTimeMillis();
 
         if (bb.limit() == 0)
             return;
@@ -93,31 +96,28 @@ public class Analyzer implements IClient, Runnable {
     }
 
     public void run() {
-        stationDAO.setOnline(model);
         log.log(Level.FINE, model.getMountpoint() + " analyzer is running!");
-        double[] lla; // save position stations
-        boolean apiRequest = true;
+
+        stationDAO.setOnline(model);
+
+        boolean isApiRequested = true;
 
         while (true) {
-
             try {
                 Thread.sleep(10000);
             } catch (InterruptedException ex) {
                 ex.printStackTrace();
             }
 
-            if (apiRequest) {
+            if (isApiRequested) {
                 determinePosition();
+                isApiRequested = false;
             }
 
             determineFormatDetails();
-
             determineRtcmVersion();
-
             determineNav_System();
-
             determineCarrier();
-
             stationDAO.update(model);
         }
     }
@@ -261,17 +261,15 @@ public class Analyzer implements IClient, Runnable {
     }
 
     void determinePosition() {
-        int msgNum = 0;
+        MSG1006 msg;
 
-        if (rawData.containsKey(1005))
-            msgNum = 1005;
-        if (rawData.containsKey(1006))
-            msgNum = 1006;
-
-        if (msgNum == 0)
+        if (rawData.containsKey(1005)) {
+            msg = new MSG1006(rawData.get(1005));
+        } else if (rawData.containsKey(1006)) {
+            msg = new MSG1006(rawData.get(1006));
+        } else {
             return;
-
-        MSG1006 msg = new MSG1006(rawData.get(msgNum));
+        }
 
         double[] lla = ecef2lla(msg.getECEFX(), msg.getECEFY(), msg.getECEFZ());
 
@@ -288,10 +286,8 @@ public class Analyzer implements IClient, Runnable {
     // WGS84 ellipsoid constants
     private final double a = 6378137; // radius
     private final double e = 8.1819190842622e-2;  // eccentricity
-
     private final double asq = Math.pow(a, 2);
     private final double esq = Math.pow(e, 2);
-
     private double[] ecef2lla(double x, double y, double z) {
 
         double b = Math.sqrt(asq * (1 - esq));

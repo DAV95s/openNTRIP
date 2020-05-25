@@ -23,7 +23,7 @@ public class StationModel {
     private String Misc;
     private String Password;
     private String Properties;
-    private String Is_online;
+    private boolean Is_online;
 
 
     public String getType() {
@@ -236,15 +236,16 @@ public class StationModel {
         this.id = id;
     }
 
-    public String getIs_online() {
+    public boolean getIs_online() {
         return Is_online;
     }
 
-    public void setIs_online(String is_online) {
-        if(is_online == null){
-            is_online = "";
+    public void setIs_online(int is_online) {
+        if (is_online == 0) {
+            Is_online = false;
+        } else {
+            Is_online = true;
         }
-        Is_online = is_online;
     }
 
     public String getProperties() {

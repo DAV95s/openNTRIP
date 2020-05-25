@@ -26,6 +26,20 @@ public abstract class RTCM {
         return answer;
     }
 
+    protected int toUnsignedInt(String biString) {
+        int n = biString.length();
+        int decimal = 0;
+        for (int d = 0; d < n; d++) {
+
+            decimal = decimal << 1;
+
+            if (biString.charAt(d) == '1') {
+                decimal = decimal | 1;
+            }
+        }
+        return decimal;
+    }
+
     protected static String toBinaryString(byte n) {
         StringBuilder sb = new StringBuilder("00000000");
         for (int bit = 0; bit < 8; bit++) {

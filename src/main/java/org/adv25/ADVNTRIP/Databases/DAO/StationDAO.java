@@ -20,7 +20,7 @@ public class StationDAO implements DAO<StationModel, String> {
 
             statement.setString(1, s);
 
-            try(ResultSet rs = statement.executeQuery()){
+            try (ResultSet rs = statement.executeQuery()) {
                 if (rs.next()) {
                     model.setMountpoint(s);
                     model.setId(rs.getLong("id"));
@@ -41,7 +41,7 @@ public class StationDAO implements DAO<StationModel, String> {
                     model.setNetwork(rs.getString("network"));
                     model.setNmea(rs.getInt("nmea"));
                     model.setSolution(rs.getInt("solution"));
-                    model.setIs_online(rs.getString("is_online"));
+                    model.setIs_online(rs.getInt("is_online"));
                     model.setPassword(rs.getString("password"));
                     model.setProperties(rs.getString("properties"));
                 }
@@ -65,8 +65,8 @@ public class StationDAO implements DAO<StationModel, String> {
             statement.setString(4, String.valueOf(model.getCarrier()));
             statement.setString(5, model.getNavSystem());
             statement.setString(6, model.getCountry());
-            statement.setDouble (7, model.getLatitude());
-            statement.setDouble (8, model.getLongitude());
+            statement.setDouble(7, model.getLatitude());
+            statement.setDouble(8, model.getLongitude());
             statement.setString(9, model.getGenerator());
             statement.setString(10, String.valueOf(model.getBitrate()));
             statement.setString(11, model.getMountpoint());
@@ -84,7 +84,7 @@ public class StationDAO implements DAO<StationModel, String> {
         try (Connection con = DataSource.getConnection();
              PreparedStatement statement = con.prepareStatement(SQL.SET_STATUS.QUERY)) {
 
-            statement.setString(1, "Y");
+            statement.setInt(1, 1);
             statement.setString(2, model.getMountpoint());
 
             if (statement.execute())
@@ -97,11 +97,11 @@ public class StationDAO implements DAO<StationModel, String> {
         return false;
     }
 
-    public  boolean setOffline(StationModel model){
+    public boolean setOffline(StationModel model) {
         try (Connection con = DataSource.getConnection();
              PreparedStatement statement = con.prepareStatement(SQL.SET_STATUS.QUERY)) {
 
-            statement.setString(1, "N");
+            statement.setInt(1, 0);
             statement.setString(2, model.getMountpoint());
 
             if (statement.execute())
@@ -111,6 +111,19 @@ public class StationDAO implements DAO<StationModel, String> {
             e.printStackTrace();
         }
 
+        return false;
+    }
+
+    public boolean setAllOffline() {
+        try (Connection con = DataSource.getConnection();
+             Statement statement = con.createStatement()) {
+
+            if (statement.execute(SQL.SET_ALL_STATUS_OFFLINE.QUERY))
+                return true;
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
         return false;
     }
 
@@ -120,8 +133,9 @@ public class StationDAO implements DAO<StationModel, String> {
     }
 
     enum SQL {
-        SET_STATUS("update stations_info set is_online = ? where id = (select `id` from ntrip.stations where `mountpoint` = ?);"),
-        GET("select stations.id, mountpoint, identifier, format, `format-details`, carrier, `nav-system`, network, country, latitude, longitude, nmea, solution, generator, compression, authentication, fee, bitrate, misc, password, is_online, properties from ntrip.stations left join ntrip.stations_info on stations.id = stations_info.id where mountpoint = ?"),
+        SET_STATUS("UPDATE stations_info SET is_online = ? WHERE id = (select `id` FROM ntrip.stations WHERE `mountpoint` = ?);"),
+        SET_ALL_STATUS_OFFLINE("UPDATE stations_info SET is_online = 0"),
+        GET("SELECT stations.id, mountpoint, identifier, format, `format-details`, carrier, `nav-system`, network, country, latitude, longitude, nmea, solution, generator, compression, authentication, fee, bitrate, misc, password, is_online, properties FROM ntrip.stations LEFT JOIN ntrip.stations_info ON stations.id = stations_info.id WHERE mountpoint = ?"),
         UPDATE("UPDATE `ntrip`.`stations` SET `identifier` = ?, `format` = ?, `format-details` = ?, `carrier` = ?, `nav-system` = ?, `country` = ?, `latitude` = ?, `longitude` = ?, `generator`  = ?, `bitrate` = ? WHERE `mountpoint` = ?;");
 
         String QUERY;

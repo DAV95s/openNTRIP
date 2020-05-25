@@ -1,25 +1,21 @@
 package org.adv25.ADVNTRIP.Tools.RTCM;
 
-import org.json.simple.JSONObject;
-
-import java.nio.ByteBuffer;
-
 public class MSG1006 extends RTCM {
 
-    private int MessageNumber;
-    private int StationID;
+    private int messageNumber;
+    private int stationID;
     private int ITRFyear;
     private boolean GPS;
     private boolean GLONASS;
     private boolean Galileo;
-    private boolean ReferenceStation;
+    private boolean referenceStation;
     private double ECEFX;
-    private boolean Oscillator;
-    private boolean Reserverd;
+    private boolean oscillator;
+    private boolean reserverd;
     private double ECEFY;
-    private int QuarterCycle;
+    private int quarterCycle;
     private double ECEFZ;
-    private double AntennaHeight;
+    private double antennaHeight;
 
     //byte array with preamble(0xD3)
     public MSG1006(byte[] msg) {
@@ -29,21 +25,21 @@ public class MSG1006 extends RTCM {
             binaryBuffer += toBinaryString(msg[i]);
         }
 
-        MessageNumber = Integer.parseUnsignedInt(binaryBuffer.substring(16, 28), 2);//1005 1006
-        StationID = Integer.parseUnsignedInt(binaryBuffer.substring(28, 40), 2);
+        messageNumber = Integer.parseUnsignedInt(binaryBuffer.substring(16, 28), 2);//1005 1006
+        stationID = Integer.parseUnsignedInt(binaryBuffer.substring(28, 40), 2);
         ITRFyear = Integer.parseUnsignedInt(binaryBuffer.substring(40, 46), 2);
         GPS = binaryBuffer.charAt(46) == RTCM.BIT1;
         GLONASS = binaryBuffer.charAt(47) == RTCM.BIT1;
         Galileo = binaryBuffer.charAt(48) == RTCM.BIT1;
-        ReferenceStation = binaryBuffer.charAt(49) == RTCM.BIT1;
+        referenceStation = binaryBuffer.charAt(49) == RTCM.BIT1;
         ECEFX = toSignedInt(binaryBuffer.substring(50, 88)) * 0.0001d;
-        Oscillator = binaryBuffer.charAt(88) == RTCM.BIT1;
-        Reserverd = binaryBuffer.charAt(89) == RTCM.BIT1;
+        oscillator = binaryBuffer.charAt(88) == RTCM.BIT1;
+        reserverd = binaryBuffer.charAt(89) == RTCM.BIT1;
         ECEFY = toSignedInt(binaryBuffer.substring(90, 128)) * 0.0001d;
-        QuarterCycle = Integer.parseUnsignedInt(binaryBuffer.substring(128, 130), 2);
+        quarterCycle = Integer.parseUnsignedInt(binaryBuffer.substring(128, 130), 2);
         ECEFZ = toSignedInt(binaryBuffer.substring(130, 168)) * 0.0001d;
-        if (MessageNumber == 1006)
-            AntennaHeight = Integer.parseUnsignedInt(binaryBuffer.substring(168, 184), 2) * 0.0001d;
+        if (messageNumber == 1006)
+            antennaHeight = Integer.parseUnsignedInt(binaryBuffer.substring(168, 184), 2) * 0.0001d;
     }
 
     public void Write() {
@@ -52,16 +48,16 @@ public class MSG1006 extends RTCM {
 
     @Override
     public String toString() {
-        return String.format("MSG %s: ID:%s ITRF:%s X=%s Y=%s Z=%s AntH:%s", MessageNumber, StationID, ITRFyear, ECEFX,
-                ECEFY, ECEFZ, AntennaHeight);
+        return String.format("MSG %s: ID:%s ITRF:%s X=%s Y=%s Z=%s AntH:%s", messageNumber, stationID, ITRFyear, ECEFX,
+                ECEFY, ECEFZ, antennaHeight);
     }
 
     public int getMessageNumber() {
-        return MessageNumber;
+        return messageNumber;
     }
 
     public int getStationID() {
-        return StationID;
+        return stationID;
     }
 
     public int getITRFyear() {
@@ -81,7 +77,7 @@ public class MSG1006 extends RTCM {
     }
 
     public boolean isReferenceStation() {
-        return ReferenceStation;
+        return referenceStation;
     }
 
     public double getECEFX() {
@@ -89,11 +85,11 @@ public class MSG1006 extends RTCM {
     }
 
     public boolean isOscillator() {
-        return Oscillator;
+        return oscillator;
     }
 
     public boolean isReserverd() {
-        return Reserverd;
+        return reserverd;
     }
 
     public double getECEFY() {
@@ -101,7 +97,7 @@ public class MSG1006 extends RTCM {
     }
 
     public int getQuarterCycle() {
-        return QuarterCycle;
+        return quarterCycle;
     }
 
     public double getECEFZ() {
@@ -109,6 +105,6 @@ public class MSG1006 extends RTCM {
     }
 
     public double getAntennaHeight() {
-        return AntennaHeight;
+        return antennaHeight;
     }
 }
