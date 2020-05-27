@@ -33,6 +33,7 @@ public class Config {
         } catch (IOException e) {
             e.printStackTrace();
         }
+
     }
 
     public String getProperties(String key) {
@@ -41,5 +42,9 @@ public class Config {
             return null;
 
     	return prop.replaceAll("\"", "");
+    }
+
+    enum HashAlgorithm {
+        None, BCrypt, MB5, SHA256
     }
 }

@@ -32,12 +32,12 @@ public class MSG1006 extends RTCM {
         GLONASS = binaryBuffer.charAt(47) == RTCM.BIT1;
         Galileo = binaryBuffer.charAt(48) == RTCM.BIT1;
         referenceStation = binaryBuffer.charAt(49) == RTCM.BIT1;
-        ECEFX = toSignedInt(binaryBuffer.substring(50, 88)) * 0.0001d;
+        ECEFX = toSignedLong(binaryBuffer.substring(50, 88)) * 0.0001d;
         oscillator = binaryBuffer.charAt(88) == RTCM.BIT1;
         reserverd = binaryBuffer.charAt(89) == RTCM.BIT1;
-        ECEFY = toSignedInt(binaryBuffer.substring(90, 128)) * 0.0001d;
+        ECEFY = toSignedLong(binaryBuffer.substring(90, 128)) * 0.0001d;
         quarterCycle = Integer.parseUnsignedInt(binaryBuffer.substring(128, 130), 2);
-        ECEFZ = toSignedInt(binaryBuffer.substring(130, 168)) * 0.0001d;
+        ECEFZ = toSignedLong(binaryBuffer.substring(130, 168)) * 0.0001d;
         if (messageNumber == 1006)
             antennaHeight = Integer.parseUnsignedInt(binaryBuffer.substring(168, 184), 2) * 0.0001d;
     }

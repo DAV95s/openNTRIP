@@ -3,6 +3,8 @@ package org.adv25.ADVNTRIP.Tools.RTCM;
 import com.google.protobuf.ByteOutput;
 
 import java.io.ByteArrayOutputStream;
+import java.text.DecimalFormat;
+import java.text.Format;
 
 public abstract class RTCM {
 
@@ -12,7 +14,7 @@ public abstract class RTCM {
 
     protected final static char BIT1 = '1';
 
-    protected long toSignedInt(String bits) {
+    protected long toSignedLong(String bits) {
         int position = 0;
         long answer = 0;
 
@@ -23,6 +25,20 @@ public abstract class RTCM {
         }
         if (bits.charAt(0) == BIT1)
             answer += (long) Math.pow(2, position) * -1;
+        return answer;
+    }
+
+    protected int toSignedInt(String bits) {
+        int position = 0;
+        int answer = 0;
+
+        for (int i = bits.length() - 1; i > 0; i--) {
+            if (bits.charAt(i) == BIT1)
+                answer += Math.pow(2, position);
+            position++;
+        }
+        if (bits.charAt(0) == BIT1)
+            answer += Math.pow(2, position) * -1;
         return answer;
     }
 
@@ -40,7 +56,11 @@ public abstract class RTCM {
         return decimal;
     }
 
-    protected static String toBinaryString(byte n) {
+    protected String customFormat(String pattern, double value) {
+        return new DecimalFormat(pattern).format(value);
+    }
+
+    protected String toBinaryString(byte n) {
         StringBuilder sb = new StringBuilder("00000000");
         for (int bit = 0; bit < 8; bit++) {
             if (((n >> bit) & 1) > 0) {

@@ -1,12 +1,9 @@
 import org.adv25.ADVNTRIP.Tools.Analyzer;
 import org.adv25.ADVNTRIP.Tools.RTCM.MSG1004;
-import org.junit.Assert;
 import org.junit.Test;
 
 import java.io.*;
 import java.nio.ByteBuffer;
-import java.util.ArrayList;
-import java.util.Arrays;
 
 public class Test1004 extends Analyzer {
     String path = "src/test/resources/testRtcm.rtcm3";
@@ -14,7 +11,7 @@ public class Test1004 extends Analyzer {
     File file = new File(path);
 
     @Test
-    public void start(){
+    public void start() {
         String path = "src/test/resources/1004.rtcm3";
 
         File file = new File(path);
@@ -27,7 +24,10 @@ public class Test1004 extends Analyzer {
             sendMessage(byteBuffer);
 
             MSG1004 msg1004 = new MSG1004(rawData.get(1004));
-            System.out.println(msg1004);
+
+            for (MSG1004.Sat1004 s : msg1004.getListSatellites()) {
+                System.out.println(s.toString());
+            }
 
         } catch (IOException e) {
             e.printStackTrace();

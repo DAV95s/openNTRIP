@@ -1,7 +1,7 @@
 package org.adv25.ADVNTRIP.Tools.RTCM;
 
-import java.util.ArrayList;
-import java.util.Arrays;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 
 public class MSG1004 extends RTCM {
 
@@ -12,7 +12,7 @@ public class MSG1004 extends RTCM {
     private int signalsProcessed; //No. of GPS Satellite Signals Processed
     private boolean smoothingIndicator;
     private int smoothingInterval;
-
+    private final double LightMilliSecond = 299792.458;
     String[] smoothing = new String[]{
             "No smoothing",
             "< 30 s",
@@ -24,53 +24,209 @@ public class MSG1004 extends RTCM {
             "Unlimited smoothing interval"
     };
 
-    Satellite[] listSatellites;
+    Sat1004[] listSatellites;
+
+    public Sat1004[] getListSatellites() {
+        return listSatellites;
+    }
 
     public MSG1004(byte[] msg) {
+
         rawMsg = msg;
 
         for (int i = 1; i < msg.length; i++) {
             binaryBuffer += toBinaryString(msg[i]);
         }
 
+
         messageNumber = Integer.parseUnsignedInt(binaryBuffer.substring(16, 28), 2);//1005 1006
         stationID = Integer.parseUnsignedInt(binaryBuffer.substring(28, 40), 2);
         TOW = toUnsignedInt(binaryBuffer.substring(40, 70)) / 1000.0d;
         synchronous = binaryBuffer.charAt(70) == RTCM.BIT1;
         signalsProcessed = toUnsignedInt(binaryBuffer.substring(71, 76));
-        listSatellites = new Satellite[signalsProcessed];
         smoothingIndicator = binaryBuffer.charAt(76) == RTCM.BIT1;
         smoothingInterval = toUnsignedInt(binaryBuffer.substring(77, 80));
 
+        listSatellites = new Sat1004[signalsProcessed];
+
+        for (int i = 0; i < signalsProcessed; i++) {
+            int shift = i * 125;
+
+            Sat1004 s = new Sat1004();
+
+            s.setID(toUnsignedInt(binaryBuffer.substring(80 + shift, 86 + shift)));
+            s.setCodeL1(toUnsignedInt(binaryBuffer.substring(86 + shift, 87 + shift)));
+            s.setL1Psr(toUnsignedInt(binaryBuffer.substring(87 + shift, 111 + shift)));
+            s.setL1Phr_L1Psr(toSignedInt(binaryBuffer.substring(111 + shift, 131 + shift)));
+            s.setLockL1(toUnsignedInt(binaryBuffer.substring(131 + shift, 138 + shift)));
+            s.setAmbL1(toUnsignedInt(binaryBuffer.substring(138 + shift, 146 + shift)));
+            s.setSNRL1(toUnsignedInt(binaryBuffer.substring(146 + shift, 154 + shift)));
+            s.setCodeL2(toUnsignedInt(binaryBuffer.substring(154 + shift, 156 + shift)));
+            s.setL2Psr_L1Psr(toSignedInt(binaryBuffer.substring(156 + shift, 170 + shift)));
+            s.setL2Phr_L1Psr(toSignedInt(binaryBuffer.substring(170 + shift, 190 + shift)));
+            s.setLockL2(toUnsignedInt(binaryBuffer.substring(190 + shift, 197 + shift)));
+            s.setSNRL2(toUnsignedInt(binaryBuffer.substring(197 + shift, 205 + shift)));
+
+            listSatellites[i] = s;
+        }
     }
 
-
-    private class Satellite {
+    public class Sat1004 {
         //Psr - PseudoRange
         //Phr - PhaseRange
+
+        String[] L1Indicator = new String[]{
+                "C/A Code",
+                "P(Y) Code Direct"
+        };
+
+        String[] L2Indicator = new String[]{
+                "C/A or L2C code",
+                "P(Y) code direct",
+                "P(Y) code cross-correlated",
+                "Correlated P/Y"
+        };
+
         private int ID;
-        private boolean L1CodeIndicator;
+        private int CodeL1;
         private int L1Psr;
-        private int delta_L1Phr_L1Psr;
-        private int L1LockTimeIndicator;
-        private int L1PsrAmbiguity;
-        private int L1CNR;
-        private int L2CodeIndicator;
-        private int delta_L2Psr_L1Psr;
-        private int delta_2Phr_L1Psr;
-        private int L2LockTimeIndicator;
-        private int L2CNR;
+        private int L1Phr_L1Psr;
+        private int L1Phr;
+        private int LockL1;
+        private int AmbL1;
+        private int SNRL1;
+        private int CodeL2;
+        private int L2Psr_L1Psr;
+        private int L2Phr_L1Psr;
+        private int LockL2;
+        private int SNRL2;
 
-        /*L1 Code Indicator
-        0 - C/A Code
-        1 - P(Y) Code Direct
-         */
-        /*GPS L2 Code Indicator
-        0 - C/A or L2C code
-        1 - P(Y) code direct
-        2 - P(Y) code cross-correlated
-        3 - Correlated P/Y
-         */
+        @Override
+        public String toString() {
 
+            String response = "";
+            response += customFormat("##", ID) + "\t|\t";
+            response += L1Indicator[CodeL1] + "\t|\t";
+            //response += L1Psr + "\t|\t";
+            response += new BigDecimal(L1Phr_L1Psr / 2000d).setScale(2, RoundingMode.HALF_EVEN) + "\t|\t";
+
+            response += LockL1 + "\t|\t";
+            response += new BigDecimal(AmbL1 * LightMilliSecond).setScale(2, RoundingMode.HALF_EVEN) + "\t|\t";
+
+            response += new BigDecimal(SNRL1 / 4.0d).setScale(2, RoundingMode.HALF_EVEN) + "\t|\t";
+            response += L2Indicator[CodeL2] + "\t|\t";
+
+            response += new BigDecimal(L2Psr_L1Psr * 0.02d).setScale(2, RoundingMode.HALF_EVEN) + "\t|\t";
+
+            response += new BigDecimal(L2Phr_L1Psr / 2000.0d).setScale(2, RoundingMode.HALF_EVEN) + "\t|\t";
+            response += LockL2 + "\t|\t";
+            response += new BigDecimal(SNRL2 / 4.0d).setScale(2, RoundingMode.HALF_EVEN) + "\t|\t";
+
+            return response;
+        }
+
+        public int getID() {
+            return ID;
+        }
+
+        public void setID(int ID) {
+            this.ID = ID;
+        }
+
+        public int getCodeL1() {
+            return CodeL1;
+        }
+
+        public void setCodeL1(int codeL1) {
+            CodeL1 = codeL1;
+        }
+
+        public int getL1Psr() {
+            return L1Psr;
+        }
+
+        public void setL1Psr(int l1Psr) {
+            L1Psr = l1Psr;
+        }
+
+        public int getL1Phr_L1Psr() {
+            return L1Phr_L1Psr;
+        }
+
+        public void setL1Phr_L1Psr(int l1Phr_L1Psr) {
+            this.L1Phr_L1Psr = l1Phr_L1Psr;
+        }
+
+        public int getLockL1() {
+            return LockL1;
+        }
+
+        public void setLockL1(int lockL1) {
+            LockL1 = lockL1;
+        }
+
+        public int getAmbL1() {
+            return AmbL1;
+        }
+
+        public void setAmbL1(int ambL1) {
+            AmbL1 = ambL1;
+        }
+
+        public int getSNRL1() {
+            return SNRL1;
+        }
+
+        public void setSNRL1(int SNRL1) {
+            this.SNRL1 = SNRL1;
+        }
+
+        public int getCodeL2() {
+            return CodeL2;
+        }
+
+        public void setCodeL2(int codeL2) {
+            CodeL2 = codeL2;
+        }
+
+        public int getL2Psr_L1Psr() {
+            return L2Psr_L1Psr;
+        }
+
+        public void setL2Psr_L1Psr(int l2Psr_L1Psr) {
+            this.L2Psr_L1Psr = l2Psr_L1Psr;
+        }
+
+        public int getL2Phr_L1Psr() {
+            return L2Phr_L1Psr;
+        }
+
+        public void setL2Phr_L1Psr(int l2Phr_L1Psr) {
+            this.L2Phr_L1Psr = l2Phr_L1Psr;
+        }
+
+        public int getLockL2() {
+            return LockL2;
+        }
+
+        public void setLockL2(int lockL2) {
+            LockL2 = lockL2;
+        }
+
+        public int getSNRL2() {
+            return SNRL2;
+        }
+
+        public void setSNRL2(int SNRL2) {
+            this.SNRL2 = SNRL2;
+        }
+
+        public int getL1Phr() {
+            return L1Phr;
+        }
+
+        public void setL1Phr(int l1Phr) {
+            L1Phr = l1Phr;
+        }
     }
 }
