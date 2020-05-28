@@ -42,18 +42,26 @@ public abstract class RTCM {
         return answer;
     }
 
-    protected int toUnsignedInt(String biString) {
-        int n = biString.length();
+    protected int toUnsignedInt(String bits) {
+        int n = bits.length();
         int decimal = 0;
         for (int d = 0; d < n; d++) {
 
             decimal = decimal << 1;
 
-            if (biString.charAt(d) == '1') {
+            if (bits.charAt(d) == '1') {
                 decimal = decimal | 1;
             }
         }
         return decimal;
+    }
+
+    protected int toIntS(String bits) {
+        int response = toUnsignedInt(bits.substring(1));
+        if (bits.charAt(0) == BIT1)
+            response *= -1;
+
+        return response;
     }
 
     protected String customFormat(String pattern, double value) {
@@ -68,6 +76,20 @@ public abstract class RTCM {
             }
         }
         return sb.toString();
+    }
+
+    protected void setToBinaryBuffer(byte[] bytes) {
+        for (int i = 1; i < bytes.length; i++) {
+            binaryBuffer += toBinaryString(bytes[i]);
+        }
+    }
+
+    protected String getBinary(int position, int length) {
+        String response = "";
+        for (int i = position; i < position + length; i++) {
+            response += binaryBuffer.charAt(i);
+        }
+        return response;
     }
 
     protected static final int[] crc24 = new int[]{

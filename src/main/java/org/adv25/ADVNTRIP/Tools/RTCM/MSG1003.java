@@ -3,7 +3,7 @@ package org.adv25.ADVNTRIP.Tools.RTCM;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 
-public class MSG1004 extends RTCM {
+public class MSG1003 extends RTCM {
 
     private int messageNumber;
     private int stationID;
@@ -24,17 +24,20 @@ public class MSG1004 extends RTCM {
             "Unlimited smoothing interval"
     };
 
-    Sat1004[] listSatellites;
+    Sat1003[] listSatellites;
 
-    public Sat1004[] getListSatellites() {
+    public Sat1003[] getListSatellites() {
         return listSatellites;
     }
 
-    public MSG1004(byte[] msg) {
+    public MSG1003(byte[] msg) {
 
-        super.rawMsg = msg;
+        rawMsg = msg;
 
-        super.setToBinaryBuffer(msg);
+        for (int i = 1; i < msg.length; i++) {
+            binaryBuffer += toBinaryString(msg[i]);
+        }
+
 
         messageNumber = Integer.parseUnsignedInt(binaryBuffer.substring(16, 28), 2);//1005 1006
         stationID = Integer.parseUnsignedInt(binaryBuffer.substring(28, 40), 2);
@@ -44,32 +47,30 @@ public class MSG1004 extends RTCM {
         smoothingIndicator = binaryBuffer.charAt(76) == RTCM.BIT1;
         smoothingInterval = toUnsignedInt(binaryBuffer.substring(77, 80));
 
-        listSatellites = new Sat1004[signalsProcessed];
+        listSatellites = new Sat1003[signalsProcessed];
 
         for (int i = 0; i < signalsProcessed; i++) {
-            int shift = i * 125;
+            int shift = i * 101;
 
-            Sat1004 s = new Sat1004();
-
+            Sat1003 s = new Sat1003();
 
             s.setID(toUnsignedInt(getBinary(80 + shift, 6)));
             s.setCodeL1(toUnsignedInt(getBinary(86 + shift, 1)));
             s.setL1Psr(toUnsignedInt(getBinary(87 + shift, 24)));
             s.setL1Phr_L1Psr(toSignedInt(getBinary(111 + shift, 20)));
             s.setLockL1(toUnsignedInt(getBinary(131 + shift, 7)));
-            s.setAmbL1(toUnsignedInt(getBinary(138 + shift, 8)));
-            s.setSNRL1(toUnsignedInt(getBinary(146 + shift, 8)));
-            s.setCodeL2(toUnsignedInt(getBinary(154 + shift, 2)));
-            s.setL2Psr_L1Psr(toSignedInt(getBinary(156 + shift, 14)));
-            s.setL2Phr_L1Psr(toSignedInt(getBinary(170 + shift, 20)));
-            s.setLockL2(toUnsignedInt(getBinary(190 + shift, 7)));
-            s.setSNRL2(toUnsignedInt(getBinary(197 + shift, 8)));
+            s.setCodeL2(toUnsignedInt(getBinary(138 + shift, 2)));
+            s.setL2Psr_L1Psr(toSignedInt(getBinary(140 + shift, 14)));
+            s.setL2Phr_L1Psr(toSignedInt(getBinary(154 + shift, 20)));
+            s.setLockL2(toUnsignedInt(getBinary(174 + shift, 7)));
+
+
 
             listSatellites[i] = s;
         }
     }
 
-    public class Sat1004 {
+    public class Sat1003 {
         //Psr - PseudoRange
         //Phr - PhaseRange
 
@@ -89,15 +90,12 @@ public class MSG1004 extends RTCM {
         private int CodeL1;
         private int L1Psr;
         private int L1Phr_L1Psr;
-        private int L1Phr;
         private int LockL1;
-        private int AmbL1;
-        private int SNRL1;
         private int CodeL2;
         private int L2Psr_L1Psr;
         private int L2Phr_L1Psr;
         private int LockL2;
-        private int SNRL2;
+
 
         @Override
         public String toString() {
@@ -108,13 +106,10 @@ public class MSG1004 extends RTCM {
             //response += L1Psr + "\t|\t";
             response += new BigDecimal(L1Phr_L1Psr / 2000d).setScale(2, RoundingMode.HALF_EVEN) + "\t|\t";
             response += LockL1 + "\t|\t";
-            response += new BigDecimal(AmbL1 * LightMilliSecond).setScale(2, RoundingMode.HALF_EVEN) + "\t|\t";
-            response += new BigDecimal(SNRL1 / 4.0d).setScale(2, RoundingMode.HALF_EVEN) + "\t|\t";
             response += L2Indicator[CodeL2] + "\t|\t";
             response += new BigDecimal(L2Psr_L1Psr * 0.02d).setScale(2, RoundingMode.HALF_EVEN) + "\t|\t";
             response += new BigDecimal(L2Phr_L1Psr / 2000.0d).setScale(2, RoundingMode.HALF_EVEN) + "\t|\t";
             response += LockL2 + "\t|\t";
-            response += new BigDecimal(SNRL2 / 4.0d).setScale(2, RoundingMode.HALF_EVEN) + "\t|\t";
 
             return response;
         }
@@ -159,22 +154,6 @@ public class MSG1004 extends RTCM {
             LockL1 = lockL1;
         }
 
-        public int getAmbL1() {
-            return AmbL1;
-        }
-
-        public void setAmbL1(int ambL1) {
-            AmbL1 = ambL1;
-        }
-
-        public int getSNRL1() {
-            return SNRL1;
-        }
-
-        public void setSNRL1(int SNRL1) {
-            this.SNRL1 = SNRL1;
-        }
-
         public int getCodeL2() {
             return CodeL2;
         }
@@ -207,20 +186,5 @@ public class MSG1004 extends RTCM {
             LockL2 = lockL2;
         }
 
-        public int getSNRL2() {
-            return SNRL2;
-        }
-
-        public void setSNRL2(int SNRL2) {
-            this.SNRL2 = SNRL2;
-        }
-
-        public int getL1Phr() {
-            return L1Phr;
-        }
-
-        public void setL1Phr(int l1Phr) {
-            L1Phr = l1Phr;
-        }
     }
 }

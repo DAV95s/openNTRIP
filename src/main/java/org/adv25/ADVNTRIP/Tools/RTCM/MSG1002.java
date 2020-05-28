@@ -3,7 +3,7 @@ package org.adv25.ADVNTRIP.Tools.RTCM;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 
-public class MSG1004 extends RTCM {
+public class MSG1002 extends RTCM {
 
     private int messageNumber;
     private int stationID;
@@ -24,13 +24,13 @@ public class MSG1004 extends RTCM {
             "Unlimited smoothing interval"
     };
 
-    Sat1004[] listSatellites;
+    Sat1002[] listSatellites;
 
-    public Sat1004[] getListSatellites() {
+    public Sat1002[] getListSatellites() {
         return listSatellites;
     }
 
-    public MSG1004(byte[] msg) {
+    public MSG1002(byte[] msg) {
 
         super.rawMsg = msg;
 
@@ -44,32 +44,25 @@ public class MSG1004 extends RTCM {
         smoothingIndicator = binaryBuffer.charAt(76) == RTCM.BIT1;
         smoothingInterval = toUnsignedInt(binaryBuffer.substring(77, 80));
 
-        listSatellites = new Sat1004[signalsProcessed];
+        listSatellites = new Sat1002[signalsProcessed];
 
         for (int i = 0; i < signalsProcessed; i++) {
-            int shift = i * 125;
+            int shift = i * 74;
 
-            Sat1004 s = new Sat1004();
-
+            Sat1002 s = new Sat1002();
 
             s.setID(toUnsignedInt(getBinary(80 + shift, 6)));
             s.setCodeL1(toUnsignedInt(getBinary(86 + shift, 1)));
             s.setL1Psr(toUnsignedInt(getBinary(87 + shift, 24)));
             s.setL1Phr_L1Psr(toSignedInt(getBinary(111 + shift, 20)));
             s.setLockL1(toUnsignedInt(getBinary(131 + shift, 7)));
-            s.setAmbL1(toUnsignedInt(getBinary(138 + shift, 8)));
-            s.setSNRL1(toUnsignedInt(getBinary(146 + shift, 8)));
-            s.setCodeL2(toUnsignedInt(getBinary(154 + shift, 2)));
-            s.setL2Psr_L1Psr(toSignedInt(getBinary(156 + shift, 14)));
-            s.setL2Phr_L1Psr(toSignedInt(getBinary(170 + shift, 20)));
-            s.setLockL2(toUnsignedInt(getBinary(190 + shift, 7)));
-            s.setSNRL2(toUnsignedInt(getBinary(197 + shift, 8)));
+            s.setSNRL1(toUnsignedInt(getBinary(138 + shift, 8)));
 
             listSatellites[i] = s;
         }
     }
 
-    public class Sat1004 {
+    public class Sat1002 {
         //Psr - PseudoRange
         //Phr - PhaseRange
 
@@ -89,15 +82,10 @@ public class MSG1004 extends RTCM {
         private int CodeL1;
         private int L1Psr;
         private int L1Phr_L1Psr;
-        private int L1Phr;
         private int LockL1;
         private int AmbL1;
         private int SNRL1;
-        private int CodeL2;
-        private int L2Psr_L1Psr;
-        private int L2Phr_L1Psr;
-        private int LockL2;
-        private int SNRL2;
+
 
         @Override
         public String toString() {
@@ -110,11 +98,6 @@ public class MSG1004 extends RTCM {
             response += LockL1 + "\t|\t";
             response += new BigDecimal(AmbL1 * LightMilliSecond).setScale(2, RoundingMode.HALF_EVEN) + "\t|\t";
             response += new BigDecimal(SNRL1 / 4.0d).setScale(2, RoundingMode.HALF_EVEN) + "\t|\t";
-            response += L2Indicator[CodeL2] + "\t|\t";
-            response += new BigDecimal(L2Psr_L1Psr * 0.02d).setScale(2, RoundingMode.HALF_EVEN) + "\t|\t";
-            response += new BigDecimal(L2Phr_L1Psr / 2000.0d).setScale(2, RoundingMode.HALF_EVEN) + "\t|\t";
-            response += LockL2 + "\t|\t";
-            response += new BigDecimal(SNRL2 / 4.0d).setScale(2, RoundingMode.HALF_EVEN) + "\t|\t";
 
             return response;
         }
@@ -175,52 +158,5 @@ public class MSG1004 extends RTCM {
             this.SNRL1 = SNRL1;
         }
 
-        public int getCodeL2() {
-            return CodeL2;
-        }
-
-        public void setCodeL2(int codeL2) {
-            CodeL2 = codeL2;
-        }
-
-        public int getL2Psr_L1Psr() {
-            return L2Psr_L1Psr;
-        }
-
-        public void setL2Psr_L1Psr(int l2Psr_L1Psr) {
-            this.L2Psr_L1Psr = l2Psr_L1Psr;
-        }
-
-        public int getL2Phr_L1Psr() {
-            return L2Phr_L1Psr;
-        }
-
-        public void setL2Phr_L1Psr(int l2Phr_L1Psr) {
-            this.L2Phr_L1Psr = l2Phr_L1Psr;
-        }
-
-        public int getLockL2() {
-            return LockL2;
-        }
-
-        public void setLockL2(int lockL2) {
-            LockL2 = lockL2;
-        }
-
-        public int getSNRL2() {
-            return SNRL2;
-        }
-
-        public void setSNRL2(int SNRL2) {
-            this.SNRL2 = SNRL2;
-        }
-
-        public int getL1Phr() {
-            return L1Phr;
-        }
-
-        public void setL1Phr(int l1Phr) {
-            L1Phr = l1Phr;
-        }
     }
 }

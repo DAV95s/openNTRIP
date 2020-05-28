@@ -2,6 +2,7 @@ package org.adv25.ADVNTRIP;
 
 import at.favre.lib.crypto.bcrypt.BCrypt;
 import org.adv25.ADVNTRIP.Clients.Client;
+import org.adv25.ADVNTRIP.Clients.Passwords.PasswordHandler;
 import org.adv25.ADVNTRIP.Databases.DAO.ClientDAO;
 import org.adv25.ADVNTRIP.Databases.DAO.StationDAO;
 import org.adv25.ADVNTRIP.Databases.Models.ClientModel;
@@ -69,7 +70,7 @@ public class ConnectHandler extends Thread {
 
         // if station not exists
         if (requestedStation == null) {
-            log.log(Level.INFO, requestedStation + " is not exist");
+            log.log(Level.INFO, "Requested station is not exist");
             HttpProtocol.sendMessageAndClose(socketChannel, buffer, Caster.GetSourceTable());
             return;
         }
@@ -79,44 +80,25 @@ public class ConnectHandler extends Thread {
         // if station have a password
         if (requestedStation.isAuthentication()) {
             //user [0] and pass [1] decode
-            String[] acc = basicAuthorizationDecode(httpRequest.getParam("Authorization"));
+            String[] fromUser = basicAuthorizationDecode(httpRequest.getParam("Authorization"));
 
-            ClientModel clientModel = dao.read(acc[0]);
+            ClientModel fromDB = dao.read(fromUser[0]);
 
             //user not a registered
-            if (clientModel.getName() == null) {
-                throw new SecurityException("unknown user name or bad password");
+            if (fromDB.getName() == null) {
+                throw new SecurityException("Unknown user name or bad password");
             }
 
-            // get config hash function
             Config config = Config.getInstance();
-            String algorithm = config.getProperties("passwordHashAlgorithm");
-
-            boolean response = false;
-
-            // if BCrypt
-            if ("BCrypt".equals(algorithm)) {
-                byte[] password = acc[1].getBytes();
-                byte[] dbPassword = clientModel.getPassword().getBytes();
-
-                BCrypt.Result rr = BCrypt.verifyer().verify(password, dbPassword);
-                if (rr.verified)
-                    response = true;
-            }
-
-            // if none hash
-            if ("None".equals(algorithm)) {
-                response = acc[1].equals(clientModel.getPassword());
-            }
+            PasswordHandler passwordHandler = config.getPasswordHandler();
 
             // result of authentication
-            if (response) {
+            if (passwordHandler.Compare(fromDB.getPassword(), fromUser[1])) {
                 HttpProtocol.sendMessage(socketChannel, buffer, OK_MESSAGE);
-                requestedStation.addClient(new Client(requestedStation, socketChannel, clientModel));
+                requestedStation.addClient(new Client(requestedStation, socketChannel, fromDB));
             } else {
-                throw new SecurityException("unknown user name or bad password");
+                throw new SecurityException("Unknown user name or bad password");
             }
-
             return;
         }
 
@@ -145,7 +127,7 @@ public class ConnectHandler extends Thread {
                 }
                 return;
             } else {
-                throw new SecurityException("unknown station name or bad password");
+                throw new SecurityException("Unknown station name or bad password");
             }
         }
 
@@ -153,7 +135,7 @@ public class ConnectHandler extends Thread {
         StationModel model = dao.read(stationName);
 
         if (model == null)
-            throw new SecurityException("unknown station name or bad password");
+            throw new SecurityException("Unknown station name or bad password");
 
         if (password.equals(model.getPassword())) {
             HttpProtocol.sendMessage(socketChannel, buffer, HttpProtocol.getOkMessage());
@@ -165,7 +147,7 @@ public class ConnectHandler extends Thread {
             }
 
         } else {
-            throw new SecurityException("unknown station name or bad password");
+            throw new SecurityException("Unknown station name or bad password");
         }
     }
 

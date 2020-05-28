@@ -3,16 +3,17 @@ package org.adv25.ADVNTRIP.Tools.RTCM;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 
-public class MSG1004 extends RTCM {
+public class MSG1012 extends RTCM {
 
     private int messageNumber;
     private int stationID;
-    private double TOW;
+    private double epochTime;
     private boolean synchronous;
     private int signalsProcessed; //No. of GPS Satellite Signals Processed
     private boolean smoothingIndicator;
     private int smoothingInterval;
     private final double LightMilliSecond = 299792.458;
+
     String[] smoothing = new String[]{
             "No smoothing",
             "< 30 s",
@@ -24,52 +25,52 @@ public class MSG1004 extends RTCM {
             "Unlimited smoothing interval"
     };
 
-    Sat1004[] listSatellites;
+    Sat1012[] listSatellites;
 
-    public Sat1004[] getListSatellites() {
+    public Sat1012[] getListSatellites() {
         return listSatellites;
     }
 
-    public MSG1004(byte[] msg) {
+    public MSG1012(byte[] msg) {
 
         super.rawMsg = msg;
 
         super.setToBinaryBuffer(msg);
 
-        messageNumber = Integer.parseUnsignedInt(binaryBuffer.substring(16, 28), 2);//1005 1006
-        stationID = Integer.parseUnsignedInt(binaryBuffer.substring(28, 40), 2);
-        TOW = toUnsignedInt(binaryBuffer.substring(40, 70)) / 1000.0d;
-        synchronous = binaryBuffer.charAt(70) == RTCM.BIT1;
-        signalsProcessed = toUnsignedInt(binaryBuffer.substring(71, 76));
-        smoothingIndicator = binaryBuffer.charAt(76) == RTCM.BIT1;
-        smoothingInterval = toUnsignedInt(binaryBuffer.substring(77, 80));
+        messageNumber = toUnsignedInt(getBinary(16, 12));
+        stationID = toUnsignedInt(getBinary(28, 12));
+        epochTime = toUnsignedInt(binaryBuffer.substring(40, 27)) / 1000.0d;
+        synchronous = binaryBuffer.charAt(67) == RTCM.BIT1;
+        signalsProcessed = toUnsignedInt(binaryBuffer.substring(68, 5));
+        smoothingIndicator = binaryBuffer.charAt(73) == RTCM.BIT1;
+        smoothingInterval = toUnsignedInt(binaryBuffer.substring(74, 3));
 
-        listSatellites = new Sat1004[signalsProcessed];
+        listSatellites = new Sat1012[signalsProcessed];
 
         for (int i = 0; i < signalsProcessed; i++) {
-            int shift = i * 125;
+            int shift = i * 130;
 
-            Sat1004 s = new Sat1004();
+            Sat1012 s = new Sat1012();
 
-
-            s.setID(toUnsignedInt(getBinary(80 + shift, 6)));
-            s.setCodeL1(toUnsignedInt(getBinary(86 + shift, 1)));
-            s.setL1Psr(toUnsignedInt(getBinary(87 + shift, 24)));
-            s.setL1Phr_L1Psr(toSignedInt(getBinary(111 + shift, 20)));
-            s.setLockL1(toUnsignedInt(getBinary(131 + shift, 7)));
-            s.setAmbL1(toUnsignedInt(getBinary(138 + shift, 8)));
-            s.setSNRL1(toUnsignedInt(getBinary(146 + shift, 8)));
-            s.setCodeL2(toUnsignedInt(getBinary(154 + shift, 2)));
-            s.setL2Psr_L1Psr(toSignedInt(getBinary(156 + shift, 14)));
-            s.setL2Phr_L1Psr(toSignedInt(getBinary(170 + shift, 20)));
-            s.setLockL2(toUnsignedInt(getBinary(190 + shift, 7)));
-            s.setSNRL2(toUnsignedInt(getBinary(197 + shift, 8)));
+            s.setID(toUnsignedInt(getBinary(77 + shift, 6)));
+            s.setCodeL1(toUnsignedInt(getBinary(83 + shift, 1)));
+            s.setChannelNumber(toUnsignedInt(getBinary(84,5)));
+            s.setL1Psr(toUnsignedInt(getBinary(89 + shift, 25)));
+            s.setL1Phr_L1Psr(toSignedInt(getBinary(114 + shift, 20)));
+            s.setLockL1(toUnsignedInt(getBinary(134 + shift, 7)));
+            s.setAmbL1(toUnsignedInt(getBinary(141 + shift, 7)));
+            s.setSNRL1(toUnsignedInt(getBinary(148 + shift, 8)));
+            s.setCodeL2(toUnsignedInt(getBinary(156 + shift, 2)));
+            s.setL2Psr_L1Psr(toSignedInt(getBinary(158 + shift, 14)));
+            s.setL2Phr_L1Psr(toSignedInt(getBinary(172 + shift, 20)));
+            s.setLockL2(toUnsignedInt(getBinary(192 + shift, 7)));
+            s.setSNRL2(toUnsignedInt(getBinary(199 + shift, 8)));
 
             listSatellites[i] = s;
         }
     }
 
-    public class Sat1004 {
+    public class Sat1012 {
         //Psr - PseudoRange
         //Phr - PhaseRange
 
@@ -87,9 +88,9 @@ public class MSG1004 extends RTCM {
 
         private int ID;
         private int CodeL1;
+        private int ChannelNumber;
         private int L1Psr;
         private int L1Phr_L1Psr;
-        private int L1Phr;
         private int LockL1;
         private int AmbL1;
         private int SNRL1;
@@ -215,12 +216,12 @@ public class MSG1004 extends RTCM {
             this.SNRL2 = SNRL2;
         }
 
-        public int getL1Phr() {
-            return L1Phr;
+        public int getChannelNumber() {
+            return ChannelNumber;
         }
 
-        public void setL1Phr(int l1Phr) {
-            L1Phr = l1Phr;
+        public void setChannelNumber(int channelNumber) {
+            ChannelNumber = channelNumber;
         }
     }
 }
