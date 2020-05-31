@@ -71,6 +71,43 @@ public class MSG1019 extends RTCM {
         Fit_Interval = toUnsignedInt(getBinary(503, 1));
     }
 
+    @Override
+    public String toString() {
+        return "MSG1019{" +
+                "messageNumber=" + messageNumber +
+                ", SatelliteID=" + SatelliteID +
+                ", WeekNumber=" + WeekNumber +
+                ", SV_ACCURACY=" + SV_ACCURACY +
+                ", CODE_ON_L2=" + CODE_ON_L2 +
+                ", IDOT=" + IDOT +
+                ", IODE=" + IODE +
+                ", toc=" + toc +
+                ", af2=" + af2 +
+                ", af1=" + af1 +
+                ", af0=" + af0 +
+                ", IODC=" + IODC +
+                ", Crs=" + Crs +
+                ", DELTAn=" + DELTAn +
+                ", M0=" + M0 +
+                ", Cuc=" + Cuc +
+                ", e=" + e +
+                ", Cus=" + Cus +
+                ", sqA=" + sqA +
+                ", toe=" + toe +
+                ", Cic=" + Cic +
+                ", OMEGA0=" + OMEGA0 +
+                ", Cis=" + Cis +
+                ", i0=" + i0 +
+                ", Crc=" + Crc +
+                ", Argument_of_Perigee=" + Argument_of_Perigee +
+                ", OMEGADOT=" + OMEGADOT +
+                ", tGD=" + tGD +
+                ", SV_HEALTH=" + SV_HEALTH +
+                ", L2_P_data_flag=" + L2_P_data_flag +
+                ", Fit_Interval=" + Fit_Interval +
+                '}';
+    }
+
     public int getMessageNumber() {
         return messageNumber;
     }

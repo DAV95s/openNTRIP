@@ -105,7 +105,7 @@ public class MSG1004 extends RTCM {
             String response = "";
             response += customFormat("##", ID) + "\t|\t";
             response += L1Indicator[CodeL1] + "\t|\t";
-            //response += L1Psr + "\t|\t";
+            response += L1Psr + "\t|\t\t";
             response += new BigDecimal(L1Phr_L1Psr / 2000d).setScale(2, RoundingMode.HALF_EVEN) + "\t|\t";
             response += LockL1 + "\t|\t";
             response += new BigDecimal(AmbL1 * LightMilliSecond).setScale(2, RoundingMode.HALF_EVEN) + "\t|\t";

@@ -1,5 +1,6 @@
 package org.adv25.ADVNTRIP.Tools;
 
+import org.adv25.ADVNTRIP.Caster;
 import org.adv25.ADVNTRIP.Clients.IClient;
 import org.adv25.ADVNTRIP.Databases.DAO.StationDAO;
 import org.adv25.ADVNTRIP.Databases.Models.StationModel;
@@ -108,6 +109,14 @@ public class Analyzer implements IClient, Runnable {
             } catch (InterruptedException ex) {
                 ex.printStackTrace();
             }
+
+//            long deltaT = System.currentTimeMillis() - LastPackageTimeMark;
+//            if (deltaT > 5000) {
+//                stationDAO.setOffline(model);
+//            }
+//            if (deltaT > 10000) {
+//                server.safeClose();
+//            }
 
             if (isApiRequested) {
                 determinePosition();
@@ -288,6 +297,7 @@ public class Analyzer implements IClient, Runnable {
     private final double e = 8.1819190842622e-2;  // eccentricity
     private final double asq = Math.pow(a, 2);
     private final double esq = Math.pow(e, 2);
+
     private double[] ecef2lla(double x, double y, double z) {
 
         double b = Math.sqrt(asq * (1 - esq));

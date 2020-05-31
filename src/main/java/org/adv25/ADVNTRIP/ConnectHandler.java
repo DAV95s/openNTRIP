@@ -1,6 +1,5 @@
 package org.adv25.ADVNTRIP;
 
-import at.favre.lib.crypto.bcrypt.BCrypt;
 import org.adv25.ADVNTRIP.Clients.Client;
 import org.adv25.ADVNTRIP.Clients.Passwords.PasswordHandler;
 import org.adv25.ADVNTRIP.Databases.DAO.ClientDAO;

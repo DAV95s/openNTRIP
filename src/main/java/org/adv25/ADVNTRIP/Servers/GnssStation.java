@@ -86,6 +86,7 @@ public class GnssStation extends Thread {
             for (var client : frame) {
                 client.safeClose();
             }
+
         } catch (Exception e) {
             e.printStackTrace();
         }
