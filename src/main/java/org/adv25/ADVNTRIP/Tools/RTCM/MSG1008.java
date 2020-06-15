@@ -13,25 +13,25 @@ public class MSG1008 extends RTCM {
 
         super.setToBinaryBuffer(msg);
 
-        messageNumber = toUnsignedInt(getBinary(16, 12));
-        stationID = toUnsignedInt(getBinary(28, 12));
-        int descriptorCounter = toUnsignedInt(getBinary(40, 8));
+        messageNumber = toUnsignedInt(getBits(16, 12));
+        stationID = toUnsignedInt(getBits(28, 12));
+        int descriptorCounter = toUnsignedInt(getBits(40, 8));
 
         /* antennaDescriptor */
         antennaDescriptor = "";
         for (int i = 0; i < descriptorCounter; i++) {
-            antennaDescriptor += (char) toUnsignedInt(getBinary(48 + (i * 8), 8));
+            antennaDescriptor += (char) toUnsignedInt(getBits(48 + (i * 8), 8));
         }
         /* antennaDescriptor */
 
         int pointer = 48 + (descriptorCounter * 8); //pointer to next
-        antennaID = toUnsignedInt(getBinary(pointer, 8));
+        antennaID = toUnsignedInt(getBits(pointer, 8));
 
         /* serialNumber */
-        int serialNumberCounter = toUnsignedInt(getBinary(pointer + 8, 8));
+        int serialNumberCounter = toUnsignedInt(getBits(pointer + 8, 8));
         serialNumber = "";
         for (int i = 0; i < serialNumberCounter; i++) {
-            serialNumber += (char) toUnsignedInt(getBinary((pointer + 16) + (i * 8), 8));
+            serialNumber += (char) toUnsignedInt(getBits((pointer + 16) + (i * 8), 8));
         }
         /* serialNumber */
 

@@ -37,8 +37,8 @@ public class MSG1012 extends RTCM {
 
         super.setToBinaryBuffer(msg);
 
-        messageNumber = toUnsignedInt(getBinary(16, 12));
-        stationID = toUnsignedInt(getBinary(28, 12));
+        messageNumber = toUnsignedInt(getBits(16, 12));
+        stationID = toUnsignedInt(getBits(28, 12));
         epochTime = toUnsignedInt(binaryBuffer.substring(40, 27)) / 1000.0d;
         synchronous = binaryBuffer.charAt(67) == RTCM.BIT1;
         signalsProcessed = toUnsignedInt(binaryBuffer.substring(68, 5));
@@ -52,19 +52,19 @@ public class MSG1012 extends RTCM {
 
             Sat1012 s = new Sat1012();
 
-            s.setID(toUnsignedInt(getBinary(77 + shift, 6)));
-            s.setCodeL1(toUnsignedInt(getBinary(83 + shift, 1)));
-            s.setChannelNumber(toUnsignedInt(getBinary(84,5)));
-            s.setL1Psr(toUnsignedInt(getBinary(89 + shift, 25)));
-            s.setL1Phr_L1Psr(toSignedInt(getBinary(114 + shift, 20)));
-            s.setLockL1(toUnsignedInt(getBinary(134 + shift, 7)));
-            s.setAmbL1(toUnsignedInt(getBinary(141 + shift, 7)));
-            s.setSNRL1(toUnsignedInt(getBinary(148 + shift, 8)));
-            s.setCodeL2(toUnsignedInt(getBinary(156 + shift, 2)));
-            s.setL2Psr_L1Psr(toSignedInt(getBinary(158 + shift, 14)));
-            s.setL2Phr_L1Psr(toSignedInt(getBinary(172 + shift, 20)));
-            s.setLockL2(toUnsignedInt(getBinary(192 + shift, 7)));
-            s.setSNRL2(toUnsignedInt(getBinary(199 + shift, 8)));
+            s.setID(toUnsignedInt(getBits(77 + shift, 6)));
+            s.setCodeL1(toUnsignedInt(getBits(83 + shift, 1)));
+            s.setChannelNumber(toUnsignedInt(getBits(84,5)));
+            s.setL1Psr(toUnsignedInt(getBits(89 + shift, 25)));
+            s.setL1Phr_L1Psr(toSignedInt(getBits(114 + shift, 20)));
+            s.setLockL1(toUnsignedInt(getBits(134 + shift, 7)));
+            s.setAmbL1(toUnsignedInt(getBits(141 + shift, 7)));
+            s.setSNRL1(toUnsignedInt(getBits(148 + shift, 8)));
+            s.setCodeL2(toUnsignedInt(getBits(156 + shift, 2)));
+            s.setL2Psr_L1Psr(toSignedInt(getBits(158 + shift, 14)));
+            s.setL2Phr_L1Psr(toSignedInt(getBits(172 + shift, 20)));
+            s.setLockL2(toUnsignedInt(getBits(192 + shift, 7)));
+            s.setSNRL2(toUnsignedInt(getBits(199 + shift, 8)));
 
             listSatellites[i] = s;
         }

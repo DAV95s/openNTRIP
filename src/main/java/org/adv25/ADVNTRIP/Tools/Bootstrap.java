@@ -1,11 +1,11 @@
 package org.adv25.ADVNTRIP.Tools;
 
-import org.adv25.ADVNTRIP.Databases.DAO.StationDAO;
+import org.adv25.ADVNTRIP.Databases.DAO.MountPointDAO;
 
 public class Bootstrap {
 
     public Bootstrap() {
-        StationDAO stationDAO = new StationDAO();
-        stationDAO.setAllOffline();
+        MountPointDAO stationDAO = new MountPointDAO();
+
     }
 }

@@ -1,4 +1,4 @@
-package org.adv25.ADVNTRIP.Databases.DAO;
+package org.adv25.ADVNTRIP.Databases;
 
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;

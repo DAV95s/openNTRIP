@@ -1,7 +1,5 @@
 package org.adv25.ADVNTRIP.Tools;
 
-
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.StringReader;
@@ -10,14 +8,14 @@ import java.util.Hashtable;
 public class HttpRequestParser {
     private String requestLine;
     private Hashtable<String, String> requestHeaders;
-    private StringBuffer _messageBody;
+    private StringBuffer messageBody;
 
     public HttpRequestParser() {
         requestHeaders = new Hashtable<String, String>();
-        _messageBody = new StringBuffer();
+        messageBody = new StringBuffer();
     }
 
-    public void parseRequest(String request) throws IOException, HttpFormatException, IndexOutOfBoundsException {
+    public void parseRequest(String request) throws IOException, IndexOutOfBoundsException {
         BufferedReader reader = new BufferedReader(new StringReader(request));
 
         setRequestLine(reader.readLine());
@@ -51,39 +49,31 @@ public class HttpRequestParser {
     }
 
     public String getMessageBody() {
-        return _messageBody.toString();
+        return messageBody.toString();
     }
 
-    private void setRequestLine(String requestLine) throws HttpFormatException {
+    private void setRequestLine(String requestLine) {
         if (requestLine == null || requestLine.length() == 0) {
-            throw new HttpFormatException("Invalid Request-Line: " + requestLine);
+            this.requestLine = "";
         }
         this.requestLine = requestLine;
     }
 
-    private void appendHeaderParameter(String header) throws HttpFormatException {
+    private void appendHeaderParameter(String header)   {
         int idx = header.indexOf(":");
         if (idx == -1) {
-            throw new HttpFormatException("Invalid Header Parameter: " + header);
+            return;
         }
-        requestHeaders.put(header.substring(0, idx), header.substring(idx + 1, header.length()));
+        requestHeaders.put(header.substring(0, idx), header.substring(idx + 1));
     }
 
     private void appendMessageBody(String bodyLine) {
-        _messageBody.append(bodyLine).append("\r\n");
+        messageBody.append(bodyLine).append("\r\n");
     }
 
     public String getParam(String headerName) {
         return requestHeaders.get(headerName);
     }
 
-    public void setRemoteAddress(String ip){
-        requestHeaders.put("ip", ip);
-    }
+}
 
-}
-class HttpFormatException2 extends Throwable {
-    public HttpFormatException2(String s) {
-        System.out.println(s);
-    }
-}

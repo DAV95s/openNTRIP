@@ -1,10 +1,9 @@
 package org.adv25.ADVNTRIP.Tools;
 
-import org.adv25.ADVNTRIP.Caster;
-import org.adv25.ADVNTRIP.Clients.IClient;
-import org.adv25.ADVNTRIP.Databases.DAO.StationDAO;
-import org.adv25.ADVNTRIP.Databases.Models.StationModel;
-import org.adv25.ADVNTRIP.Servers.GnssStation;
+import org.adv25.ADVNTRIP.Clients.ClientListener;
+import org.adv25.ADVNTRIP.Databases.DAO.MountPointDAO;
+import org.adv25.ADVNTRIP.Databases.Models.MountPointModel;
+import org.adv25.ADVNTRIP.Servers.BaseStation;
 import org.adv25.ADVNTRIP.Tools.RTCM.MSG1006;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -20,7 +19,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 
-public class Analyzer implements IClient, Runnable {
+public class Analyzer implements ClientListener, Runnable {
     private static Logger log = Logger.getLogger(Analyzer.class.getName());
 
     protected ConcurrentHashMap<Integer, byte[]> rawData = new ConcurrentHashMap<>();
@@ -28,31 +27,30 @@ public class Analyzer implements IClient, Runnable {
 
     //ConcurrentHashMap<Integer, Integer> details = new ConcurrentHashMap<>(); // its time mark for "Format-Details"
 
-    GnssStation server; //base station
+    BaseStation server; //base station
 
-    StationModel model;
+    MountPointModel model;
 
     Thread thread;
 
     long StartPackageTimeMark = 0; //Time of start stream. For bit rate
     long LastPackageTimeMark = 0; //Time of last data send. For check up alive
 
-    StationDAO stationDAO = new StationDAO();
+    MountPointDAO stationDAO = new MountPointDAO();
 
     public Analyzer() {
 
     }
 
-    public Analyzer(GnssStation server) {
+    public Analyzer(BaseStation server) {
         this.server = server;
-        model = server.getModel();
+       // model = server.getModel();
 
-        server.addClient(this);
+        //server.addClient(this);
         thread = new Thread(this);
     }
 
-    @Override
-    public void sendMessage(ByteBuffer bb) {
+    public void send(ByteBuffer bb) {
         if (StartPackageTimeMark == 0)
             StartPackageTimeMark = System.currentTimeMillis();
 
@@ -99,7 +97,7 @@ public class Analyzer implements IClient, Runnable {
     public void run() {
         log.log(Level.FINE, model.getMountpoint() + " analyzer is running!");
 
-        stationDAO.setOnline(model);
+        //stationDAO.setOnline(model);
 
         boolean isApiRequested = true;
 
@@ -284,8 +282,8 @@ public class Analyzer implements IClient, Runnable {
 
         model = stationDAO.read(model.getMountpoint());
 
-        model.setLatitude(lla[0]);
-        model.setLongitude(lla[1]);
+        //model.setLatitude(lla[0]);
+        //model.setLongitude(lla[1]);
 
         osmParser(HttpProtocol.osmApi(lla[0], lla[1]));
         stationDAO.update(model);
@@ -349,6 +347,11 @@ public class Analyzer implements IClient, Runnable {
         } catch (ParseException ex) {
             ex.printStackTrace();
         }
+    }
+
+    @Override
+    public void send(ByteBuffer bytes, BaseStation baseStation) throws IOException {
+
     }
 
     @Override

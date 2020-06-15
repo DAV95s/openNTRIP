@@ -16,24 +16,24 @@ public class MSG1017 extends RTCM {
         super.rawMsg = msg;
         super.setToBinaryBuffer(msg);
 
-        messageNumber = toUnsignedInt(getBinary(16, 12));
-        NetworkID = toUnsignedInt(getBinary(28, 8));
-        SubnetworkID = toUnsignedInt(getBinary(36, 4));
-        TOW = toUnsignedInt(getBinary(40, 23));
+        messageNumber = toUnsignedInt(getBits(16, 12));
+        NetworkID = toUnsignedInt(getBits(28, 8));
+        SubnetworkID = toUnsignedInt(getBits(36, 4));
+        TOW = toUnsignedInt(getBits(40, 23));
         MultipleMessageIndicator = binaryBuffer.charAt(63) == BIT1;
-        MasterStationID = toUnsignedInt(getBinary(64, 12));
-        AuxiliaryStationID = toUnsignedInt(getBinary(76, 12));
-        int gpsCounter = toUnsignedInt(getBinary(88, 4));
+        MasterStationID = toUnsignedInt(getBits(64, 12));
+        AuxiliaryStationID = toUnsignedInt(getBits(76, 12));
+        int gpsCounter = toUnsignedInt(getBits(88, 4));
         for (int i = 0; i < gpsCounter; i++) {
             int shift = i * 53;
             GPS g = new GPS();
 
-            g.setID(toUnsignedInt(getBinary(92, 6)));
-            g.setAmbiguityStatusFlag(toUnsignedInt(getBinary(98, 2)));
-            g.setNonSyncCount(toUnsignedInt(getBinary(100, 3)));
-            g.setGeometricCarrierPhaseCorrectionDifference(toUnsignedInt(getBinary(103, 17)));
-            g.setIODE(toUnsignedInt(getBinary(120, 8)));
-            g.setIonosphericCarrierPhaseCorrectionDifference(toSignedInt(getBinary(128, 17)));
+            g.setID(toUnsignedInt(getBits(92, 6)));
+            g.setAmbiguityStatusFlag(toUnsignedInt(getBits(98, 2)));
+            g.setNonSyncCount(toUnsignedInt(getBits(100, 3)));
+            g.setGeometricCarrierPhaseCorrectionDifference(toUnsignedInt(getBits(103, 17)));
+            g.setIODE(toUnsignedInt(getBits(120, 8)));
+            g.setIonosphericCarrierPhaseCorrectionDifference(toSignedInt(getBits(128, 17)));
 
         }
     }

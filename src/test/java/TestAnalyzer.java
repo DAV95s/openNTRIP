@@ -33,7 +33,7 @@ public class TestAnalyzer extends Analyzer {
             ByteBuffer byteBuffer = ByteBuffer.wrap(input.readAllBytes());
             input.close();
 
-            sendMessage(byteBuffer);
+            send(byteBuffer);
             ArrayList<String> list = new ArrayList<>();
 
             rawData.forEach((k, v) -> list.add("Numb: " + k + " Size: " + v.length));

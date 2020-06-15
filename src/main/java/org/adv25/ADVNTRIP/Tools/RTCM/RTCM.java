@@ -56,6 +56,20 @@ public abstract class RTCM {
         return decimal;
     }
 
+    protected long toUnsignedLong(String bits) {
+        long n = bits.length();
+        long decimal = 0;
+        for (int d = 0; d < n; d++) {
+
+            decimal = decimal << 1;
+
+            if (bits.charAt(d) == '1') {
+                decimal = decimal | 1;
+            }
+        }
+        return decimal;
+    }
+
     protected int toIntS(String bits) {
         int response = toUnsignedInt(bits.substring(1));
         if (bits.charAt(0) == BIT1)
@@ -84,7 +98,7 @@ public abstract class RTCM {
         }
     }
 
-    protected String getBinary(int position, int length) {
+    protected String getBits(int position, int length) {
         String response = "";
         for (int i = position; i < position + length; i++) {
             response += binaryBuffer.charAt(i);

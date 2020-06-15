@@ -1,11 +1,6 @@
 package org.adv25.ADVNTRIP.Clients.Passwords;
 
-import org.adv25.ADVNTRIP.ConnectHandler;
-
-import java.math.BigInteger;
-import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 

@@ -1,13 +1,14 @@
 package org.adv25.ADVNTRIP;
 
-import at.favre.lib.crypto.bcrypt.BCrypt;
-import org.adv25.ADVNTRIP.Tools.Bootstrap;
+import org.adv25.ADVNTRIP.Servers.BaseStation;
+import org.adv25.ADVNTRIP.Servers.Caster;
+import org.apache.log4j.Logger;
 
 public class Main {
-    public static void main(String[] args) {
+    final static Logger logger = Logger.getLogger(Main.class);
 
-        new Bootstrap();
-        Caster ntripCaster = new Caster();
-        ntripCaster.run();
+    public static void main(String[] args) {
+        BaseStation.init();
+        Caster.init();
     }
 }

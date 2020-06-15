@@ -54,15 +54,15 @@ public class MSG1003 extends RTCM {
 
             Sat1003 s = new Sat1003();
 
-            s.setID(toUnsignedInt(getBinary(80 + shift, 6)));
-            s.setCodeL1(toUnsignedInt(getBinary(86 + shift, 1)));
-            s.setL1Psr(toUnsignedInt(getBinary(87 + shift, 24)));
-            s.setL1Phr_L1Psr(toSignedInt(getBinary(111 + shift, 20)));
-            s.setLockL1(toUnsignedInt(getBinary(131 + shift, 7)));
-            s.setCodeL2(toUnsignedInt(getBinary(138 + shift, 2)));
-            s.setL2Psr_L1Psr(toSignedInt(getBinary(140 + shift, 14)));
-            s.setL2Phr_L1Psr(toSignedInt(getBinary(154 + shift, 20)));
-            s.setLockL2(toUnsignedInt(getBinary(174 + shift, 7)));
+            s.setID(toUnsignedInt(getBits(80 + shift, 6)));
+            s.setCodeL1(toUnsignedInt(getBits(86 + shift, 1)));
+            s.setL1Psr(toUnsignedInt(getBits(87 + shift, 24)));
+            s.setL1Phr_L1Psr(toSignedInt(getBits(111 + shift, 20)));
+            s.setLockL1(toUnsignedInt(getBits(131 + shift, 7)));
+            s.setCodeL2(toUnsignedInt(getBits(138 + shift, 2)));
+            s.setL2Psr_L1Psr(toSignedInt(getBits(140 + shift, 14)));
+            s.setL2Phr_L1Psr(toSignedInt(getBits(154 + shift, 20)));
+            s.setLockL2(toUnsignedInt(getBits(174 + shift, 7)));
 
 
 

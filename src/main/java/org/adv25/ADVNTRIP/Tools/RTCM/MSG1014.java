@@ -15,14 +15,14 @@ public class MSG1014 extends RTCM {
         super.rawMsg = msg;
         super.setToBinaryBuffer(msg);
 
-        messageNumber = toUnsignedInt(getBinary(16, 12));
-        NetworkID = toUnsignedInt(getBinary(28, 8));
-        SubnetworkID = toUnsignedInt(getBinary(36, 4));
-        NumberAuxiliaryStationsTransmitted = toUnsignedInt(getBinary(40,5));
-        MasterStation = toUnsignedInt(getBinary(45, 12));
-        AuxiliaryReferenceStationID = toUnsignedInt(getBinary(57, 12));
-        AuxMasterDeltaLatitude = toSignedInt(getBinary(69, 20));
-        AuxMasterDeltaLongitude = toSignedInt(getBinary(89, 21));
-        AuxMasterDeltaHeight = toSignedInt(getBinary(110, 23));
+        messageNumber = toUnsignedInt(getBits(16, 12));
+        NetworkID = toUnsignedInt(getBits(28, 8));
+        SubnetworkID = toUnsignedInt(getBits(36, 4));
+        NumberAuxiliaryStationsTransmitted = toUnsignedInt(getBits(40,5));
+        MasterStation = toUnsignedInt(getBits(45, 12));
+        AuxiliaryReferenceStationID = toUnsignedInt(getBits(57, 12));
+        AuxMasterDeltaLatitude = toSignedInt(getBits(69, 20));
+        AuxMasterDeltaLongitude = toSignedInt(getBits(89, 21));
+        AuxMasterDeltaHeight = toSignedInt(getBits(110, 23));
     }
 }

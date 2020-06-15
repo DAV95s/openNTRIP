@@ -1,9 +1,6 @@
 package org.adv25.ADVNTRIP.Tools;
 
-import org.adv25.ADVNTRIP.Clients.Passwords.BCrypt;
-import org.adv25.ADVNTRIP.Clients.Passwords.None;
-import org.adv25.ADVNTRIP.Clients.Passwords.PasswordHandler;
-import org.adv25.ADVNTRIP.Clients.Passwords.SHA256;
+import org.adv25.ADVNTRIP.Clients.Passwords.*;
 
 import java.io.File;
 import java.io.FileReader;
@@ -13,6 +10,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import static java.util.logging.Level.FINE;
+import static java.util.logging.Level.FINEST;
 
 public class Config {
     public static final Logger log = Logger.getLogger(Config.class.getName());
@@ -33,8 +31,7 @@ public class Config {
     private PasswordHandler passwordHandler;
 
     private Config() {
-        log.setLevel(FINE);
-        log.log(FINE, "123123");
+
         try {
 
             if (!configFile.exists()) {
@@ -54,13 +51,13 @@ public class Config {
 
         try {
             passwordHandler = HashAlgorithm.valueOf(hashAlgorithm).passwordHandler;
-        }catch (IllegalArgumentException e) {
+        } catch (IllegalArgumentException e) {
             e.printStackTrace();
             log.log(Level.WARNING, "'passwordHashAlgorithm' have illegalArgument!");
         }
     }
 
-    public PasswordHandler getPasswordHandler(){
+    public PasswordHandler getPasswordHandler() {
         return passwordHandler;
     }
 
@@ -72,13 +69,4 @@ public class Config {
         return prop.replaceAll("\"", "");
     }
 
-    enum HashAlgorithm {
-        None(new None()), BCrypt(new BCrypt()), SHA256(new SHA256());
-
-        PasswordHandler passwordHandler;
-
-        HashAlgorithm(PasswordHandler passwordHandler) {
-            this.passwordHandler = passwordHandler;
-        }
-    }
 }

@@ -21,7 +21,7 @@ public class Test1004 extends Analyzer {
             ByteBuffer byteBuffer = ByteBuffer.wrap(input.readAllBytes());
             input.close();
 
-            sendMessage(byteBuffer);
+            send(byteBuffer);
 
             MSG1004 msg1004 = new MSG1004(rawData.get(1004));
 

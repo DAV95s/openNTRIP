@@ -51,11 +51,11 @@ public class MSG1001 extends RTCM {
 
             Sat1001 s = new Sat1001();
 
-            s.setID(toUnsignedInt(getBinary(80 + shift, 6)));
-            s.setCodeL1(toUnsignedInt(getBinary(86 + shift, 1)));
-            s.setL1Psr(toUnsignedInt(getBinary(87 + shift, 24)));
-            s.setL1Phr_L1Psr(toSignedInt(getBinary(111 + shift, 20)));
-            s.setLockL1(toUnsignedInt(getBinary(131 + shift, 7)));
+            s.setID(toUnsignedInt(getBits(80 + shift, 6)));
+            s.setCodeL1(toUnsignedInt(getBits(86 + shift, 1)));
+            s.setL1Psr(toUnsignedInt(getBits(87 + shift, 24)));
+            s.setL1Phr_L1Psr(toSignedInt(getBits(111 + shift, 20)));
+            s.setLockL1(toUnsignedInt(getBits(131 + shift, 7)));
 
             listSatellites[i] = s;
         }

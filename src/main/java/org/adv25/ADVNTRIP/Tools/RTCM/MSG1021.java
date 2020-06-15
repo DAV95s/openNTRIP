@@ -32,43 +32,43 @@ public class MSG1021 extends RTCM {
         super.rawMsg = msg;
         super.setToBinaryBuffer(msg);
 
-        MessageNumber = toUnsignedInt(getBinary(16, 12));
-        int Source_Name_Counter = toUnsignedInt(getBinary(28, 5));
+        MessageNumber = toUnsignedInt(getBits(16, 12));
+        int Source_Name_Counter = toUnsignedInt(getBits(28, 5));
         for (int i = 0; i < Source_Name_Counter; i++) {
-            SourceName += toUnsignedInt(getBinary(33 + 8 * i, 8));
+            SourceName += toUnsignedInt(getBits(33 + 8 * i, 8));
         }
 
         int pointer = Source_Name_Counter * 8;
 
-        int Target_Name_Counter = toUnsignedInt(getBinary(pointer, 5));
+        int Target_Name_Counter = toUnsignedInt(getBits(pointer, 5));
 
         for (int i = 0; i < Target_Name_Counter; i++) {
-            TargetName += toUnsignedInt(getBinary(pointer + 5 + (8 * i), 8));
+            TargetName += toUnsignedInt(getBits(pointer + 5 + (8 * i), 8));
         }
 
         pointer = pointer + 5 + 8 * Target_Name_Counter;
 
-        SystemIdentificationNumber = toUnsignedInt(getBinary(pointer, 8));
-        UtilizedTransformationMessageIndicator = toUnsignedInt(getBinary(pointer + 8, 10));
-        PlateNumber = toUnsignedInt(getBinary(pointer + 18, 5));
-        ComputationIndicator = toUnsignedInt(getBinary(pointer + 23, 4));
-        HeightIndicator = toUnsignedInt(getBinary(pointer + 27, 2));
-        Fv = toSignedInt(getBinary(pointer + 29, 19));
-        Lv = toSignedInt(getBinary(pointer + 48, 20));
-        dFv = toUnsignedInt(getBinary(pointer + 68, 14));
-        dLv = toUnsignedInt(getBinary(pointer + 82, 14));
-        dX = toSignedInt(getBinary(pointer + 96, 23));
-        dY = toSignedInt(getBinary(pointer + 119, 23));
-        dZ = toSignedInt(getBinary(pointer + 142, 23));
-        Rx = toSignedInt(getBinary(pointer + 165, 32));
-        Ry = toSignedInt(getBinary(pointer + 197, 32));
-        Rz = toSignedInt(getBinary(pointer + 229, 32));
-        dS = toSignedInt(getBinary(pointer + 261, 25));
-        add_as = toUnsignedInt(getBinary(pointer + 286, 24));
-        add_bs = toUnsignedInt(getBinary(pointer + 310, 25));
-        add_at = toUnsignedInt(getBinary(pointer + 335, 24));
-        add_bt = toUnsignedInt(getBinary(pointer + 359, 25));
-        HrInd = toUnsignedInt(getBinary(pointer + 384 , 3));
-        VrInd = toUnsignedInt(getBinary(pointer + 387 , 3));
+        SystemIdentificationNumber = toUnsignedInt(getBits(pointer, 8));
+        UtilizedTransformationMessageIndicator = toUnsignedInt(getBits(pointer + 8, 10));
+        PlateNumber = toUnsignedInt(getBits(pointer + 18, 5));
+        ComputationIndicator = toUnsignedInt(getBits(pointer + 23, 4));
+        HeightIndicator = toUnsignedInt(getBits(pointer + 27, 2));
+        Fv = toSignedInt(getBits(pointer + 29, 19));
+        Lv = toSignedInt(getBits(pointer + 48, 20));
+        dFv = toUnsignedInt(getBits(pointer + 68, 14));
+        dLv = toUnsignedInt(getBits(pointer + 82, 14));
+        dX = toSignedInt(getBits(pointer + 96, 23));
+        dY = toSignedInt(getBits(pointer + 119, 23));
+        dZ = toSignedInt(getBits(pointer + 142, 23));
+        Rx = toSignedInt(getBits(pointer + 165, 32));
+        Ry = toSignedInt(getBits(pointer + 197, 32));
+        Rz = toSignedInt(getBits(pointer + 229, 32));
+        dS = toSignedInt(getBits(pointer + 261, 25));
+        add_as = toUnsignedInt(getBits(pointer + 286, 24));
+        add_bs = toUnsignedInt(getBits(pointer + 310, 25));
+        add_at = toUnsignedInt(getBits(pointer + 335, 24));
+        add_bt = toUnsignedInt(getBits(pointer + 359, 25));
+        HrInd = toUnsignedInt(getBits(pointer + 384 , 3));
+        VrInd = toUnsignedInt(getBits(pointer + 387 , 3));
     }
 }

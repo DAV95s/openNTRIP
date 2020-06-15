@@ -1,5 +1,4 @@
 import org.adv25.ADVNTRIP.Tools.Analyzer;
-import org.adv25.ADVNTRIP.Tools.RTCM.MSG1004;
 import org.adv25.ADVNTRIP.Tools.RTCM.MSG1019;
 import org.junit.Test;
 
@@ -21,7 +20,7 @@ public class Test1019 extends Analyzer {
             ByteBuffer byteBuffer = ByteBuffer.wrap(input.readAllBytes());
             input.close();
 
-            sendMessage(byteBuffer);
+            send(byteBuffer);
 
             MSG1019 msg1019 = new MSG1019(rawData.get(1019));
 

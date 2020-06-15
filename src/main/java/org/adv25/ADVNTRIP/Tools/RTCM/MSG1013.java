@@ -13,21 +13,21 @@ public class MSG1013 extends RTCM {
         super.rawMsg = msg;
         super.setToBinaryBuffer(msg);
 
-        messageNumber = toUnsignedInt(getBinary(16, 12));
-        stationID = toUnsignedInt(getBinary(28, 12));
-        MJD = toUnsignedInt(getBinary(40, 16));
-        UTC = toUnsignedInt(getBinary(56, 17));
-        int messageCounter = toUnsignedInt(getBinary(73, 5));
+        messageNumber = toUnsignedInt(getBits(16, 12));
+        stationID = toUnsignedInt(getBits(28, 12));
+        MJD = toUnsignedInt(getBits(40, 16));
+        UTC = toUnsignedInt(getBits(56, 17));
+        int messageCounter = toUnsignedInt(getBits(73, 5));
         list = new Message[messageCounter];
-        LeapSeconds = toUnsignedInt(getBinary(78, 8));//86
+        LeapSeconds = toUnsignedInt(getBits(78, 8));//86
 
         for (int i = 0; i < messageCounter; i++) {
             int shift = i * 29;
             Message m = new Message();
 
-            m.setMessageID(toUnsignedInt(getBinary(89 + shift, 12)));
-            m.setSyncFlag(toUnsignedInt(getBinary(101 + shift, 1)));
-            m.setTransmissionInterval(toUnsignedInt(getBinary(102 + shift, 16)));
+            m.setMessageID(toUnsignedInt(getBits(89 + shift, 12)));
+            m.setSyncFlag(toUnsignedInt(getBits(101 + shift, 1)));
+            m.setTransmissionInterval(toUnsignedInt(getBits(102 + shift, 16)));
 
             list[i] = m;
         }

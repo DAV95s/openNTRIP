@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Хост: 127.0.0.1
--- Время создания: Май 21 2020 г., 19:10
+-- Время создания: Июн 03 2020 г., 16:31
 -- Версия сервера: 10.4.11-MariaDB
 -- Версия PHP: 7.2.30
 
@@ -20,6 +20,39 @@ SET time_zone = "+00:00";
 --
 -- База данных: `ntrip`
 --
+
+-- --------------------------------------------------------
+
+--
+-- Структура таблицы `base_stations`
+--
+
+CREATE TABLE `base_stations` (
+  `id` int(11) NOT NULL,
+  `mountpoint` varchar(100) NOT NULL,
+  `identifier` varchar(255) NOT NULL DEFAULT '',
+  `format` varchar(255) NOT NULL DEFAULT '',
+  `format-details` varchar(255) NOT NULL DEFAULT '',
+  `carrier` int(1) NOT NULL DEFAULT 0,
+  `nav-system` varchar(255) NOT NULL DEFAULT '',
+  `country` varchar(3) NOT NULL DEFAULT '',
+  `lla` point NOT NULL,
+  `altitude` decimal(15,10) NOT NULL DEFAULT 0.0000000000,
+  `bitrate` int(11) NOT NULL DEFAULT 0,
+  `misc` varchar(255) NOT NULL DEFAULT '',
+  `is_online` int(1) NOT NULL DEFAULT 0,
+  `password` varchar(255) NOT NULL DEFAULT '',
+  `ecef` point NOT NULL DEFAULT '',
+  `ecef_z` decimal(15,4) NOT NULL DEFAULT 0.0000,
+  `hz` int(2) NOT NULL DEFAULT 0
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Дамп данных таблицы `base_stations`
+--
+
+INSERT INTO `base_stations` (`id`, `mountpoint`, `identifier`, `format`, `format-details`, `carrier`, `nav-system`, `country`, `lla`, `altitude`, `bitrate`, `misc`, `is_online`, `password`, `ecef`, `ecef_z`, `hz`) VALUES
+(1, 'AL1', '1231aa', 'fafaf', '123', 2, 'dddaGFPS', 'RUS', 0x00000000010100000000000000008040400000000000004640, '0.0000000000', 123, '', 1, '44444', 0x0000000001010000000000000000c05e400000000000d07440, '0.0000', 4);
 
 -- --------------------------------------------------------
 
@@ -64,19 +97,6 @@ INSERT INTO `config` (`id`, `group`, `key`, `value`) VALUES
 -- --------------------------------------------------------
 
 --
--- Структура таблицы `fail2ban`
---
-
-CREATE TABLE `fail2ban` (
-  `id` int(11) NOT NULL,
-  `ip` varchar(50) NOT NULL DEFAULT '0',
-  `try` int(11) NOT NULL,
-  `time` timestamp NOT NULL DEFAULT current_timestamp()
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
--- --------------------------------------------------------
-
---
 -- Структура таблицы `groups`
 --
 
@@ -110,10 +130,10 @@ CREATE TABLE `login_attempts` (
 -- --------------------------------------------------------
 
 --
--- Структура таблицы `stations`
+-- Структура таблицы `mountpoint`
 --
 
-CREATE TABLE `stations` (
+CREATE TABLE `mountpoint` (
   `id` int(11) NOT NULL,
   `mountpoint` varchar(100) NOT NULL,
   `identifier` varchar(255) DEFAULT NULL,
@@ -132,42 +152,40 @@ CREATE TABLE `stations` (
   `authentication` int(1) DEFAULT NULL,
   `fee` int(1) DEFAULT NULL,
   `bitrate` int(11) DEFAULT NULL,
-  `misc` varchar(255) DEFAULT NULL
+  `misc` varchar(255) DEFAULT NULL,
+  `password` varchar(255) DEFAULT NULL,
+  `caster_id` int(11) DEFAULT 0,
+  `bases_id` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT NULL CHECK (json_valid(`bases_id`))
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
--- Дамп данных таблицы `stations`
+-- Дамп данных таблицы `mountpoint`
 --
 
-INSERT INTO `stations` (`id`, `mountpoint`, `identifier`, `format`, `format-details`, `carrier`, `nav-system`, `network`, `country`, `latitude`, `longitude`, `nmea`, `solution`, `generator`, `compression`, `authentication`, `fee`, `bitrate`, `misc`) VALUES
-(1, 'test1', 'Juneau', 'RTCM 3.1', '1004(1),1005(30),1007(30),1033(30)', 2, 'GPS', NULL, 'USA', 58.416774365884315, -134.5453031026356, 0, NULL, '', NULL, 0, NULL, 0, NULL),
-(2, 'test2', 'Juneau', 'RTCM 3.1', '1004(1)', 2, 'GPS', NULL, 'USA', 58.416774365884315, -134.5453031026356, 0, NULL, '', NULL, 1, NULL, 0, NULL);
+INSERT INTO `mountpoint` (`id`, `mountpoint`, `identifier`, `format`, `format-details`, `carrier`, `nav-system`, `network`, `country`, `latitude`, `longitude`, `nmea`, `solution`, `generator`, `compression`, `authentication`, `fee`, `bitrate`, `misc`, `password`, `caster_id`, `bases_id`) VALUES
+(1, 'test1', 'Juneau', 'RTCM 3.1', '1004(1),1005(30),1007(30),1033(30)', 2, 'GPS', NULL, 'USA', 58.416774365884315, -134.5453031026356, 0, NULL, '', NULL, 0, NULL, 0, NULL, NULL, 0, NULL),
+(2, 'test2', 'Juneau', 'RTCM 3.0', '1004(1)', 2, 'GPS', NULL, 'USA', 58.416774365884315, -134.5453031026356, 0, NULL, '', NULL, 1, NULL, 0, NULL, NULL, 0, NULL);
 
 -- --------------------------------------------------------
 
 --
--- Структура таблицы `stations_info`
+-- Структура таблицы `port_listeners`
 --
 
-CREATE TABLE `stations_info` (
+CREATE TABLE `port_listeners` (
   `id` int(11) NOT NULL,
-  `is_online` int(1) DEFAULT NULL,
-  `properties` longtext DEFAULT NULL,
-  `password` varchar(255) DEFAULT NULL,
-  `fix_x` decimal(15,4) DEFAULT NULL,
-  `fix_y` decimal(15,4) DEFAULT NULL,
-  `fix_z` decimal(15,4) DEFAULT NULL,
-  `sourcetable` int(1) NOT NULL,
-  `hz` int(2) DEFAULT NULL
+  `address` varchar(40) NOT NULL,
+  `port` int(5) NOT NULL,
+  `group_id` int(11) NOT NULL,
+  `status` int(1) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
--- Дамп данных таблицы `stations_info`
+-- Дамп данных таблицы `port_listeners`
 --
 
-INSERT INTO `stations_info` (`id`, `is_online`, `properties`, `password`, `fix_x`, `fix_y`, `fix_z`, `sourcetable`, `hz`) VALUES
-(1, 0, NULL, '123', NULL, NULL, NULL, 0, NULL),
-(2, 0, NULL, '123', NULL, NULL, NULL, 0, NULL);
+INSERT INTO `port_listeners` (`id`, `address`, `port`, `group_id`, `status`) VALUES
+(0, 'localhost', 8500, 1, 0);
 
 -- --------------------------------------------------------
 
@@ -202,7 +220,7 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`id`, `ip_address`, `username`, `password`, `email`, `activation_selector`, `activation_code`, `forgotten_password_selector`, `forgotten_password_code`, `forgotten_password_time`, `remember_selector`, `remember_code`, `created_on`, `last_login`, `active`, `first_name`, `last_name`, `company`, `phone`) VALUES
-(1, '127.0.0.1', 'administrator', '$2y$12$c8pG2YTdvnTPbaxafH1aH.NDvcibJ8HbzRrXyYfiDkHB8pShZBxnq', 'admin@admin.com', NULL, '', NULL, NULL, NULL, NULL, NULL, 1268889823, 1590058736, 1, 'Admin', 'istrator', 'ADMIN', '0');
+(1, '127.0.0.1', 'administrator', '$2y$12$c8pG2YTdvnTPbaxafH1aH.NDvcibJ8HbzRrXyYfiDkHB8pShZBxnq', 'admin@admin.com', NULL, '', NULL, NULL, NULL, NULL, NULL, 1268889823, 1590842478, 1, 'Admin', 'istrator', 'ADMIN', '0');
 
 -- --------------------------------------------------------
 
@@ -229,6 +247,14 @@ INSERT INTO `users_groups` (`id`, `user_id`, `group_id`) VALUES
 --
 
 --
+-- Индексы таблицы `base_stations`
+--
+ALTER TABLE `base_stations`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `mountpoint` (`mountpoint`),
+  ADD SPATIAL KEY `lla` (`lla`);
+
+--
 -- Индексы таблицы `clients_log`
 --
 ALTER TABLE `clients_log`
@@ -245,14 +271,6 @@ ALTER TABLE `config`
   ADD KEY `key` (`key`);
 
 --
--- Индексы таблицы `fail2ban`
---
-ALTER TABLE `fail2ban`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `time` (`time`),
-  ADD KEY `ip` (`ip`);
-
---
 -- Индексы таблицы `groups`
 --
 ALTER TABLE `groups`
@@ -265,17 +283,19 @@ ALTER TABLE `login_attempts`
   ADD PRIMARY KEY (`id`);
 
 --
--- Индексы таблицы `stations`
+-- Индексы таблицы `mountpoint`
 --
-ALTER TABLE `stations`
+ALTER TABLE `mountpoint`
   ADD PRIMARY KEY (`id`),
   ADD KEY `mountpoint` (`mountpoint`);
 
 --
--- Индексы таблицы `stations_info`
+-- Индексы таблицы `port_listeners`
 --
-ALTER TABLE `stations_info`
-  ADD PRIMARY KEY (`id`);
+ALTER TABLE `port_listeners`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `port` (`port`),
+  ADD KEY `group_id` (`group_id`);
 
 --
 -- Индексы таблицы `users`
@@ -301,6 +321,12 @@ ALTER TABLE `users_groups`
 --
 
 --
+-- AUTO_INCREMENT для таблицы `base_stations`
+--
+ALTER TABLE `base_stations`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+
+--
 -- AUTO_INCREMENT для таблицы `clients_log`
 --
 ALTER TABLE `clients_log`
@@ -311,12 +337,6 @@ ALTER TABLE `clients_log`
 --
 ALTER TABLE `config`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
-
---
--- AUTO_INCREMENT для таблицы `fail2ban`
---
-ALTER TABLE `fail2ban`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT для таблицы `groups`
@@ -331,9 +351,9 @@ ALTER TABLE `login_attempts`
   MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
--- AUTO_INCREMENT для таблицы `stations`
+-- AUTO_INCREMENT для таблицы `mountpoint`
 --
-ALTER TABLE `stations`
+ALTER TABLE `mountpoint`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
