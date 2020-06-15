@@ -4,7 +4,8 @@ import org.adv25.ADVNTRIP.Databases.Models.ClientModel;
 import org.adv25.ADVNTRIP.Servers.BaseStation;
 import org.adv25.ADVNTRIP.Servers.MountPoint;
 import org.adv25.ADVNTRIP.Tools.NMEA;
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.io.IOException;
 import java.nio.ByteBuffer;
@@ -21,7 +22,7 @@ public class Client implements ClientListener {
     StringBuffer messageBody;
     MountPoint mountPoint;
     BaseStation baseStation;
-    final static org.apache.log4j.Logger logger = Logger.getLogger(Client.class);
+    final static private Logger logger = LogManager.getLogger(Client.class.getName());
 
     public Client(SocketChannel channel, String requestLine, Hashtable<String, String> header, StringBuffer body) {
         this.channel = channel;

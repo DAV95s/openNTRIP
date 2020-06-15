@@ -4,7 +4,9 @@ import org.adv25.ADVNTRIP.Clients.Client;
 import org.adv25.ADVNTRIP.Clients.ClientListener;
 import org.adv25.ADVNTRIP.Databases.DAO.BaseStationDAO;
 import org.adv25.ADVNTRIP.Databases.Models.BaseStationModel;
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 
 import java.io.IOException;
 
@@ -17,7 +19,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
 
 
 public class BaseStation implements Runnable {
-    final static org.apache.log4j.Logger logger = Logger.getLogger(BaseStation.class);
+    final static private Logger logger = LogManager.getLogger(BaseStation.class.getName());
     BaseStationModel model;
     SocketChannel socketChannel = null;
     long timeLastPack;

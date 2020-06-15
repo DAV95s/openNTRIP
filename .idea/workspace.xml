@@ -2,59 +2,15 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="b7aa1f89-fb3e-44e2-a0de-b72c0eae2f41" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/adv25/ADVNTRIP/Clients/Authentication/Authentication.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/adv25/ADVNTRIP/Clients/Authentication/Basic.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/adv25/ADVNTRIP/Clients/Authentication/Digest.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/adv25/ADVNTRIP/Clients/Authentication/None.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/adv25/ADVNTRIP/Clients/Passwords/HashAlgorithm.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/adv25/ADVNTRIP/Databases/DAO/BaseStationDAO.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/adv25/ADVNTRIP/Databases/DAO/CastersDAO.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/adv25/ADVNTRIP/Databases/DAO/MountPointDAO.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/adv25/ADVNTRIP/Databases/Models/BaseStationModel.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/adv25/ADVNTRIP/Databases/Models/CasterModel.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/adv25/ADVNTRIP/Servers/Caster.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/adv25/ADVNTRIP/Servers/MountPoint.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/adv25/ADVNTRIP/Spatial/Point.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/adv25/ADVNTRIP/Spatial/Point_lla.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/adv25/ADVNTRIP/Tools/NMEA.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/log4j.properties" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/config.ini" beforeDir="false" afterPath="$PROJECT_DIR$/config.ini" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/adv25/ADVNTRIP/Caster.java" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/adv25/ADVNTRIP/Clients/Client.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/adv25/ADVNTRIP/Clients/Client.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/adv25/ADVNTRIP/Clients/IClient.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/adv25/ADVNTRIP/Clients/ClientListener.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/adv25/ADVNTRIP/Clients/Passwords/SHA256.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/adv25/ADVNTRIP/Clients/Passwords/SHA256.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/adv25/ADVNTRIP/ConnectHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/adv25/ADVNTRIP/Network/ConnectHandler.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/adv25/ADVNTRIP/Databases/DAO/ClientDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/adv25/ADVNTRIP/Databases/DAO/ClientDAO.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/adv25/ADVNTRIP/Databases/DAO/DataSource.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/adv25/ADVNTRIP/Databases/DataSource.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/adv25/ADVNTRIP/Databases/DAO/StationDAO.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/adv25/ADVNTRIP/Databases/Models/StationModel.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/adv25/ADVNTRIP/Databases/Models/MountPointModel.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/adv25/ADVNTRIP/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/adv25/ADVNTRIP/Main.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/adv25/ADVNTRIP/Servers/GnssStation.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/adv25/ADVNTRIP/Servers/BaseStation.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/adv25/ADVNTRIP/Tools/Analyzer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/adv25/ADVNTRIP/Tools/Analyzer.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/adv25/ADVNTRIP/Tools/Bootstrap.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/adv25/ADVNTRIP/Tools/Bootstrap.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/adv25/ADVNTRIP/Tools/Config.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/adv25/ADVNTRIP/Tools/Config.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/adv25/ADVNTRIP/Tools/HttpFormatException.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/adv25/ADVNTRIP/Tools/HttpRequestParser.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/adv25/ADVNTRIP/Tools/HttpRequestParser.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/adv25/ADVNTRIP/Tools/RTCM/MSG1001.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/adv25/ADVNTRIP/Tools/RTCM/MSG1001.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/adv25/ADVNTRIP/Tools/RTCM/MSG1002.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/adv25/ADVNTRIP/Tools/RTCM/MSG1002.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/adv25/ADVNTRIP/Tools/RTCM/MSG1003.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/adv25/ADVNTRIP/Tools/RTCM/MSG1003.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/adv25/ADVNTRIP/Tools/RTCM/MSG1004.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/adv25/ADVNTRIP/Tools/RTCM/MSG1004.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/adv25/ADVNTRIP/Tools/RTCM/MSG1007.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/adv25/ADVNTRIP/Tools/RTCM/MSG1007.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/adv25/ADVNTRIP/Tools/RTCM/MSG1008.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/adv25/ADVNTRIP/Tools/RTCM/MSG1008.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/adv25/ADVNTRIP/Tools/RTCM/MSG1012.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/adv25/ADVNTRIP/Tools/RTCM/MSG1012.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/adv25/ADVNTRIP/Tools/RTCM/MSG1013.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/adv25/ADVNTRIP/Tools/RTCM/MSG1013.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/adv25/ADVNTRIP/Tools/RTCM/MSG1014.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/adv25/ADVNTRIP/Tools/RTCM/MSG1014.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/adv25/ADVNTRIP/Tools/RTCM/MSG1017.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/adv25/ADVNTRIP/Tools/RTCM/MSG1017.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/adv25/ADVNTRIP/Tools/RTCM/MSG1019.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/adv25/ADVNTRIP/Tools/RTCM/MSG1019.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/adv25/ADVNTRIP/Tools/RTCM/MSG1020.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/adv25/ADVNTRIP/Tools/RTCM/MSG1020.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/adv25/ADVNTRIP/Tools/RTCM/MSG1021.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/adv25/ADVNTRIP/Tools/RTCM/MSG1021.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/adv25/ADVNTRIP/Tools/RTCM/RTCM.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/adv25/ADVNTRIP/Tools/RTCM/RTCM.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/ntrip.sql" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/ntrip.sql" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/Test1004.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/Test1004.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/Test1019.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/Test1019.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/TestAnalyzer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/TestAnalyzer.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/adv25/ADVNTRIP/Network/ConnectHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/adv25/ADVNTRIP/Network/ConnectHandler.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/adv25/ADVNTRIP/Servers/BaseStation.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/adv25/ADVNTRIP/Servers/BaseStation.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/adv25/ADVNTRIP/Servers/Caster.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/adv25/ADVNTRIP/Servers/Caster.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/adv25/ADVNTRIP/Servers/MountPoint.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/adv25/ADVNTRIP/Servers/MountPoint.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/log4j.properties" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/log4j2.properties" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -292,26 +248,26 @@
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="740" y="274" key="FileChooserDialogImpl/0.0.1920.1040@0.0.1920.1040" timestamp="1590142231246" />
-    <state width="1877" height="325" key="GridCell.Tab.0.bottom" timestamp="1592245263761">
+    <state width="1052" height="325" key="GridCell.Tab.0.bottom" timestamp="1592246789010">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state width="1493" height="165" key="GridCell.Tab.0.bottom/0.0.1536.824@0.0.1536.824" timestamp="1590075489684" />
-    <state width="1877" height="325" key="GridCell.Tab.0.bottom/0.0.1920.1040@0.0.1920.1040" timestamp="1592245263761" />
-    <state width="1877" height="325" key="GridCell.Tab.0.center" timestamp="1592245263761">
+    <state width="1052" height="325" key="GridCell.Tab.0.bottom/0.0.1920.1040@0.0.1920.1040" timestamp="1592246789010" />
+    <state width="1052" height="325" key="GridCell.Tab.0.center" timestamp="1592246789010">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state width="1493" height="165" key="GridCell.Tab.0.center/0.0.1536.824@0.0.1536.824" timestamp="1590075489684" />
-    <state width="1877" height="325" key="GridCell.Tab.0.center/0.0.1920.1040@0.0.1920.1040" timestamp="1592245263761" />
-    <state width="1877" height="325" key="GridCell.Tab.0.left" timestamp="1592245263760">
+    <state width="1052" height="325" key="GridCell.Tab.0.center/0.0.1920.1040@0.0.1920.1040" timestamp="1592246789010" />
+    <state width="1052" height="325" key="GridCell.Tab.0.left" timestamp="1592246789009">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state width="1493" height="165" key="GridCell.Tab.0.left/0.0.1536.824@0.0.1536.824" timestamp="1590075489683" />
-    <state width="1877" height="325" key="GridCell.Tab.0.left/0.0.1920.1040@0.0.1920.1040" timestamp="1592245263760" />
-    <state width="1877" height="325" key="GridCell.Tab.0.right" timestamp="1592245263761">
+    <state width="1052" height="325" key="GridCell.Tab.0.left/0.0.1920.1040@0.0.1920.1040" timestamp="1592246789009" />
+    <state width="1052" height="325" key="GridCell.Tab.0.right" timestamp="1592246789010">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state width="1493" height="165" key="GridCell.Tab.0.right/0.0.1536.824@0.0.1536.824" timestamp="1590075489684" />
-    <state width="1877" height="325" key="GridCell.Tab.0.right/0.0.1920.1040@0.0.1920.1040" timestamp="1592245263761" />
+    <state width="1052" height="325" key="GridCell.Tab.0.right/0.0.1920.1040@0.0.1920.1040" timestamp="1592246789010" />
     <state width="1877" height="348" key="GridCell.Tab.1.bottom" timestamp="1591905642729">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>

@@ -4,9 +4,12 @@ import org.adv25.ADVNTRIP.Clients.Client;
 import org.adv25.ADVNTRIP.Clients.Passwords.None;
 import org.adv25.ADVNTRIP.Databases.DAO.BaseStationDAO;
 import org.adv25.ADVNTRIP.Databases.Models.BaseStationModel;
+import org.adv25.ADVNTRIP.Main;
 import org.adv25.ADVNTRIP.Servers.BaseStation;
 import org.adv25.ADVNTRIP.Servers.Caster;
-import org.apache.log4j.Logger;
+
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.io.*;
 import java.net.StandardSocketOptions;
@@ -15,11 +18,11 @@ import java.nio.channels.SocketChannel;
 import java.util.Hashtable;
 
 public class ConnectHandler extends Thread {
-    final static org.apache.log4j.Logger logger = Logger.getLogger(ConnectHandler.class);
+    final static private Logger logger = LogManager.getLogger(ConnectHandler.class.getName());
+
     private Caster caster;
     private SocketChannel clientChannel;
     private ByteBuffer bb = ByteBuffer.allocate(1024);
-
 
     public ConnectHandler(SocketChannel clientChannel, Caster caster) throws IOException {
         this.caster = caster;

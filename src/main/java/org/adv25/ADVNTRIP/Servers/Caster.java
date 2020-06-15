@@ -6,7 +6,8 @@ import org.adv25.ADVNTRIP.Databases.DAO.MountPointDAO;
 import org.adv25.ADVNTRIP.Databases.Models.CasterModel;
 import org.adv25.ADVNTRIP.Databases.Models.MountPointModel;
 import org.adv25.ADVNTRIP.Network.ConnectHandler;
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;
@@ -19,7 +20,7 @@ import java.util.Map;
 
 public class Caster implements Runnable {
     // <static>
-    final static org.apache.log4j.Logger logger = Logger.getLogger(Caster.class);
+    final static private Logger logger = LogManager.getLogger(Caster.class.getName());
 
     private static ArrayList<Caster> casters = new ArrayList<>();
 

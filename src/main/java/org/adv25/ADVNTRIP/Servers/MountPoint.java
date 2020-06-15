@@ -3,12 +3,15 @@ package org.adv25.ADVNTRIP.Servers;
 import org.adv25.ADVNTRIP.Clients.Authentication.Authentication;
 import org.adv25.ADVNTRIP.Clients.Client;
 import org.adv25.ADVNTRIP.Databases.Models.MountPointModel;
-import org.apache.log4j.Logger;
+
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.io.IOException;
 
 public class MountPoint {
-    final static org.apache.log4j.Logger logger = Logger.getLogger(MountPoint.class);
+    final static private Logger logger = LogManager.getLogger(MountPoint.class.getName());
+
     MountPointModel model;
     Caster parentCaster;
 
