@@ -1,5 +1,9 @@
 package org.adv25.ADVNTRIP.Tools;
 
+import org.adv25.ADVNTRIP.Servers.MountPoint;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import java.util.HashMap;
 import java.util.Map;
 /*
@@ -7,7 +11,7 @@ import java.util.Map;
  */
 
 public class NMEA {
-
+    final static private Logger logger = LogManager.getLogger(NMEA.class.getName());
 
     interface SentenceParser {
         boolean parse(String[] tokens, GPSPosition position);
@@ -92,6 +96,11 @@ public class NMEA {
 
         public String toString() {
             return String.format("POSITION: lat: %f, lon: %f, time: %f, Q: %d, dir: %f, alt: %f, vel: %f", lat, lon, time, quality, dir, altitude, velocity);
+        }
+
+        public boolean isSet() {
+            logger.debug("NMEA isSet response lat = " + lat + " lon = " + lon + " " + (lat != 0.0f && lon != 0.0f));
+            return lat != 0.0f && lon != 0.0f;
         }
     }
 

@@ -38,9 +38,11 @@ public class ConnectHandler extends Thread {
     @Override
     public void run() {
         try {
+            logger.info("Caster " + caster.getPort() + " has new connection " + clientChannel.getRemoteAddress().toString());
+
             clientChannel.read(bb);
             bb.flip();
-
+            System.out.println(new String(bb.array()));
             BufferedReader reader = new BufferedReader(new InputStreamReader(new ByteArrayInputStream(bb.array())));
 
             requestLine = reader.readLine();
@@ -58,6 +60,7 @@ public class ConnectHandler extends Thread {
             }
 
             if (requestLine.matches("GET [\\S]+ HTTP[\\S]+")) {
+                logger.info("Caster " + caster.getPort() + " | " + requestLine + " " + clientChannel.getRemoteAddress().toString());
                 Client client = new Client(clientChannel, requestLine, requestHeaders, messageBody);
                 caster.newClient(client);
             }

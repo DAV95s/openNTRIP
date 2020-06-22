@@ -13,7 +13,7 @@ import java.nio.channels.SocketChannel;
 import java.util.Hashtable;
 
 public class Client implements ClientListener {
-
+    final static private Logger logger = LogManager.getLogger(Client.class.getName());
     SocketChannel channel;
     ClientModel model;
     NMEA.GPSPosition position;
@@ -22,13 +22,16 @@ public class Client implements ClientListener {
     StringBuffer messageBody;
     MountPoint mountPoint;
     BaseStation baseStation;
-    final static private Logger logger = LogManager.getLogger(Client.class.getName());
+    long connectTimeMark = System.currentTimeMillis();
 
     public Client(SocketChannel channel, String requestLine, Hashtable<String, String> header, StringBuffer body) {
         this.channel = channel;
         this.requestLine = requestLine;
         this.requestHeaders = header;
         this.messageBody = body;
+        if (messageBody.toString() != " ") {
+            position = new NMEA().parse(messageBody.toString());
+        }
     }
 
     //Network
@@ -68,16 +71,20 @@ public class Client implements ClientListener {
             //this.bb.put(mountPoint.injection(this, baseStation));
             this.bb.flip();
             channel.write(bb);
+            logger.debug(model.getName() + " has accept message from " + baseStation.getName());
         } catch (IOException e) {
             logger.info(model.getName() + " user was disconnected.", e);
             baseStation.removeListener(this);
         }
-
     }
 
     //Getters and setters
     public NMEA.GPSPosition getPosition() {
         return position;
+    }
+
+    public MountPoint getMountPoint() {
+        return mountPoint;
     }
 
     public void setPosition(String nmea) {

@@ -8,7 +8,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.nio.ByteBuffer;
 
-public class Test1019 extends Analyzer {
+public class Test1019  {
     @Test
     public void start() {
         String path = "src/test/resources/1019.rtcm3";
@@ -20,11 +20,11 @@ public class Test1019 extends Analyzer {
             ByteBuffer byteBuffer = ByteBuffer.wrap(input.readAllBytes());
             input.close();
 
-            send(byteBuffer);
+            //send(byteBuffer);
 
-            MSG1019 msg1019 = new MSG1019(rawData.get(1019));
+            //MSG1019 msg1019 = new MSG1019(rawData.get(1019));
 
-           System.out.println(msg1019.toString());
+           //System.out.println(msg1019.toString());
 
         } catch (IOException e) {
             e.printStackTrace();

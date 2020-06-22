@@ -3,28 +3,33 @@ package org.adv25.ADVNTRIP.Servers;
 import org.adv25.ADVNTRIP.Clients.Authentication.Authentication;
 import org.adv25.ADVNTRIP.Clients.Client;
 import org.adv25.ADVNTRIP.Databases.Models.MountPointModel;
-
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.io.IOException;
+import java.util.*;
 
 public class MountPoint {
     final static private Logger logger = LogManager.getLogger(MountPoint.class.getName());
 
-    MountPointModel model;
     Caster parentCaster;
+    MountPointModel model;
+    BaseStation[] baseStationPool;
 
     public MountPoint(MountPointModel model, Caster parentCaster) {
         this.model = model;
         this.parentCaster = parentCaster;
-        logger.info("Mountpoint " + model.getMountpoint() + "has been set.");
-        System.out.println(this.toString());
-    }
+        logger.info("Mountpoint " + model.getMountpoint() + " has been set.");
 
-    public byte[] injection(Client client, BaseStation baseStation) {
+        String[] baseIds = this.model.getBasesIds().split(",");
+        baseStationPool = new BaseStation[baseIds.length];
 
-        return null;
+        for (int i = 0; i < baseIds.length; i++) {
+            int temp = Integer.parseInt(baseIds[i]);
+            baseStationPool[i] = BaseStation.getBase(temp);
+        }
+
+        logger.info("Mountpoint " + model.getMountpoint() + " " + Arrays.toString(baseStationPool));
     }
 
     public boolean isAvailable() {
@@ -44,16 +49,39 @@ public class MountPoint {
 
         client.setMountPoint(this);
 
-        BaseStation baseStation = BaseStation.getBase(1);
-
-        client.setBaseStation(baseStation);
-        baseStation.addListener(client);
-
-        if (model.isNmea()) {
-            parentCaster.clientInput(client);
+        if (!model.isNmea()) {
+            BaseStation baseStation = BaseStation.getBase(1);
+            client.setBaseStation(baseStation);
+            baseStation.addListener(client);
+            client.sendMessage(Client.OK_MESSAGE);
+            return;
         }
 
-        client.sendMessage(Client.OK_MESSAGE);
+        parentCaster.clientInput(client);
+
+        if (!client.getPosition().isSet()) {
+            nmeaClientQueue.add(client);
+        }
+    }
+
+    //NMEA wait
+    public static ArrayList<Client> nmeaClientQueue = new ArrayList();
+
+    public void nmeaWait(Client client) {
+        if (!client.getPosition().isSet())
+            return;
+
+        TreeMap<Float, BaseStation> distentions = new TreeMap<>();
+
+        for (BaseStation base : baseStationPool) {
+            float distention = base.getPosition().distance(client.getPosition());
+            distentions.put(distention, base);
+        }
+
+        BaseStation selectedBs = distentions.firstEntry().getValue();
+        selectedBs.addListener(client);
+
+        nmeaClientQueue.remove(client);
     }
 
     @Override

@@ -17,6 +17,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 public class Caster implements Runnable {
     // <static>
@@ -79,6 +81,8 @@ public class Caster implements Runnable {
         return port;
     }
 
+    private static ExecutorService executor = Executors.newCachedThreadPool();
+
     @Override
     public void run() {
         ByteBuffer byteBuffer = ByteBuffer.allocate(1024);
@@ -89,10 +93,10 @@ public class Caster implements Runnable {
             this.selector = Selector.open();
             this.serverChannel.register(selector, SelectionKey.OP_ACCEPT, this);
 
-            logger.info("Caster id " + model.getId() + " was created and port " + this.port + " has bind");
+            logger.info("Caster id:" + model.getId() + " was created and port " + this.port + " has bind");
 
             while (true) {
-                int count = this.selector.select(1000);
+                int count = this.selector.select(250);
 
                 if (count < 1)
                     continue;
@@ -105,7 +109,7 @@ public class Caster implements Runnable {
                         continue;
 
                     if (key.isAcceptable()) {
-                        new Thread(new ConnectHandler(serverChannel.accept(), this)).start();
+                        executor.submit(new ConnectHandler(serverChannel.accept(), this));
                     }
 
                     if (key.isReadable()) {
@@ -120,7 +124,17 @@ public class Caster implements Runnable {
 
                             byteBuffer.flip();
 
-                            client.setPosition(new String(byteBuffer.array()));
+                            byte[] chars = new byte[byteBuffer.remaining()];
+                            byteBuffer.get(chars);
+
+                            client.setPosition(new String(chars));
+
+                            logger.debug("Client input " + new String(byteBuffer.array()));
+
+                            if (MountPoint.nmeaClientQueue.contains(client)) {
+                                MountPoint.nmeaClientQueue.remove(client);
+                                client.getMountPoint().nmeaWait(client);
+                            }
 
                         } catch (IOException e) {
                             e.printStackTrace();
@@ -139,8 +153,9 @@ public class Caster implements Runnable {
     public void newClient(Client client) throws IOException {
         String get = client.getRequestLine().split(" ")[1].replaceAll("/", "");
         MountPoint requested = this.mountPoints.get(get);
-
+        logger.info("Caster " + port + " requested station " + get);
         if (requested == null) {
+            logger.info("Caster " + port + " has send sourcetable");
             sendSourceTable(client);
         } else {
             requested.clientAuthorization(client);
