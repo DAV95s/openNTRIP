@@ -111,6 +111,30 @@ public class BaseStationDAO implements DAO<BaseStationModel, String> {
 
     @Override
     public boolean update(BaseStationModel model) {
+
+        try (Connection con = DataSource.getConnection();
+             PreparedStatement statement = con.prepareStatement(SQL.UPDATE.QUERY)) {
+
+            statement.setString(1, model.getIdentifier());
+            statement.setString(2, model.getFormat());
+            statement.setString(3, model.getFormat_details());
+            statement.setInt(4, model.getCarrier());
+            statement.setString(5, model.getNav_system());
+            statement.setString(6, model.getCountry());
+            statement.setString(7, model.getLla().getWKT());
+            statement.setBigDecimal(8, model.getLla().getAlt());
+            statement.setInt(9, model.getBitrate());
+            statement.setString(10, model.getMisc());
+            statement.setInt(11, model.getHz());
+
+            statement.setInt(12, model.getId());
+
+            if (statement.execute())
+                return true;
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
         return false;
     }
 
@@ -127,7 +151,9 @@ public class BaseStationDAO implements DAO<BaseStationModel, String> {
                 " WHERE `mountpoint` = ?;"),
         READALL("SELECT id, mountpoint, identifier, format, `format-details`, carrier, `nav-system`, country, ST_AsText(lla) as lla, altitude, bitrate, misc, is_online, password, hz " +
                 "FROM ntrip.base_stations"),
-        UPDATE(""),
+        UPDATE("UPDATE ntrip.base_stations " +
+                "SET identifier=?, format=?, `format-details`=?, carrier=?, `nav-system`=?, country=?, lla=ST_GeomFromText(?), altitude=?, bitrate=?, misc=?, hz=?" +
+                "WHERE `id`=?;"),
         DELETE("");
 
         String QUERY;

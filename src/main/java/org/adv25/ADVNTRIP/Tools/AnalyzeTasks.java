@@ -185,7 +185,7 @@ public class AnalyzeTasks {
             Point_lla position = new Point_lla(lla[0], lla[1]);
             logger.debug(baseStation.getName() + " new position: " + position.toString());
             model.setLla(position);
-
+            model.update();
         }
 
         //gist.github.com/1536056
