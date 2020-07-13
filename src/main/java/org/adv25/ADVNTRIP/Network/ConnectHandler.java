@@ -88,7 +88,6 @@ public class ConnectHandler extends Thread {
                 bb.put(Client.OK_MESSAGE);
                 bb.flip();
                 clientChannel.write(bb);
-
             }
 
         } catch (SecurityException ex) {

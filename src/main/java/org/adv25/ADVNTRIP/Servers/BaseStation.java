@@ -4,7 +4,7 @@ import org.adv25.ADVNTRIP.Clients.ClientListener;
 import org.adv25.ADVNTRIP.Databases.DAO.BaseStationDAO;
 import org.adv25.ADVNTRIP.Databases.Models.BaseStationModel;
 import org.adv25.ADVNTRIP.Spatial.Point_lla;
-import org.adv25.ADVNTRIP.Tools.Analyzer;
+import org.adv25.ADVNTRIP.Tools.AnalyzeListener;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -15,18 +15,17 @@ import java.nio.channels.AsynchronousCloseException;
 import java.nio.channels.SocketChannel;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 public class BaseStation implements Runnable {
     final static private Logger logger = LogManager.getLogger(BaseStation.class.getName());
 
+    public static HashMap<Integer, BaseStation> bases = new HashMap<>();
+
     CopyOnWriteArrayList<ClientListener> listeners = new CopyOnWriteArrayList<>();
 
-    static HashMap<Integer, BaseStation> bases = new HashMap<>();
-
     BaseStationModel model;
-    SocketChannel socketChannel = null;
+    SocketChannel socketChannel;
     Thread thread;
     ByteBuffer buffer = ByteBuffer.allocate(8192);
 
@@ -34,16 +33,17 @@ public class BaseStation implements Runnable {
         BaseStationDAO dao = new BaseStationDAO();
         ArrayList<BaseStationModel> bases = dao.readAll();
         for (BaseStationModel base : bases) {
+            dao.setOffline(base);
             new BaseStation(base);
         }
     }
 
     private BaseStation(BaseStationModel model) {
         this.model = model;
-        bases.put(model.getId(), this);
         this.thread = new Thread(this);
-        addListener(Analyzer.registration(this));
+        bases.put(model.getId(), this);
         logger.debug(model.getMountpoint() + " position: " + this.getPosition().toString());
+        this.addListener(new AnalyzeListener(this));
     }
 
     // If base station connection was aborted
@@ -58,7 +58,7 @@ public class BaseStation implements Runnable {
         }
 
         this.socketChannel = newChannel;
-        System.out.println(thread.getState());
+
         if (thread.getState() == Thread.State.NEW) {
             thread.start();
         }
@@ -67,6 +67,9 @@ public class BaseStation implements Runnable {
             thread = new Thread(this);
             thread.start();
         }
+
+        BaseStationDAO dao = new BaseStationDAO();
+        dao.setOnline(model);
     }
 
     public static BaseStation getBase(int id) {
@@ -119,16 +122,16 @@ public class BaseStation implements Runnable {
 
                 if (i == -1) {
                     socketChannel.close();
+                    BaseStationDAO dao = new BaseStationDAO();
+                    dao.setOffline(model);
                     return;
                 }
 
-                Iterator<ClientListener> iterator = listeners.iterator();
-
-                while (iterator.hasNext()) {
+                for (ClientListener listener : listeners) {
                     buffer.flip();
-                    ClientListener client = iterator.next();
-                    client.send(buffer, this);
+                    listener.send(buffer, this);
                 }
+
             } catch (AsynchronousCloseException ex) {
                 logger.warn(model.getMountpoint() + " new connection, socket has replace!");
             } catch (IOException e) {
@@ -141,5 +144,6 @@ public class BaseStation implements Runnable {
                 break;
             }
         }
+
     }
 }

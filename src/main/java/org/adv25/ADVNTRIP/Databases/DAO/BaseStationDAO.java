@@ -2,8 +2,6 @@ package org.adv25.ADVNTRIP.Databases.DAO;
 
 import org.adv25.ADVNTRIP.Databases.DataSource;
 import org.adv25.ADVNTRIP.Databases.Models.BaseStationModel;
-import org.adv25.ADVNTRIP.Servers.BaseStation;
-import org.adv25.ADVNTRIP.Spatial.Point;
 import org.adv25.ADVNTRIP.Spatial.Point_lla;
 
 import java.sql.Connection;
@@ -143,6 +141,30 @@ public class BaseStationDAO implements DAO<BaseStationModel, String> {
         return false;
     }
 
+    public void setOnline(BaseStationModel model) {
+        try (Connection con = DataSource.getConnection();
+             PreparedStatement statement = con.prepareStatement(SQL.SET_ONLINE.QUERY)) {
+
+            statement.setInt(1, model.getId());
+
+            statement.execute();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void setOffline(BaseStationModel model) {
+        try (Connection con = DataSource.getConnection();
+             PreparedStatement statement = con.prepareStatement(SQL.SET_OFFLINE.QUERY)) {
+
+            statement.setInt(1, model.getId());
+
+            statement.execute();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
     //id | mountpoint | identifier | format | format-details | carrier | nav-system | country | lla | bitrate | misc | is_online | password | ecef | hz
     enum SQL {
         CREATE("INSERT INTO base_stations VALUES( DEFAULT , ?, ?, ?, ?, ?, ?, ?, GeomFromText(?),? , ?, ?, ?, ?, GeomFromText(?),? ,? );"),
@@ -152,9 +174,13 @@ public class BaseStationDAO implements DAO<BaseStationModel, String> {
         READALL("SELECT id, mountpoint, identifier, format, `format-details`, carrier, `nav-system`, country, ST_AsText(lla) as lla, altitude, bitrate, misc, is_online, password, hz " +
                 "FROM ntrip.base_stations"),
         UPDATE("UPDATE ntrip.base_stations " +
-                "SET identifier=?, format=?, `format-details`=?, carrier=?, `nav-system`=?, country=?, lla=ST_GeomFromText(?), altitude=?, bitrate=?, misc=?, hz=?" +
-                "WHERE `id`=?;"),
-        DELETE("");
+                "SET `identifier`=?, `format`=?, `format-details`=?, `carrier`=?, `nav-system`=?, `country`=?, `lla`=ST_GeomFromText(?), `altitude`=?, `bitrate`=?, `misc`=?, `hz`=? WHERE `id` = ?"),
+        DELETE(""),
+
+        SET_OFFLINE("UPDATE ntrip.base_stations " +
+                "SET `is_online` = 0 WHERE `id` = ?;"),
+        SET_ONLINE("UPDATE ntrip.base_stations " +
+                "SET `is_online` = 1 WHERE `id` = ?;");
 
         String QUERY;
 

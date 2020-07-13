@@ -148,6 +148,5 @@ public class BaseStationModel {
     public void update() {
         BaseStationDAO dao = new BaseStationDAO();
         dao.update(this);
-        logger.debug(mountpoint + " model has update.");
     }
 }
