@@ -30,7 +30,7 @@ public class MountPointModel {
     private String misc;
     private boolean available;
     private int casterId;
-    private String basesIds;
+    private String baseIds;
     private int plugin_id;
 
     public long getId() {
@@ -215,11 +215,11 @@ public class MountPointModel {
     }
 
     public String getBasesIds() {
-        return basesIds == null ? "" : basesIds;
+        return baseIds;
     }
 
-    public void setBasesIds(String basesIds) {
-        this.basesIds = basesIds;
+    public void setBasesIds(String ids) {
+        baseIds = ids;
     }
 
     public int getPlugin_id() {

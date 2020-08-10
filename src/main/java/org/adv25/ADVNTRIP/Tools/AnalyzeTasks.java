@@ -1,10 +1,9 @@
 package org.adv25.ADVNTRIP.Tools;
 
-import org.adv25.ADVNTRIP.Databases.Models.BaseStationModel;
-import org.adv25.ADVNTRIP.Servers.BaseStation;
+import org.adv25.ADVNTRIP.Databases.Models.ReferenceStationModel;
+import org.adv25.ADVNTRIP.Servers.ReferenceStation;
 import org.adv25.ADVNTRIP.Spatial.Point_lla;
 import org.adv25.ADVNTRIP.Tools.RTCM.MSG1005;
-import org.adv25.ADVNTRIP.Tools.RTCM.MSG1006;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.json.simple.JSONObject;
@@ -20,14 +19,14 @@ import java.util.*;
 
 public class AnalyzeTasks {
     final static private Logger logger = LogManager.getLogger(AnalyzeTasks.class.getName());
-    BaseStation baseStation;
-    BaseStationModel model;
+    ReferenceStation referenceStation;
+    ReferenceStationModel model;
     MessagePool messagePool;
 
 
-    public AnalyzeTasks(BaseStation baseStation, MessagePool messagePool) {
-        this.baseStation = baseStation;
-        this.model = baseStation.getModel();
+    public AnalyzeTasks(ReferenceStation referenceStation, MessagePool messagePool) {
+        this.referenceStation = referenceStation;
+        this.model = referenceStation.getModel();
         this.messagePool = messagePool;
 
     }
@@ -65,7 +64,7 @@ public class AnalyzeTasks {
 
             model.update();
 
-            logger.debug(baseStation.getName() + ": update RTCM Version");
+            logger.debug(referenceStation.getName() + ": update RTCM Version");
         }
     };
 
@@ -107,7 +106,7 @@ public class AnalyzeTasks {
                 model.update();
             }
 
-            logger.debug(baseStation.getName() + ": update Nav Systems");
+            logger.debug(referenceStation.getName() + ": update Nav Systems");
         }
     };
 
@@ -134,7 +133,7 @@ public class AnalyzeTasks {
 
             model.setCarrier(carrier);
             model.update();
-            logger.debug(baseStation.getName() + ": update Carrier");
+            logger.debug(referenceStation.getName() + ": update Carrier");
         }
     };
 
@@ -161,7 +160,7 @@ public class AnalyzeTasks {
 
             model.setLla(position);
             model.update();
-            logger.debug(baseStation.getName() + ": update position " + position.toString());
+            logger.debug(referenceStation.getName() + ": update position " + position.toString());
         }
     };
 

@@ -5,6 +5,7 @@ import org.adv25.ADVNTRIP.Databases.Models.MountPointModel;
 
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 public class MountPointDAO implements DAO<MountPointModel, String> {
 
@@ -110,7 +111,7 @@ public class MountPointDAO implements DAO<MountPointModel, String> {
             statement.setInt(16, model.getBitrate());
             statement.setString(17, model.getMisc());
             statement.setInt(18, model.getCasterId());
-            statement.setString(19, model.getBasesIds());
+            statement.setString(19, model.getBasesIds());//model.getBasesIds()
             statement.setBoolean(20, model.isAvailable());
             statement.setInt(21, model.getPlugin_id());
             statement.setString(22, model.getMountpoint());

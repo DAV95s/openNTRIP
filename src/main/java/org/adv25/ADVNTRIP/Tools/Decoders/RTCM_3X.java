@@ -1,20 +1,18 @@
 package org.adv25.ADVNTRIP.Tools.Decoders;
 
-import org.adv25.ADVNTRIP.Tools.Msg;
+import org.adv25.ADVNTRIP.Tools.Message;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.nio.BufferUnderflowException;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
 
 public class RTCM_3X {
     private static Logger logger = LogManager.getLogger(RTCM_3X.class.getName());
 
-    public ArrayList<Msg> separate(ByteBuffer bb) {
-        ArrayList<Msg> list = new ArrayList<>();
+    public ArrayList<Message> separate(ByteBuffer bb) {
+        ArrayList<Message> list = new ArrayList<>();
 
         if (bb.limit() == 0)
             return list;
@@ -33,7 +31,7 @@ public class RTCM_3X {
                 bb.position(preamble);
                 byte[] msg = new byte[shift];
                 bb.get(msg, 0, shift);
-                list.add(new Msg(nmb, msg));
+                list.add(new Message(nmb, msg));
 
                 bb.position(preamble + shift);
 
@@ -44,7 +42,7 @@ public class RTCM_3X {
         return list;
     }
 
-    public ArrayList<Msg> separate(byte[] bytes) {
+    public ArrayList<Message> separate(byte[] bytes) {
         ByteBuffer bb = ByteBuffer.wrap(bytes);
         return separate(bb);
     }

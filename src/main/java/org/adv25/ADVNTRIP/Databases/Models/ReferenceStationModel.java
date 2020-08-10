@@ -1,14 +1,13 @@
 package org.adv25.ADVNTRIP.Databases.Models;
 
-import org.adv25.ADVNTRIP.Databases.DAO.BaseStationDAO;
-import org.adv25.ADVNTRIP.Servers.BaseStation;
+import org.adv25.ADVNTRIP.Databases.DAO.ReferenceStationDAO;
 import org.adv25.ADVNTRIP.Spatial.Point;
 import org.adv25.ADVNTRIP.Spatial.Point_lla;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-public class BaseStationModel {
-    private static Logger logger = LogManager.getLogger(BaseStationModel.class.getName());
+public class ReferenceStationModel {
+    private static Logger logger = LogManager.getLogger(ReferenceStationModel.class.getName());
     int id;
     String mountpoint;
     String identifier;
@@ -146,7 +145,7 @@ public class BaseStationModel {
     }
 
     public void update() {
-        BaseStationDAO dao = new BaseStationDAO();
+        ReferenceStationDAO dao = new ReferenceStationDAO();
         dao.update(this);
     }
 }

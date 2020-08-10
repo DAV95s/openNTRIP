@@ -1,11 +1,11 @@
 package org.adv25.ADVNTRIP.Tools;
 
-public class Msg {
+public class Message {
     int nmb;
     byte[] bytes;
 
 
-    public Msg(int nmb ,byte[] bytes) {
+    public Message(int nmb , byte[] bytes) {
         this.bytes = bytes;
         this.nmb = nmb;
     }

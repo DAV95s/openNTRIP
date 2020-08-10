@@ -21,8 +21,6 @@ public class Point_lla {
 
 
     public Point_lla(String wkt) {
-        System.out.println(wkt);
-
         if (wkt == null)
             return;
 

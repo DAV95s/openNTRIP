@@ -14,26 +14,11 @@ public class MountPoint {
 
     Caster parentCaster;
     MountPointModel model;
-    BaseStation[] baseStationPool;
 
     public MountPoint(MountPointModel model, Caster parentCaster) {
         this.model = model;
         this.parentCaster = parentCaster;
         logger.info("Mountpoint " + model.getMountpoint() + " has been set.");
-
-        String[] baseIds = this.model.getBasesIds().split(",");
-        baseStationPool = new BaseStation[baseIds.length];
-
-        for (int i = 0; i < baseIds.length; i++) {
-            int temp = Integer.parseInt(baseIds[i]);
-            baseStationPool[i] = BaseStation.getBase(temp);
-        }
-
-        logger.info("Mountpoint " + model.getMountpoint() + " " + Arrays.toString(baseStationPool));
-    }
-
-    public boolean isAvailable() {
-        return this.model.isAvailable();
     }
 
     synchronized public void clientAuthorization(Client client) throws IOException {
@@ -42,6 +27,7 @@ public class MountPoint {
 
         Authentication auth = this.model.getAuthentication();
 
+        //if bad password
         if (!auth.start(client)) {
             client.sendMessageAndClose(Client.BAD_MESSAGE);
             return;
@@ -49,14 +35,16 @@ public class MountPoint {
 
         client.setMountPoint(this);
 
+        //if nmea connect off
         if (!model.isNmea()) {
-            BaseStation baseStation = BaseStation.getBase(1);
-            client.setBaseStation(baseStation);
-            baseStation.addListener(client);
+            ReferenceStation referenceStation = ReferenceStation.getBase(Integer.parseInt(model.getBasesIds()));
+            client.setReferenceStation(referenceStation);
+            referenceStation.addListener(client);
             client.sendMessage(Client.OK_MESSAGE);
             return;
         }
 
+        //if nmea connect on
         parentCaster.clientInput(client);
 
         if (!client.getPosition().isSet()) {
@@ -64,24 +52,11 @@ public class MountPoint {
         }
     }
 
-    //NMEA wait
+    //Clients are waiting for nmea message
     public static ArrayList<Client> nmeaClientQueue = new ArrayList();
 
-    public void nmeaWait(Client client) {
-        if (!client.getPosition().isSet())
-            return;
-
-        TreeMap<Float, BaseStation> distentions = new TreeMap<>();
-
-        for (BaseStation base : baseStationPool) {
-            float distention = base.getPosition().distance(client.getPosition());
-            distentions.put(distention, base);
-        }
-
-        BaseStation selectedBs = distentions.firstEntry().getValue();
-        selectedBs.addListener(client);
-
-        nmeaClientQueue.remove(client);
+    public boolean isAvailable() {
+        return this.model.isAvailable();
     }
 
     @Override

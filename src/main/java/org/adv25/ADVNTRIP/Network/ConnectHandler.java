@@ -2,10 +2,9 @@ package org.adv25.ADVNTRIP.Network;
 
 import org.adv25.ADVNTRIP.Clients.Client;
 import org.adv25.ADVNTRIP.Clients.Passwords.None;
-import org.adv25.ADVNTRIP.Databases.DAO.BaseStationDAO;
-import org.adv25.ADVNTRIP.Databases.Models.BaseStationModel;
-import org.adv25.ADVNTRIP.Main;
-import org.adv25.ADVNTRIP.Servers.BaseStation;
+import org.adv25.ADVNTRIP.Databases.DAO.ReferenceStationDAO;
+import org.adv25.ADVNTRIP.Databases.Models.ReferenceStationModel;
+import org.adv25.ADVNTRIP.Servers.ReferenceStation;
 import org.adv25.ADVNTRIP.Servers.Caster;
 
 import org.apache.logging.log4j.LogManager;
@@ -26,7 +25,6 @@ public class ConnectHandler extends Thread {
 
     public ConnectHandler(SocketChannel clientChannel, Caster caster) throws IOException {
         this.caster = caster;
-
         this.clientChannel = clientChannel;
         this.clientChannel.setOption(StandardSocketOptions.TCP_NODELAY, true);
     }
@@ -71,8 +69,8 @@ public class ConnectHandler extends Thread {
                 String pass = requestLine.split(" ")[1];
 
                 //compare
-                BaseStationDAO dao = new BaseStationDAO();
-                BaseStationModel model = dao.read(acc);
+                ReferenceStationDAO dao = new ReferenceStationDAO();
+                ReferenceStationModel model = dao.read(acc);
                 None compare = new None();
 
                 if (!compare.Compare(model.getPassword(), pass)) {
@@ -80,7 +78,7 @@ public class ConnectHandler extends Thread {
                     throw new SecurityException();
                 }
 
-                BaseStation bs = BaseStation.getBase(model.getId());
+                ReferenceStation bs = ReferenceStation.getBase(model.getId());
                 if (bs != null) {
                     bs.setNewSocket(clientChannel);
                 }

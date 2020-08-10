@@ -1,6 +1,5 @@
 package org.adv25.ADVNTRIP.Tools;
 
-import org.adv25.ADVNTRIP.Servers.MountPoint;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 

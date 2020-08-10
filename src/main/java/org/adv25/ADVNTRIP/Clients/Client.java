@@ -1,7 +1,7 @@
 package org.adv25.ADVNTRIP.Clients;
 
 import org.adv25.ADVNTRIP.Databases.Models.ClientModel;
-import org.adv25.ADVNTRIP.Servers.BaseStation;
+import org.adv25.ADVNTRIP.Servers.ReferenceStation;
 import org.adv25.ADVNTRIP.Servers.MountPoint;
 import org.adv25.ADVNTRIP.Tools.NMEA;
 import org.apache.logging.log4j.LogManager;
@@ -21,8 +21,7 @@ public class Client implements ClientListener {
     Hashtable<String, String> requestHeaders;
     StringBuffer messageBody;
     MountPoint mountPoint;
-    BaseStation baseStation;
-    long connectTimeMark = System.currentTimeMillis();
+    ReferenceStation referenceStation;
 
     public Client(SocketChannel channel, String requestLine, Hashtable<String, String> header, StringBuffer body) {
         this.channel = channel;
@@ -57,24 +56,24 @@ public class Client implements ClientListener {
 
     public void safeClose() {
         try {
-            baseStation.removeListener(this);
+            referenceStation.removeListener(this);
             channel.close();
         } catch (IOException e) {
 
         }
     }
 
-    public void send(ByteBuffer bytes, BaseStation baseStation) throws IOException {
+    public void send(ByteBuffer bytes, ReferenceStation referenceStation) throws IOException {
         try {
             this.bb.clear();
             this.bb.put(bytes);
-            //this.bb.put(mountPoint.injection(this, baseStation));
+            //this.bb.put(mountPoint.injection(this, referenceStation));
             this.bb.flip();
             channel.write(bb);
-            logger.debug(model.getName() + " has accept message from " + baseStation.getName());
+            logger.debug( channel.getRemoteAddress() + "has accept message from " + referenceStation.getName());
         } catch (IOException e) {
-            logger.info(model.getName() + " user was disconnected.", e);
-            baseStation.removeListener(this);
+            logger.info( channel.getRemoteAddress() + " user was disconnected.", e);
+            referenceStation.removeListener(this);
         }
     }
 
@@ -125,7 +124,7 @@ public class Client implements ClientListener {
         this.model = model;
     }
 
-    public void setBaseStation(BaseStation baseStation) {
-        this.baseStation = baseStation;
+    public void setReferenceStation(ReferenceStation referenceStation) {
+        this.referenceStation = referenceStation;
     }
 }

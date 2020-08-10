@@ -1,7 +1,7 @@
 package org.adv25.ADVNTRIP.Databases.DAO;
 
 import org.adv25.ADVNTRIP.Databases.DataSource;
-import org.adv25.ADVNTRIP.Databases.Models.BaseStationModel;
+import org.adv25.ADVNTRIP.Databases.Models.ReferenceStationModel;
 import org.adv25.ADVNTRIP.Spatial.Point_lla;
 
 import java.sql.Connection;
@@ -10,9 +10,9 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
-public class BaseStationDAO implements DAO<BaseStationModel, String> {
+public class ReferenceStationDAO implements DAO<ReferenceStationModel, String> {
     @Override
-    public boolean create(BaseStationModel model) {
+    public boolean create(ReferenceStationModel model) {
         try (Connection con = DataSource.getConnection();
              PreparedStatement statement = con.prepareStatement(SQL.CREATE.QUERY)) {
 
@@ -41,11 +41,11 @@ public class BaseStationDAO implements DAO<BaseStationModel, String> {
     }
 
     @Override
-    public BaseStationModel read(String s) {
+    public ReferenceStationModel read(String s) {
         try (Connection con = DataSource.getConnection();
              PreparedStatement statement = con.prepareStatement(SQL.READ.QUERY)) {
 
-            BaseStationModel model = new BaseStationModel();
+            ReferenceStationModel model = new ReferenceStationModel();
             statement.setString(1, s);
 
             try (ResultSet rs = statement.executeQuery()) {
@@ -74,14 +74,14 @@ public class BaseStationDAO implements DAO<BaseStationModel, String> {
         }
     }
 
-    public ArrayList<BaseStationModel> readAll() {
-        ArrayList<BaseStationModel> response = new ArrayList<>();
+    public ArrayList<ReferenceStationModel> readAll() {
+        ArrayList<ReferenceStationModel> response = new ArrayList<>();
         try (Connection con = DataSource.getConnection();
              PreparedStatement statement = con.prepareStatement(SQL.READALL.QUERY)) {
 
             try (ResultSet rs = statement.executeQuery()) {
                 while (rs.next()) {
-                    BaseStationModel model = new BaseStationModel();
+                    ReferenceStationModel model = new ReferenceStationModel();
                     model.setId(rs.getInt("id"));
                     model.setMountpoint(rs.getString("mountpoint"));
                     model.setIdentifier(rs.getString("identifier"));
@@ -108,7 +108,7 @@ public class BaseStationDAO implements DAO<BaseStationModel, String> {
     }
 
     @Override
-    public boolean update(BaseStationModel model) {
+    public boolean update(ReferenceStationModel model) {
 
         try (Connection con = DataSource.getConnection();
              PreparedStatement statement = con.prepareStatement(SQL.UPDATE.QUERY)) {
@@ -137,11 +137,11 @@ public class BaseStationDAO implements DAO<BaseStationModel, String> {
     }
 
     @Override
-    public boolean delete(BaseStationModel model) {
+    public boolean delete(ReferenceStationModel model) {
         return false;
     }
 
-    public void setOnline(BaseStationModel model) {
+    public void setOnline(ReferenceStationModel model) {
         try (Connection con = DataSource.getConnection();
              PreparedStatement statement = con.prepareStatement(SQL.SET_ONLINE.QUERY)) {
 
@@ -153,7 +153,7 @@ public class BaseStationDAO implements DAO<BaseStationModel, String> {
         }
     }
 
-    public void setOffline(BaseStationModel model) {
+    public void setOffline(ReferenceStationModel model) {
         try (Connection con = DataSource.getConnection();
              PreparedStatement statement = con.prepareStatement(SQL.SET_OFFLINE.QUERY)) {
 
@@ -165,7 +165,24 @@ public class BaseStationDAO implements DAO<BaseStationModel, String> {
         }
     }
 
-    //id | mountpoint | identifier | format | format-details | carrier | nav-system | country | lla | bitrate | misc | is_online | password | ecef | hz
+    public Integer getNearestId(double lat, double lon, String filter) {
+        try (Connection con = DataSource.getConnection();
+             PreparedStatement statement = con.prepareStatement((SQL.GET_NEAREST.QUERY))) {
+            statement.setString(1, "POINT(" + lat + " " + lon + ")");
+            statement.setString(2, filter);
+
+            try (ResultSet rs = statement.executeQuery()) {
+                if (rs.next()) {
+                    return rs.getInt("id");
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return null;
+    }
+
     enum SQL {
         CREATE("INSERT INTO base_stations VALUES( DEFAULT , ?, ?, ?, ?, ?, ?, ?, GeomFromText(?),? , ?, ?, ?, ?, GeomFromText(?),? ,? );"),
         READ("SELECT id, mountpoint, identifier, format, `format-details`, carrier, `nav-system`, country, ST_AsText(lla) as lla, altitude, bitrate, misc, is_online, password, hz\n" +
@@ -180,7 +197,13 @@ public class BaseStationDAO implements DAO<BaseStationModel, String> {
         SET_OFFLINE("UPDATE ntrip.base_stations " +
                 "SET `is_online` = 0 WHERE `id` = ?;"),
         SET_ONLINE("UPDATE ntrip.base_stations " +
-                "SET `is_online` = 1 WHERE `id` = ?;");
+                "SET `is_online` = 1 WHERE `id` = ?;"),
+
+        GET_NEAREST("SELECT id, lla, st_distance(lla, ST_GeomFromText(?)) AS dist " +
+                "FRO< ntrip.base_stations " +
+                "WHERE lla IS NOT NULL AND id IN (?)" +
+                "GROUP BY dist" +
+                "LIMIT 1");
 
         String QUERY;
 

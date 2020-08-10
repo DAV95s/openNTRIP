@@ -17,7 +17,7 @@ public class CastersDAO {
             try (ResultSet rs = statement.executeQuery(SQL.READ_ALL.QUERY)) {
                 response = new ArrayList<>();
 
-                if (rs.next()) {
+                while (rs.next()) {
                     CasterModel temp = new CasterModel();
 
                     temp.setId(rs.getInt("id"));

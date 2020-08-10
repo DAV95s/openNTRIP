@@ -1,5 +1,5 @@
 import org.adv25.ADVNTRIP.Tools.Decoders.RTCM_3X;
-import org.adv25.ADVNTRIP.Tools.Msg;
+import org.adv25.ADVNTRIP.Tools.Message;
 import org.adv25.ADVNTRIP.Tools.RTCM.MSG1004;
 import org.junit.Test;
 
@@ -23,10 +23,10 @@ public class Test1004 {
             input.close();
 
             RTCM_3X rtcm3X = new RTCM_3X();
-            ArrayList<Msg> list = rtcm3X.separate(bytes);
-            for (Msg msg : list) {
-                if (msg.getNmb() == 1004) {
-                    System.out.println(new MSG1004(msg.getBytes()).toString());
+            ArrayList<Message> list = rtcm3X.separate(bytes);
+            for (Message message : list) {
+                if (message.getNmb() == 1004) {
+                    System.out.println(new MSG1004(message.getBytes()).toString());
                 }
             }
 

@@ -1,8 +1,8 @@
 package org.adv25.ADVNTRIP.Servers;
 
 import org.adv25.ADVNTRIP.Clients.ClientListener;
-import org.adv25.ADVNTRIP.Databases.DAO.BaseStationDAO;
-import org.adv25.ADVNTRIP.Databases.Models.BaseStationModel;
+import org.adv25.ADVNTRIP.Databases.DAO.ReferenceStationDAO;
+import org.adv25.ADVNTRIP.Databases.Models.ReferenceStationModel;
 import org.adv25.ADVNTRIP.Spatial.Point_lla;
 import org.adv25.ADVNTRIP.Tools.AnalyzeListener;
 import org.apache.logging.log4j.LogManager;
@@ -17,28 +17,28 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
 
-public class BaseStation implements Runnable {
-    final static private Logger logger = LogManager.getLogger(BaseStation.class.getName());
+public class ReferenceStation implements Runnable {
+    final static private Logger logger = LogManager.getLogger(ReferenceStation.class.getName());
 
-    public static HashMap<Integer, BaseStation> bases = new HashMap<>();
+    public static HashMap<Integer, ReferenceStation> bases = new HashMap<>();
 
     CopyOnWriteArrayList<ClientListener> listeners = new CopyOnWriteArrayList<>();
 
-    BaseStationModel model;
+    ReferenceStationModel model;
     SocketChannel socketChannel;
     Thread thread;
     ByteBuffer buffer = ByteBuffer.allocate(8192);
 
     public static void init() {
-        BaseStationDAO dao = new BaseStationDAO();
-        ArrayList<BaseStationModel> bases = dao.readAll();
-        for (BaseStationModel base : bases) {
+        ReferenceStationDAO dao = new ReferenceStationDAO();
+        ArrayList<ReferenceStationModel> bases = dao.readAll();
+        for (ReferenceStationModel base : bases) {
             dao.setOffline(base);
-            new BaseStation(base);
+            new ReferenceStation(base);
         }
     }
 
-    private BaseStation(BaseStationModel model) {
+    private ReferenceStation(ReferenceStationModel model) {
         this.model = model;
         this.thread = new Thread(this);
         bases.put(model.getId(), this);
@@ -68,11 +68,11 @@ public class BaseStation implements Runnable {
             thread.start();
         }
 
-        BaseStationDAO dao = new BaseStationDAO();
+        ReferenceStationDAO dao = new ReferenceStationDAO();
         dao.setOnline(model);
     }
 
-    public static BaseStation getBase(int id) {
+    public static ReferenceStation getBase(int id) {
         return bases.get(id);
     }
 
@@ -107,7 +107,7 @@ public class BaseStation implements Runnable {
         return model.getId() + "(" + model.getMountpoint() + ")";
     }
 
-    public BaseStationModel getModel() {
+    public ReferenceStationModel getModel() {
         return model;
     }
 
@@ -122,7 +122,7 @@ public class BaseStation implements Runnable {
 
                 if (i == -1) {
                     socketChannel.close();
-                    BaseStationDAO dao = new BaseStationDAO();
+                    ReferenceStationDAO dao = new ReferenceStationDAO();
                     dao.setOffline(model);
                     return;
                 }
@@ -144,6 +144,5 @@ public class BaseStation implements Runnable {
                 break;
             }
         }
-
     }
 }

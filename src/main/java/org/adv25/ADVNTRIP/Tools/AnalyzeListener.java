@@ -1,7 +1,7 @@
 package org.adv25.ADVNTRIP.Tools;
 
 import org.adv25.ADVNTRIP.Clients.ClientListener;
-import org.adv25.ADVNTRIP.Servers.BaseStation;
+import org.adv25.ADVNTRIP.Servers.ReferenceStation;
 import org.adv25.ADVNTRIP.Tools.Decoders.RTCM_3X;
 import org.apache.logging.log4j.LogManager;
 
@@ -23,16 +23,16 @@ public class AnalyzeListener implements ClientListener, Runnable {
 
     private MessagePool messagePool = new MessagePool();
     private AnalyzeTasks tasks;
-    private BaseStation baseStation;
+    private ReferenceStation referenceStation;
 
-    public AnalyzeListener(BaseStation baseStation) {
-        this.baseStation = baseStation;
-        tasks = new AnalyzeTasks(baseStation, messagePool);
+    public AnalyzeListener(ReferenceStation referenceStation) {
+        this.referenceStation = referenceStation;
+        tasks = new AnalyzeTasks(referenceStation, messagePool);
     }
 
     @Override
     public void safeClose() throws IOException {
-        baseStation.removeListener(this);
+        referenceStation.removeListener(this);
     }
 
     public void analyzePlanner(TimerTask timerTask) {
@@ -44,7 +44,7 @@ public class AnalyzeListener implements ClientListener, Runnable {
     boolean hasAnalyzed = false;
 
     @Override
-    public void send(ByteBuffer bytes, BaseStation baseStation) throws IOException {
+    public void send(ByteBuffer bytes, ReferenceStation referenceStation) throws IOException {
 
         if (!hasAnalyzed) {
             logger.debug("IN");
@@ -79,8 +79,8 @@ public class AnalyzeListener implements ClientListener, Runnable {
 
     @Override
     public void run() {
-        ArrayList<Msg> arrayMsg = rtcmSeparator.separate(bytes.poll());
-        messagePool.putData(arrayMsg, timeMarks.poll());
+        ArrayList<Message> arrayMessage = rtcmSeparator.separate(bytes.poll());
+        messagePool.putData(arrayMessage, timeMarks.poll());
     }
 }
 
@@ -104,8 +104,8 @@ class MessagePool {
         }
     }
 
-    public void putData(ArrayList<Msg> messages, Long time) {
-        for (Msg message : messages) {
+    public void putData(ArrayList<Message> messages, Long time) {
+        for (Message message : messages) {
             bytePool.put(message.nmb, message.bytes);
             putData(message.nmb, time);
         }
