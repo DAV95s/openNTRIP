@@ -1,33 +1,35 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="b7aa1f89-fb3e-44e2-a0de-b72c0eae2f41" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/adv25/ADVNTRIP/Network/NetworkProcessor.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/adv25/ADVNTRIP/Network/Socket.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/adv25/ADVNTRIP/Network/SocketAccepter.java" afterDir="false" />
+    <list default="true" id="b7aa1f89-fb3e-44e2-a0de-b72c0eae2f41" name="Default Changelist" comment="rewrite network layout">
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/adv25/ADVNTRIP/Servers/RefStation.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/adv25/ADVNTRIP/Clients/Client.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/adv25/ADVNTRIP/Clients/Client.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/adv25/ADVNTRIP/Clients/ClientListener.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/adv25/ADVNTRIP/Clients/ClientListener.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/adv25/ADVNTRIP/Databases/DAO/BaseStationDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/adv25/ADVNTRIP/Databases/DAO/ReferenceStationDAO.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/adv25/ADVNTRIP/Databases/DAO/CastersDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/adv25/ADVNTRIP/Databases/DAO/CastersDAO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/adv25/ADVNTRIP/Clients/ClientListener.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/adv25/ADVNTRIP/Databases/DAO/CastersDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/adv25/ADVNTRIP/Databases/DAO/NtripCasterDAO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/adv25/ADVNTRIP/Databases/DAO/ClientDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/adv25/ADVNTRIP/Databases/DAO/ClientDAO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/adv25/ADVNTRIP/Databases/DAO/DAO.java" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/adv25/ADVNTRIP/Databases/DAO/MountPointDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/adv25/ADVNTRIP/Databases/DAO/MountPointDAO.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/adv25/ADVNTRIP/Databases/Models/BaseStationModel.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/adv25/ADVNTRIP/Databases/Models/ReferenceStationModel.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/adv25/ADVNTRIP/Databases/DAO/ReferenceStationDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/adv25/ADVNTRIP/Databases/DAO/ReferenceStationDAO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/adv25/ADVNTRIP/Databases/Models/CasterModel.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/adv25/ADVNTRIP/Databases/Models/NtripCasterModel.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/adv25/ADVNTRIP/Databases/Models/MountPointModel.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/adv25/ADVNTRIP/Databases/Models/MountPointModel.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/adv25/ADVNTRIP/Databases/Models/ReferenceStationModel.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/adv25/ADVNTRIP/Databases/Models/ReferenceStationModel.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/adv25/ADVNTRIP/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/adv25/ADVNTRIP/Main.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/adv25/ADVNTRIP/Network/ConnectHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/adv25/ADVNTRIP/Network/ConnectHandler.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/adv25/ADVNTRIP/Servers/BaseStation.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/adv25/ADVNTRIP/Servers/ReferenceStation.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/adv25/ADVNTRIP/Servers/Caster.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/adv25/ADVNTRIP/Servers/Caster.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/adv25/ADVNTRIP/Servers/MountPoint.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/adv25/ADVNTRIP/Servers/MountPoint.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/adv25/ADVNTRIP/Spatial/Point_lla.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/adv25/ADVNTRIP/Spatial/Point_lla.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/adv25/ADVNTRIP/Network/NetworkProcessor.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/adv25/ADVNTRIP/Network/NetworkProcessor.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/adv25/ADVNTRIP/Network/Socket.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/adv25/ADVNTRIP/Network/SocketAccepter.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/adv25/ADVNTRIP/Servers/Caster.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/adv25/ADVNTRIP/Servers/NtripCaster.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/adv25/ADVNTRIP/Servers/MountPoint.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/adv25/ADVNTRIP/Servers/ReferenceStation.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/adv25/ADVNTRIP/Spatial/Point_lla.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/adv25/ADVNTRIP/Spatial/PointLla.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/adv25/ADVNTRIP/Tools/AnalyzeListener.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/adv25/ADVNTRIP/Tools/AnalyzeListener.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/adv25/ADVNTRIP/Tools/AnalyzeTasks.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/adv25/ADVNTRIP/Tools/AnalyzeTasks.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/adv25/ADVNTRIP/Tools/Bootstrap.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/adv25/ADVNTRIP/Tools/Bootstrap.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/adv25/ADVNTRIP/Tools/Decoders/RTCM_3X.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/adv25/ADVNTRIP/Tools/Decoders/RTCM_3X.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/adv25/ADVNTRIP/Tools/HttpProtocol.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/adv25/ADVNTRIP/Tools/Msg.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/adv25/ADVNTRIP/Tools/Message.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/adv25/ADVNTRIP/Tools/NMEA.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/adv25/ADVNTRIP/Tools/NMEA.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/Test1004.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/Test1004.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/Test1019.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/Test1019.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/ntrip.sql" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/ntrip.sql" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/TestAnalyzer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/TestAnalyzer.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/TestSpatials.java" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -70,38 +72,47 @@
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="last_directory_selection" value="$PROJECT_DIR$/src/main/java/org/adv25/ADVNTRIP/Tools" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$/src/main/java/org/adv25/ADVNTRIP/Network" />
-    <property name="project.structure.last.edited" value="Libraries" />
+    <property name="project.structure.last.edited" value="Project" />
     <property name="project.structure.proportion" value="0.15429688" />
     <property name="project.structure.side.proportion" value="0.40578035" />
     <property name="restartRequiresConfirmation" value="false" />
-    <property name="settings.editor.selected.configurable" value="editor.preferences.fonts.default" />
+    <property name="settings.editor.selected.configurable" value="preferences.pluginManager" />
   </component>
   <component name="RecentsManager">
-    <key name="CopyFile.RECENT_KEYS">
-      <recent name="C:\Users\Main\Documents\ADVNTRIP\src\main\java\org\adv25\ADVNTRIP\Network" />
-    </key>
     <key name="MoveFile.RECENT_KEYS">
       <recent name="C:\Users\Main\Documents\ADVNTRIP\src\main\resources" />
       <recent name="C:\Users\Main\Documents\ADVNTRIP\src\main\java\org\adv25\ADVNTRIP\Tools" />
       <recent name="C:\Users\Main\Documents\ADVNTRIP\src\main\java\org\adv25\ADVNTRIP" />
     </key>
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\Main\Documents\ADVNTRIP\src\main\java\org\adv25\ADVNTRIP\Network" />
+    </key>
   </component>
-  <component name="RunManager" selected="Application.Start">
+  <component name="RunManager" selected="JUnit.TestAnalyzer.test1">
     <configuration name="Start" type="Application" factoryName="Application">
       <option name="MAIN_CLASS_NAME" value="org.adv25.ADVNTRIP.Main" />
       <module name="ADVNTRIP" />
+      <extension name="recording" autostart="false">
+        <include_pattern>
+          <option name="PATTERN" value="org.adv25.ADVNTRIP.*" />
+          <option name="ENABLED" value="true" />
+          <option name="INCLUDE" value="true" />
+        </include_pattern>
+      </extension>
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
     </configuration>
     <configuration default="true" type="Application" factoryName="Application">
       <module name="ADVNTRIP" />
+      <extension name="recording" autostart="false" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
     </configuration>
     <configuration name="Test1004.start" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="ADVNTRIP" />
+      <extension name="recording" autostart="true" />
       <option name="PACKAGE_NAME" value="" />
       <option name="MAIN_CLASS_NAME" value="Test1004" />
       <option name="METHOD_NAME" value="start" />
@@ -112,6 +123,7 @@
     </configuration>
     <configuration name="Test1019.start" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="ADVNTRIP" />
+      <extension name="recording" autostart="true" />
       <option name="PACKAGE_NAME" value="" />
       <option name="MAIN_CLASS_NAME" value="Test1019" />
       <option name="METHOD_NAME" value="start" />
@@ -120,11 +132,11 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="TestPasswordAlgorithm.None" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+    <configuration name="TestAnalyzer.test1" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="ADVNTRIP" />
       <option name="PACKAGE_NAME" value="" />
-      <option name="MAIN_CLASS_NAME" value="TestPasswordAlgorithm" />
-      <option name="METHOD_NAME" value="None" />
+      <option name="MAIN_CLASS_NAME" value="TestAnalyzer" />
+      <option name="METHOD_NAME" value="test1" />
       <option name="TEST_OBJECT" value="method" />
       <method v="2">
         <option name="Make" enabled="true" />
@@ -132,6 +144,7 @@
     </configuration>
     <configuration name="TestPasswordAlgorithm.none" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="ADVNTRIP" />
+      <extension name="recording" autostart="true" />
       <option name="PACKAGE_NAME" value="" />
       <option name="MAIN_CLASS_NAME" value="TestPasswordAlgorithm" />
       <option name="METHOD_NAME" value="none" />
@@ -142,6 +155,7 @@
     </configuration>
     <configuration name="TestSpatials.lea_distentions" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="ADVNTRIP" />
+      <extension name="recording" autostart="true" />
       <option name="PACKAGE_NAME" value="" />
       <option name="MAIN_CLASS_NAME" value="TestSpatials" />
       <option name="METHOD_NAME" value="lea_distentions" />
@@ -150,13 +164,21 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
+    <list>
+      <item itemvalue="Application.Start" />
+      <item itemvalue="JUnit.Test1004.start" />
+      <item itemvalue="JUnit.Test1019.start" />
+      <item itemvalue="JUnit.TestPasswordAlgorithm.none" />
+      <item itemvalue="JUnit.TestSpatials.lea_distentions" />
+      <item itemvalue="JUnit.TestAnalyzer.test1" />
+    </list>
     <recent_temporary>
       <list>
+        <item itemvalue="JUnit.TestAnalyzer.test1" />
         <item itemvalue="JUnit.Test1019.start" />
         <item itemvalue="JUnit.Test1004.start" />
         <item itemvalue="JUnit.TestSpatials.lea_distentions" />
         <item itemvalue="JUnit.TestPasswordAlgorithm.none" />
-        <item itemvalue="JUnit.TestPasswordAlgorithm.None" />
       </list>
     </recent_temporary>
   </component>
@@ -190,7 +212,14 @@
       <option name="project" value="LOCAL" />
       <updated>1589991661322</updated>
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task id="LOCAL-00002" summary="3">
+      <created>1597083132616</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1597083132616</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
     <servers />
   </component>
   <component name="Vcs.Log.History.Properties">
@@ -205,29 +234,45 @@
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="add crc24q and fix authorization" />
-    <option name="LAST_COMMIT_MESSAGE" value="add crc24q and fix authorization" />
+    <MESSAGE value="3" />
+    <MESSAGE value="rewrite network layout" />
+    <option name="LAST_COMMIT_MESSAGE" value="rewrite network layout" />
   </component>
   <component name="WindowStateProjectService">
+    <state x="361" y="70" key="#Auto_Import" timestamp="1598278270785">
+      <screen x="0" y="0" width="1536" height="824" />
+    </state>
+    <state x="361" y="70" key="#Auto_Import/0.0.1536.824@0.0.1536.824" timestamp="1598278270785" />
     <state x="552" y="178" key="#Inspections" timestamp="1590439542773">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="552" y="178" key="#Inspections/0.0.1920.1040@0.0.1920.1040" timestamp="1590439542773" />
+    <state x="223" y="67" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1598261259724">
+      <screen x="0" y="0" width="1536" height="824" />
+    </state>
+    <state x="223" y="67" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.0.1536.824@0.0.1536.824" timestamp="1598261259724" />
     <state x="719" y="322" key="#com.intellij.fileTypes.FileTypeChooser" timestamp="1593104828986">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="719" y="322" key="#com.intellij.fileTypes.FileTypeChooser/0.0.1920.1040@0.0.1920.1040" timestamp="1593104828986" />
-    <state x="765" y="203" key="#com.intellij.ide.util.MemberChooser" timestamp="1593450673223">
-      <screen x="0" y="0" width="1920" height="1040" />
-    </state>
-    <state x="765" y="203" key="#com.intellij.ide.util.MemberChooser/0.0.1920.1040@0.0.1920.1040" timestamp="1593450673223" />
-    <state x="0" y="0" key="#com.intellij.refactoring.rename.AutomaticRenamingDialog" timestamp="1596896607500">
+    <state x="476" y="125" key="#com.intellij.ide.macro.MacrosDialog" timestamp="1598260221447">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
-    <state x="0" y="0" key="#com.intellij.refactoring.rename.AutomaticRenamingDialog/0.0.1536.824@0.0.1536.824" timestamp="1596896607500" />
-    <state x="0" y="0" key="#com.intellij.refactoring.rename.AutomaticRenamingDialog/0.0.1920.1040@0.0.1920.1040" timestamp="1593018649368" />
-    <state x="690" y="266" key="#com.intellij.refactoring.safeDelete.UnsafeUsagesDialog" timestamp="1593287586808">
-      <screen x="0" y="0" width="1920" height="1040" />
+    <state x="476" y="125" key="#com.intellij.ide.macro.MacrosDialog/0.0.1536.824@0.0.1536.824" timestamp="1598260221447" />
+    <state x="612" y="161" key="#com.intellij.ide.util.MemberChooser" timestamp="1597784761447">
+      <screen x="0" y="0" width="1536" height="824" />
     </state>
+    <state x="612" y="161" key="#com.intellij.ide.util.MemberChooser/0.0.1536.824@0.0.1536.824" timestamp="1597784761447" />
+    <state x="765" y="203" key="#com.intellij.ide.util.MemberChooser/0.0.1920.1040@0.0.1920.1040" timestamp="1593450673223" />
+    <state x="0" y="0" key="#com.intellij.refactoring.rename.AutomaticRenamingDialog" timestamp="1597596003919">
+      <screen x="0" y="0" width="1536" height="824" />
+    </state>
+    <state x="0" y="0" key="#com.intellij.refactoring.rename.AutomaticRenamingDialog/0.0.1536.824@0.0.1536.824" timestamp="1597596003919" />
+    <state x="0" y="0" key="#com.intellij.refactoring.rename.AutomaticRenamingDialog/0.0.1920.1040@0.0.1920.1040" timestamp="1593018649368" />
+    <state x="552" y="211" key="#com.intellij.refactoring.safeDelete.UnsafeUsagesDialog" timestamp="1598273502468">
+      <screen x="0" y="0" width="1536" height="824" />
+    </state>
+    <state x="552" y="211" key="#com.intellij.refactoring.safeDelete.UnsafeUsagesDialog/0.0.1536.824@0.0.1536.824" timestamp="1598273502468" />
     <state x="690" y="266" key="#com.intellij.refactoring.safeDelete.UnsafeUsagesDialog/0.0.1920.1040@0.0.1920.1040" timestamp="1593287586808" />
     <state x="690" y="266" key="#com.intellij.refactoring.typeMigration.ui.FailedConversionsDialog" timestamp="1593287193785">
       <screen x="0" y="0" width="1920" height="1040" />
@@ -237,119 +282,115 @@
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="881" y="272" width="463" height="558" key="#xdebugger.XInspectDialog/0.0.1920.1040@0.0.1920.1040" timestamp="1589973277185" />
-    <state x="614" y="112" key="CommitChangelistDialog2" timestamp="1589991659700">
-      <screen x="0" y="0" width="1920" height="1040" />
-    </state>
-    <state x="614" y="112" key="CommitChangelistDialog2/0.0.1920.1040@0.0.1920.1040" timestamp="1589991659700" />
-    <state x="810" y="397" width="300" height="246" key="DBNavigator.ConnectionAuthenticationDialog" timestamp="1592321777336">
-      <screen x="0" y="0" width="1920" height="1040" />
-    </state>
-    <state x="810" y="397" width="300" height="246" key="DBNavigator.ConnectionAuthenticationDialog/0.0.1920.1040@0.0.1920.1040" timestamp="1592321777336" />
-    <state x="490" y="174" key="DBNavigator.ProjectSettingsDialog" timestamp="1592321804528">
-      <screen x="0" y="0" width="1920" height="1040" />
-    </state>
-    <state x="490" y="174" key="DBNavigator.ProjectSettingsDialog/0.0.1920.1040@0.0.1920.1040" timestamp="1592321804528" />
-    <state width="436" height="370" key="DebuggerActiveHint" timestamp="1596731078909">
+    <state x="491" y="10" key="CommitChangelistDialog2" timestamp="1598279543338">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
-    <state width="436" height="370" key="DebuggerActiveHint/0.0.1536.824@0.0.1536.824" timestamp="1596731078909" />
-    <state width="479" height="466" key="DebuggerActiveHint/0.0.1920.1040@0.0.1920.1040" timestamp="1591822590114" />
-    <state x="92" y="92" width="1736" height="856" key="DiffContextDialog" timestamp="1588692144806">
-      <screen x="0" y="0" width="1920" height="1040" />
+    <state x="491" y="10" key="CommitChangelistDialog2/0.0.1536.824@0.0.1536.824" timestamp="1598279543338" />
+    <state x="614" y="112" key="CommitChangelistDialog2/0.0.1920.1040@0.0.1920.1040" timestamp="1589991659700" />
+    <state x="648" y="315" width="298" height="245" key="DBNavigator.ConnectionAuthenticationDialog" timestamp="1598259275279">
+      <screen x="0" y="0" width="1536" height="824" />
     </state>
-    <state x="92" y="92" width="1736" height="856" key="DiffContextDialog/0.0.1920.1040@0.0.1920.1040" timestamp="1588692144806" />
+    <state x="648" y="315" width="298" height="245" key="DBNavigator.ConnectionAuthenticationDialog/0.0.1536.824@0.0.1536.824" timestamp="1598259275279" />
+    <state x="810" y="397" width="300" height="246" key="DBNavigator.ConnectionAuthenticationDialog/0.0.1920.1040@0.0.1920.1040" timestamp="1592321777336" />
+    <state x="392" y="134" key="DBNavigator.ProjectSettingsDialog" timestamp="1598263014227">
+      <screen x="0" y="0" width="1536" height="824" />
+    </state>
+    <state x="392" y="134" key="DBNavigator.ProjectSettingsDialog/0.0.1536.824@0.0.1536.824" timestamp="1598263014227" />
+    <state x="490" y="174" key="DBNavigator.ProjectSettingsDialog/0.0.1920.1040@0.0.1920.1040" timestamp="1592321804528" />
+    <state width="442" height="370" key="DebuggerActiveHint" timestamp="1597668997953">
+      <screen x="0" y="0" width="1536" height="824" />
+    </state>
+    <state width="442" height="370" key="DebuggerActiveHint/0.0.1536.824@0.0.1536.824" timestamp="1597668997953" />
+    <state width="479" height="466" key="DebuggerActiveHint/0.0.1920.1040@0.0.1920.1040" timestamp="1591822590114" />
     <state x="592" y="217" key="FileChooserDialogImpl" timestamp="1596901311308">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
     <state x="592" y="217" key="FileChooserDialogImpl/0.0.1536.824@0.0.1536.824" timestamp="1596901311308" />
     <state x="740" y="274" key="FileChooserDialogImpl/0.0.1920.1040@0.0.1920.1040" timestamp="1590142231246" />
-    <state width="1493" height="200" key="GridCell.Tab.0.bottom" timestamp="1596901312742">
+    <state width="1493" height="200" key="GridCell.Tab.0.bottom" timestamp="1598278572934">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
     <state width="1493" height="261" key="GridCell.Tab.0.bottom/0.0.1536.824/-1920.0.1920.1040@0.0.1536.824" timestamp="1594675170717" />
-    <state width="1493" height="200" key="GridCell.Tab.0.bottom/0.0.1536.824@0.0.1536.824" timestamp="1596901312742" />
+    <state width="1493" height="200" key="GridCell.Tab.0.bottom/0.0.1536.824@0.0.1536.824" timestamp="1598278572934" />
     <state width="1877" height="207" key="GridCell.Tab.0.bottom/0.0.1920.1040@0.0.1920.1040" timestamp="1593450976976" />
-    <state width="1493" height="200" key="GridCell.Tab.0.center" timestamp="1596901312742">
+    <state width="1493" height="200" key="GridCell.Tab.0.center" timestamp="1598278572934">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
     <state width="1493" height="261" key="GridCell.Tab.0.center/0.0.1536.824/-1920.0.1920.1040@0.0.1536.824" timestamp="1594675170717" />
-    <state width="1493" height="200" key="GridCell.Tab.0.center/0.0.1536.824@0.0.1536.824" timestamp="1596901312742" />
+    <state width="1493" height="200" key="GridCell.Tab.0.center/0.0.1536.824@0.0.1536.824" timestamp="1598278572934" />
     <state width="1877" height="207" key="GridCell.Tab.0.center/0.0.1920.1040@0.0.1920.1040" timestamp="1593450976976" />
-    <state width="1493" height="200" key="GridCell.Tab.0.left" timestamp="1596901312742">
+    <state width="1493" height="200" key="GridCell.Tab.0.left" timestamp="1598278572933">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
     <state width="1493" height="261" key="GridCell.Tab.0.left/0.0.1536.824/-1920.0.1920.1040@0.0.1536.824" timestamp="1594675170717" />
-    <state width="1493" height="200" key="GridCell.Tab.0.left/0.0.1536.824@0.0.1536.824" timestamp="1596901312742" />
+    <state width="1493" height="200" key="GridCell.Tab.0.left/0.0.1536.824@0.0.1536.824" timestamp="1598278572933" />
     <state width="1877" height="207" key="GridCell.Tab.0.left/0.0.1920.1040@0.0.1920.1040" timestamp="1593450976976" />
-    <state width="1493" height="200" key="GridCell.Tab.0.right" timestamp="1596901312742">
+    <state width="1493" height="200" key="GridCell.Tab.0.right" timestamp="1598278572934">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
     <state width="1493" height="261" key="GridCell.Tab.0.right/0.0.1536.824/-1920.0.1920.1040@0.0.1536.824" timestamp="1594675170717" />
-    <state width="1493" height="200" key="GridCell.Tab.0.right/0.0.1536.824@0.0.1536.824" timestamp="1596901312742" />
+    <state width="1493" height="200" key="GridCell.Tab.0.right/0.0.1536.824@0.0.1536.824" timestamp="1598278572934" />
     <state width="1877" height="207" key="GridCell.Tab.0.right/0.0.1920.1040@0.0.1920.1040" timestamp="1593450976976" />
-    <state width="1493" height="261" key="GridCell.Tab.1.bottom" timestamp="1596732582296">
+    <state width="1493" height="261" key="GridCell.Tab.1.bottom" timestamp="1597954130180">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
     <state width="1493" height="261" key="GridCell.Tab.1.bottom/0.0.1536.824/-1920.0.1920.1040@0.0.1536.824" timestamp="1594675170718" />
-    <state width="1493" height="261" key="GridCell.Tab.1.bottom/0.0.1536.824@0.0.1536.824" timestamp="1596732582296" />
+    <state width="1493" height="261" key="GridCell.Tab.1.bottom/0.0.1536.824@0.0.1536.824" timestamp="1597954130180" />
     <state width="1877" height="348" key="GridCell.Tab.1.bottom/0.0.1920.1040@0.0.1920.1040" timestamp="1593194712319" />
-    <state width="1493" height="261" key="GridCell.Tab.1.center" timestamp="1596732582296">
+    <state width="1493" height="261" key="GridCell.Tab.1.center" timestamp="1597954130180">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
     <state width="1493" height="261" key="GridCell.Tab.1.center/0.0.1536.824/-1920.0.1920.1040@0.0.1536.824" timestamp="1594675170717" />
-    <state width="1493" height="261" key="GridCell.Tab.1.center/0.0.1536.824@0.0.1536.824" timestamp="1596732582296" />
+    <state width="1493" height="261" key="GridCell.Tab.1.center/0.0.1536.824@0.0.1536.824" timestamp="1597954130180" />
     <state width="1877" height="348" key="GridCell.Tab.1.center/0.0.1920.1040@0.0.1920.1040" timestamp="1593194712319" />
-    <state width="1493" height="261" key="GridCell.Tab.1.left" timestamp="1596732582296">
+    <state width="1493" height="261" key="GridCell.Tab.1.left" timestamp="1597954130180">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
     <state width="1493" height="261" key="GridCell.Tab.1.left/0.0.1536.824/-1920.0.1920.1040@0.0.1536.824" timestamp="1594675170717" />
-    <state width="1493" height="261" key="GridCell.Tab.1.left/0.0.1536.824@0.0.1536.824" timestamp="1596732582296" />
+    <state width="1493" height="261" key="GridCell.Tab.1.left/0.0.1536.824@0.0.1536.824" timestamp="1597954130180" />
     <state width="1877" height="348" key="GridCell.Tab.1.left/0.0.1920.1040@0.0.1920.1040" timestamp="1593194712319" />
-    <state width="1493" height="261" key="GridCell.Tab.1.right" timestamp="1596732582296">
+    <state width="1493" height="261" key="GridCell.Tab.1.right" timestamp="1597954130180">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
     <state width="1493" height="261" key="GridCell.Tab.1.right/0.0.1536.824/-1920.0.1920.1040@0.0.1536.824" timestamp="1594675170717" />
-    <state width="1493" height="261" key="GridCell.Tab.1.right/0.0.1536.824@0.0.1536.824" timestamp="1596732582296" />
+    <state width="1493" height="261" key="GridCell.Tab.1.right/0.0.1536.824@0.0.1536.824" timestamp="1597954130180" />
     <state width="1877" height="348" key="GridCell.Tab.1.right/0.0.1920.1040@0.0.1920.1040" timestamp="1593194712319" />
-    <state x="749" y="230" key="RollbackChangesDialog" timestamp="1588692104271">
-      <screen x="0" y="0" width="1920" height="1040" />
+    <state x="352" y="0" key="SettingsEditor" timestamp="1598263077944">
+      <screen x="0" y="0" width="1536" height="824" />
     </state>
-    <state x="749" y="230" key="RollbackChangesDialog/0.0.1920.1040@0.0.1920.1040" timestamp="1588692104271" />
-    <state x="440" y="94" key="SettingsEditor" timestamp="1593099891234">
-      <screen x="0" y="0" width="1920" height="1040" />
-    </state>
+    <state x="352" y="0" key="SettingsEditor/0.0.1536.824@0.0.1536.824" timestamp="1598263077944" />
     <state x="440" y="94" key="SettingsEditor/0.0.1920.1040@0.0.1920.1040" timestamp="1593099891234" />
+    <state width="498" height="446" key="SwitcherDM" timestamp="1597760086312">
+      <screen x="0" y="0" width="1536" height="824" />
+    </state>
+    <state width="498" height="446" key="SwitcherDM/0.0.1536.824@0.0.1536.824" timestamp="1597760086312" />
     <state width="968" height="528" key="XDebugger.FullValuePopup" timestamp="1590516162228">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state width="968" height="528" key="XDebugger.FullValuePopup/0.0.1920.1040@0.0.1920.1040" timestamp="1590516162228" />
-    <state x="342" y="215" key="new project wizard" timestamp="1593269262762">
-      <screen x="0" y="0" width="1920" height="1040" />
-    </state>
-    <state x="342" y="215" key="new project wizard/0.0.1920.1040@0.0.1920.1040" timestamp="1593269262762" />
-    <state x="702" y="138" key="refactoring.ChangeSignatureDialog" timestamp="1591823054141">
-      <screen x="0" y="0" width="1920" height="1040" />
-    </state>
-    <state x="702" y="138" key="refactoring.ChangeSignatureDialog/0.0.1920.1040@0.0.1920.1040" timestamp="1591823054141" />
-    <state x="616" y="240" key="run.anything.popup" timestamp="1592760862470">
-      <screen x="0" y="0" width="1920" height="1040" />
-    </state>
-    <state x="616" y="240" key="run.anything.popup/0.0.1920.1040@0.0.1920.1040" timestamp="1592760862470" />
-    <state x="498" y="178" width="672" height="538" key="search.everywhere.popup" timestamp="1595792296637">
+    <state x="578" y="329" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2" timestamp="1597760092781">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
-    <state x="498" y="178" width="672" height="538" key="search.everywhere.popup/0.0.1536.824@0.0.1536.824" timestamp="1595792296637" />
+    <state x="578" y="329" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2/0.0.1536.824@0.0.1536.824" timestamp="1597760092781" />
+    <state x="274" y="65" key="new project wizard" timestamp="1597413642431">
+      <screen x="0" y="0" width="1536" height="824" />
+    </state>
+    <state x="274" y="65" key="new project wizard/0.0.1536.824@0.0.1536.824" timestamp="1597413642431" />
+    <state x="342" y="215" key="new project wizard/0.0.1920.1040@0.0.1920.1040" timestamp="1593269262762" />
+    <state x="562" y="62" key="refactoring.ChangeSignatureDialog" timestamp="1597994818830">
+      <screen x="0" y="0" width="1536" height="824" />
+    </state>
+    <state x="562" y="62" key="refactoring.ChangeSignatureDialog/0.0.1536.824@0.0.1536.824" timestamp="1597994818830" />
+    <state x="702" y="138" key="refactoring.ChangeSignatureDialog/0.0.1920.1040@0.0.1920.1040" timestamp="1591823054141" />
+    <state x="493" y="190" key="run.anything.popup" timestamp="1597862570548">
+      <screen x="0" y="0" width="1536" height="824" />
+    </state>
+    <state x="493" y="190" key="run.anything.popup/0.0.1536.824@0.0.1536.824" timestamp="1597862570548" />
+    <state x="616" y="240" key="run.anything.popup/0.0.1920.1040@0.0.1920.1040" timestamp="1592760862470" />
+    <state x="498" y="178" width="672" height="538" key="search.everywhere.popup" timestamp="1597606196376">
+      <screen x="0" y="0" width="1536" height="824" />
+    </state>
+    <state x="498" y="178" width="672" height="538" key="search.everywhere.popup/0.0.1536.824@0.0.1536.824" timestamp="1597606196376" />
     <state x="623" y="225" width="672" height="678" key="search.everywhere.popup/0.0.1920.1040@0.0.1920.1040" timestamp="1592825088686" />
-  </component>
-  <component name="XDebuggerManager">
-    <breakpoint-manager>
-      <breakpoints>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/org/adv25/ADVNTRIP/Tools/Bootstrap.java</url>
-          <line>31</line>
-          <option name="timeStamp" value="7" />
-        </line-breakpoint>
-      </breakpoints>
-    </breakpoint-manager>
   </component>
 </project>

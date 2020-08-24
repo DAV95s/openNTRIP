@@ -4,12 +4,16 @@ import org.adv25.ADVNTRIP.Clients.Authentication.Authentication;
 import org.adv25.ADVNTRIP.Clients.Authentication.Basic;
 import org.adv25.ADVNTRIP.Clients.Authentication.Digest;
 import org.adv25.ADVNTRIP.Clients.Authentication.None;
-import org.adv25.ADVNTRIP.Spatial.Point_lla;
+import org.adv25.ADVNTRIP.Servers.RefStation;
+import org.adv25.ADVNTRIP.Spatial.PointLla;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.math.BigDecimal;
-
+import java.util.ArrayList;
 
 public class MountPointModel {
+    final static private Logger logger = LogManager.getLogger(MountPointModel.class.getName());
     private long id;
     private String mountpoint;
     private String identifier;
@@ -19,7 +23,7 @@ public class MountPointModel {
     private String navSystem;
     private String network;
     private String country;
-    private Point_lla lla;
+    private PointLla lla;
     private boolean nmea;
     private boolean solution;
     private String generator;
@@ -30,7 +34,7 @@ public class MountPointModel {
     private String misc;
     private boolean available;
     private int casterId;
-    private String baseIds;
+    private ArrayList<RefStation> baseIds;
     private int plugin_id;
 
     public long getId() {
@@ -105,20 +109,20 @@ public class MountPointModel {
         this.country = country;
     }
 
-    public Point_lla getLla() {
+    public PointLla getLla() {
         return lla;
     }
 
     public void setLatitude(Double lat) {
         if (this.lla == null) {
-            lla = new Point_lla();
+            lla = new PointLla();
         }
         lla.setLat(new BigDecimal(lat));
     }
 
     public void setLongitude(Double lon) {
         if (this.lla == null) {
-            lla = new Point_lla();
+            lla = new PointLla();
         }
         lla.setLon(new BigDecimal(lon));
     }
@@ -148,7 +152,7 @@ public class MountPointModel {
     }
 
     public String getCompression() {
-        return compression == null ? "" : compression;
+        return compression == null ? "none" : compression;
     }
 
     public void setCompression(String compression) {
@@ -172,7 +176,6 @@ public class MountPointModel {
                 break;
         }
     }
-
 
     public boolean isFee() {
         return fee;
@@ -214,12 +217,31 @@ public class MountPointModel {
         this.casterId = casterId;
     }
 
-    public String getBasesIds() {
+    public ArrayList<RefStation> getBasesIds() {
         return baseIds;
     }
 
+    public String getBasesIdsJoin() {
+        StringBuilder sb = new StringBuilder();
+
+        for (RefStation refStation : baseIds) {
+            sb.append(refStation.getId());
+        }
+        return sb.toString();
+    }
+
     public void setBasesIds(String ids) {
-        baseIds = ids;
+        this.baseIds = new ArrayList<>();
+
+        for (String id : ids.split(",")) {
+            int i_id = Integer.parseInt(id);
+            RefStation station = RefStation.getStationById(i_id);
+            if (station != null) {
+                baseIds.add(station);
+            } else {
+                logger.error(mountpoint + ": station by id " + i_id + " not exists.");
+            }
+        }
     }
 
     public int getPlugin_id() {
@@ -228,5 +250,12 @@ public class MountPointModel {
 
     public void setPlugin_id(int plugin_id) {
         this.plugin_id = plugin_id;
+    }
+
+    @Override
+    public String toString() {
+        return "STR" + ';' + getMountpoint() + ';' + getIdentifier() + ';' + getFormat() + ';' + getFormatDetails() + ';' + getCarrier() + ';' + getNavSystem() + ';' + getNetwork() + ';' + getCountry()
+                + ';' + String.format("%.2f", getLla().getLat()) + ';' + String.format("%.2f", getLla().getLon()) + ';' + (isNmea() ? 1 : 0) + ';' + (isSolution() ? 1 : 0) + ';' + getGenerator() + ';' + getCompression()
+                + ';' + getAuthentication().toString() + ';' + (isFee() ? 'Y' : 'N') + ';' + getBitrate() + ';' + getMisc() + "\r\n";
     }
 }

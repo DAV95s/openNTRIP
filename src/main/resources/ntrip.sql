@@ -49,18 +49,18 @@ CREATE TABLE `base_stations` (
 
 LOCK TABLES `base_stations` WRITE;
 /*!40000 ALTER TABLE `base_stations` DISABLE KEYS */;
-INSERT INTO `base_stations` VALUES (1,'AL1','1231aa','fafaf','123',2,'dddaGFPS','RUS','\0\0\0\0\0\0\0\0\0\0\0\0€@@\0\0\0\0\0\0F@',0.0000000000,123,'',1,'44444',4),(2,'AL2',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,0,'',0,'44444',0);
+INSERT INTO `base_stations` VALUES (1,'AL1','1231aa','fafaf','123',2,'dddaGFPS','RUS','\0\0\0\0\0\0\0\0\0\0\0\0ï¿½@@\0\0\0\0\0\0F@',0.0000000000,123,'',1,'44444',4),(2,'AL2',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,0,'',0,'44444',0);
 /*!40000 ALTER TABLE `base_stations` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
--- Table structure for table `casters`
+-- Table structure for table `ntripCasters`
 --
 
-DROP TABLE IF EXISTS `casters`;
+DROP TABLE IF EXISTS `ntripCasters`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `casters` (
+CREATE TABLE `ntripCasters` (
   `id` int(11) NOT NULL,
   `address` varchar(40) NOT NULL,
   `port` int(5) NOT NULL,
@@ -73,13 +73,13 @@ CREATE TABLE `casters` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `casters`
+-- Dumping data for table `ntripCasters`
 --
 
-LOCK TABLES `casters` WRITE;
-/*!40000 ALTER TABLE `casters` DISABLE KEYS */;
-INSERT INTO `casters` VALUES (0,'localhost',8500,1,1);
-/*!40000 ALTER TABLE `casters` ENABLE KEYS */;
+LOCK TABLES `ntripCasters` WRITE;
+/*!40000 ALTER TABLE `ntripCasters` DISABLE KEYS */;
+INSERT INTO `ntripCasters` VALUES (0,'localhost',8500,1,1);
+/*!40000 ALTER TABLE `ntripCasters` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --

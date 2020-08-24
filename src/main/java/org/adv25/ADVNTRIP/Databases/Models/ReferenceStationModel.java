@@ -2,7 +2,7 @@ package org.adv25.ADVNTRIP.Databases.Models;
 
 import org.adv25.ADVNTRIP.Databases.DAO.ReferenceStationDAO;
 import org.adv25.ADVNTRIP.Spatial.Point;
-import org.adv25.ADVNTRIP.Spatial.Point_lla;
+import org.adv25.ADVNTRIP.Spatial.PointLla;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -16,7 +16,7 @@ public class ReferenceStationModel {
     int carrier;
     String nav_system;
     String country;
-    Point_lla lla;
+    PointLla lla;
     int bitrate;
     String misc;
     boolean is_online;
@@ -88,11 +88,11 @@ public class ReferenceStationModel {
         this.country = country;
     }
 
-    public Point_lla getLla() {
+    public PointLla getLla() {
         return lla;
     }
 
-    public void setLla(Point_lla lla) {
+    public void setLla(PointLla lla) {
         this.lla = lla;
     }
 

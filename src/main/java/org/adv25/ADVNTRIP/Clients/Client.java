@@ -1,130 +1,147 @@
 package org.adv25.ADVNTRIP.Clients;
 
 import org.adv25.ADVNTRIP.Databases.Models.ClientModel;
-import org.adv25.ADVNTRIP.Servers.ReferenceStation;
-import org.adv25.ADVNTRIP.Servers.MountPoint;
+import org.adv25.ADVNTRIP.Databases.Models.MountPointModel;
+import org.adv25.ADVNTRIP.Servers.NtripCaster;
+import org.adv25.ADVNTRIP.Servers.RefStation;
+import org.adv25.ADVNTRIP.Tools.HttpRequestParser;
 import org.adv25.ADVNTRIP.Tools.NMEA;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.io.IOException;
 import java.nio.ByteBuffer;
+import java.nio.channels.SelectionKey;
 import java.nio.channels.SocketChannel;
-import java.util.Hashtable;
 
-public class Client implements ClientListener {
+public class Client implements Runnable {
     final static private Logger logger = LogManager.getLogger(Client.class.getName());
-    SocketChannel channel;
-    ClientModel model;
-    NMEA.GPSPosition position;
-    String requestLine;
-    Hashtable<String, String> requestHeaders;
-    StringBuffer messageBody;
-    MountPoint mountPoint;
-    ReferenceStation referenceStation;
 
-    public Client(SocketChannel channel, String requestLine, Hashtable<String, String> header, StringBuffer body) {
-        this.channel = channel;
-        this.requestLine = requestLine;
-        this.requestHeaders = header;
-        this.messageBody = body;
-        if (messageBody.toString() != " ") {
-            position = new NMEA().parse(messageBody.toString());
-        }
-    }
+    private RefStation refStation;
+    private MountPointModel mountPoint;
+    private NtripCaster caster;
+    private SelectionKey key;
+    private SocketChannel socket;
+    private ClientModel model;
+    private NMEA.GPSPosition position;
+    private HttpRequestParser httpRequest;
+    private ByteBuffer input = ByteBuffer.allocate(2048);
+    private ByteBuffer output = ByteBuffer.allocate(32768);
 
-    //Network
+    private long connectionTimeStamp = System.currentTimeMillis();
+    private long bytesReceived = 0;
+
     public static final byte[] OK_MESSAGE = "ICY 200 OK\r\n".getBytes();
     public static final byte[] BAD_MESSAGE = "ERROR - Bad Password\r\n".getBytes();
 
-    private ByteBuffer bb = ByteBuffer.allocate(8192);
 
-    public void sendMessage(byte[] msg) throws IOException {
-        this.bb.clear();
-        this.bb.put(msg);
-        this.bb.flip();
-        this.channel.write(bb);
+    public Client(SocketChannel socket, HttpRequestParser httpRequest, NtripCaster caster, SelectionKey key) {
+        logger.debug("New client!");
+        this.socket = socket;
+        this.httpRequest = httpRequest;
+        this.caster = caster;
+        this.key = key;
+        this.key.attach(this);
+    }
+
+    public void setReferenceStation(RefStation referenceStation) {
+        this.refStation = referenceStation;
+        referenceStation.addClient(this);
     }
 
     public void sendMessageAndClose(byte[] msg) throws IOException {
-        this.bb.clear();
-        this.bb.put(msg);
-        this.bb.flip();
-        this.channel.write(bb);
-        this.channel.close();
+        output.clear();
+        output.put(msg);
+        output.flip();
+        this.socket.write(output);
+        this.safeClose();
     }
 
     public void safeClose() {
+        this.key.cancel();
+        this.refStation.removeClient(this);
         try {
-            referenceStation.removeListener(this);
-            channel.close();
+            this.socket.close();
         } catch (IOException e) {
-
+            logger.error(e);
         }
     }
 
-    public void send(ByteBuffer bytes, ReferenceStation referenceStation) throws IOException {
+
+    public int write(ByteBuffer byteBuffer) throws IOException {
+        int bytesWritten = this.socket.write(byteBuffer);
+        int totalBytesWritten = bytesWritten;
+
+        while (bytesWritten > 0 && byteBuffer.hasRemaining()) {
+            bytesWritten = this.socket.write(byteBuffer);
+            totalBytesWritten += bytesWritten;
+        }
+
+        return totalBytesWritten;
+    }
+
+    public void read() {
         try {
-            this.bb.clear();
-            this.bb.put(bytes);
-            //this.bb.put(mountPoint.injection(this, referenceStation));
-            this.bb.flip();
-            channel.write(bb);
-            logger.debug( channel.getRemoteAddress() + "has accept message from " + referenceStation.getName());
+            input.clear();
+            int bytesRead = this.socket.read(input);
+            int totalBytesRead = bytesRead;
+
+            while (bytesRead > 0) {
+                bytesRead = this.socket.read(input);
+                totalBytesRead += bytesRead;
+            }
+
+            if (bytesRead == -1) {
+                throw new IOException();
+            }
+
+            bytesReceived += totalBytesRead;
+
         } catch (IOException e) {
-            logger.info( channel.getRemoteAddress() + " user was disconnected.", e);
-            referenceStation.removeListener(this);
+            logger.info("Client closed connection");
+            this.safeClose();
         }
     }
 
-    //Getters and setters
+    /* getters and setters */
+    public void setMountPoint(MountPointModel mountPoint) {
+        this.mountPoint = mountPoint;
+    }
+
+    public void setPosition(String nmea_str) {
+        position = new NMEA().parse(nmea_str);
+    }
+
     public NMEA.GPSPosition getPosition() {
         return position;
     }
 
-    public MountPoint getMountPoint() {
-        return mountPoint;
-    }
-
-    public void setPosition(String nmea) {
-        NMEA nmea1 = new NMEA();
-        position = nmea1.parse(nmea);
-        logger.info(model.getName() + " set " + position.toString());
-    }
-
     public String getHttpHeader(String key) {
-        return requestHeaders.get(key);
+        return httpRequest.getParam(key);
     }
 
     public String getPassword() {
         return this.model.getPassword();
     }
 
-    public SocketChannel getChannel() {
-        return channel;
-    }
-
-    public String getRequestLine() {
-        return requestLine;
-    }
-
-    public StringBuffer getMessageBody() {
-        return messageBody;
-    }
-
-    public void setPosition(NMEA.GPSPosition position) {
-        this.position = position;
-    }
-
-    public void setMountPoint(MountPoint mountPoint) {
-        this.mountPoint = mountPoint;
-    }
-
     public void setModel(ClientModel model) {
         this.model = model;
     }
+    /* getters and setters */
 
-    public void setReferenceStation(ReferenceStation referenceStation) {
-        this.referenceStation = referenceStation;
+    @Override
+    public void run() {
+        input.flip();
+        byte[] bytes = new byte[input.limit()];
+        input.get(bytes);
+        input.clear();
+        System.out.println(new String(bytes));
+        setPosition(new String(bytes));
+
+        try {
+            caster.clientAuthorizationProcessing(this);
+        } catch (IOException e) {
+            logger.error(e);
+        }
     }
 }

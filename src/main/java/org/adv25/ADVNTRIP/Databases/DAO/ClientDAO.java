@@ -8,13 +8,13 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-public class ClientDAO implements DAO<ClientModel, String> {
-    @Override
+public class ClientDAO {
+
     public boolean create(ClientModel model) {
         return false;
     }
 
-    @Override
+
     public ClientModel read(String s) {
         ClientModel model = new ClientModel();
 
@@ -39,12 +39,12 @@ public class ClientDAO implements DAO<ClientModel, String> {
         return model;
     }
 
-    @Override
+
     public boolean update(ClientModel model) {
         return false;
     }
 
-    @Override
+
     public boolean delete(ClientModel model) {
         return false;
     }

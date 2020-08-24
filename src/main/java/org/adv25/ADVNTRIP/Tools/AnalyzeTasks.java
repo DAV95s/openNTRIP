@@ -1,8 +1,8 @@
 package org.adv25.ADVNTRIP.Tools;
 
 import org.adv25.ADVNTRIP.Databases.Models.ReferenceStationModel;
-import org.adv25.ADVNTRIP.Servers.ReferenceStation;
-import org.adv25.ADVNTRIP.Spatial.Point_lla;
+import org.adv25.ADVNTRIP.Servers.RefStation;
+import org.adv25.ADVNTRIP.Spatial.PointLla;
 import org.adv25.ADVNTRIP.Tools.RTCM.MSG1005;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -19,14 +19,14 @@ import java.util.*;
 
 public class AnalyzeTasks {
     final static private Logger logger = LogManager.getLogger(AnalyzeTasks.class.getName());
-    ReferenceStation referenceStation;
+    RefStation refStation;
     ReferenceStationModel model;
     MessagePool messagePool;
 
 
-    public AnalyzeTasks(ReferenceStation referenceStation, MessagePool messagePool) {
-        this.referenceStation = referenceStation;
-        this.model = referenceStation.getModel();
+    public AnalyzeTasks(RefStation refStation, MessagePool messagePool) {
+        this.refStation = refStation;
+        this.model = refStation.getModel();
         this.messagePool = messagePool;
 
     }
@@ -64,7 +64,7 @@ public class AnalyzeTasks {
 
             model.update();
 
-            logger.debug(referenceStation.getName() + ": update RTCM Version");
+            logger.debug(refStation.getName() + ": update RTCM Version");
         }
     };
 
@@ -106,7 +106,7 @@ public class AnalyzeTasks {
                 model.update();
             }
 
-            logger.debug(referenceStation.getName() + ": update Nav Systems");
+            logger.debug(refStation.getName() + ": update Nav Systems");
         }
     };
 
@@ -133,7 +133,7 @@ public class AnalyzeTasks {
 
             model.setCarrier(carrier);
             model.update();
-            logger.debug(referenceStation.getName() + ": update Carrier");
+            logger.debug(refStation.getName() + ": update Carrier");
         }
     };
 
@@ -156,11 +156,11 @@ public class AnalyzeTasks {
                 return;
             }
 
-            Point_lla position = new Point_lla(lla[0], lla[1]);
+            PointLla position = new PointLla(lla[0], lla[1]);
 
             model.setLla(position);
             model.update();
-            logger.debug(referenceStation.getName() + ": update position " + position.toString());
+            logger.debug(refStation.getName() + ": update position " + position.toString());
         }
     };
 
@@ -231,7 +231,7 @@ public class AnalyzeTasks {
         return response;
     }
 
-    public String osmApi(Point_lla point) {
+    public String osmApi(PointLla point) {
         double lat = point.getLat().doubleValue();
         double lon = point.getLon().doubleValue();
 

@@ -2,7 +2,7 @@ package org.adv25.ADVNTRIP.Databases.DAO;
 
 import org.adv25.ADVNTRIP.Databases.DataSource;
 import org.adv25.ADVNTRIP.Databases.Models.ReferenceStationModel;
-import org.adv25.ADVNTRIP.Spatial.Point_lla;
+import org.adv25.ADVNTRIP.Spatial.PointLla;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -10,8 +10,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
-public class ReferenceStationDAO implements DAO<ReferenceStationModel, String> {
-    @Override
+public class ReferenceStationDAO {
+
     public boolean create(ReferenceStationModel model) {
         try (Connection con = DataSource.getConnection();
              PreparedStatement statement = con.prepareStatement(SQL.CREATE.QUERY)) {
@@ -40,13 +40,13 @@ public class ReferenceStationDAO implements DAO<ReferenceStationModel, String> {
         return false;
     }
 
-    @Override
-    public ReferenceStationModel read(String s) {
+
+    public ReferenceStationModel read(int id) {
         try (Connection con = DataSource.getConnection();
              PreparedStatement statement = con.prepareStatement(SQL.READ.QUERY)) {
 
             ReferenceStationModel model = new ReferenceStationModel();
-            statement.setString(1, s);
+            statement.setInt(1, id);
 
             try (ResultSet rs = statement.executeQuery()) {
                 if (rs.next()) {
@@ -58,7 +58,7 @@ public class ReferenceStationDAO implements DAO<ReferenceStationModel, String> {
                     model.setCarrier(rs.getInt("carrier"));
                     model.setNav_system(rs.getString("nav-system"));
                     model.setCountry(rs.getString("country"));
-                    model.setLla(new Point_lla(rs.getString("lla")));
+                    model.setLla(new PointLla(rs.getString("lla")));
                     model.getLla().setAlt(rs.getBigDecimal("altitude"));
                     model.setBitrate(rs.getInt("bitrate"));
                     model.setMisc(rs.getString("misc"));
@@ -90,7 +90,7 @@ public class ReferenceStationDAO implements DAO<ReferenceStationModel, String> {
                     model.setCarrier(rs.getInt("carrier"));
                     model.setNav_system(rs.getString("nav-system"));
                     model.setCountry(rs.getString("country"));
-                    model.setLla(new Point_lla(rs.getString("lla")));
+                    model.setLla(new PointLla(rs.getString("lla")));
                     model.getLla().setAlt(rs.getBigDecimal("altitude"));
                     model.setBitrate(rs.getInt("bitrate"));
                     model.setMisc(rs.getString("misc"));
@@ -107,7 +107,7 @@ public class ReferenceStationDAO implements DAO<ReferenceStationModel, String> {
         }
     }
 
-    @Override
+
     public boolean update(ReferenceStationModel model) {
 
         try (Connection con = DataSource.getConnection();
@@ -136,7 +136,7 @@ public class ReferenceStationDAO implements DAO<ReferenceStationModel, String> {
         return false;
     }
 
-    @Override
+
     public boolean delete(ReferenceStationModel model) {
         return false;
     }
@@ -187,7 +187,7 @@ public class ReferenceStationDAO implements DAO<ReferenceStationModel, String> {
         CREATE("INSERT INTO base_stations VALUES( DEFAULT , ?, ?, ?, ?, ?, ?, ?, GeomFromText(?),? , ?, ?, ?, ?, GeomFromText(?),? ,? );"),
         READ("SELECT id, mountpoint, identifier, format, `format-details`, carrier, `nav-system`, country, ST_AsText(lla) as lla, altitude, bitrate, misc, is_online, password, hz\n" +
                 "FROM ntrip.base_stations" +
-                " WHERE `mountpoint` = ?;"),
+                " WHERE `id` = ?;"),
         READALL("SELECT id, mountpoint, identifier, format, `format-details`, carrier, `nav-system`, country, ST_AsText(lla) as lla, altitude, bitrate, misc, is_online, password, hz " +
                 "FROM ntrip.base_stations"),
         UPDATE("UPDATE ntrip.base_stations " +
@@ -200,8 +200,8 @@ public class ReferenceStationDAO implements DAO<ReferenceStationModel, String> {
                 "SET `is_online` = 1 WHERE `id` = ?;"),
 
         GET_NEAREST("SELECT id, lla, st_distance(lla, ST_GeomFromText(?)) AS dist " +
-                "FRO< ntrip.base_stations " +
-                "WHERE lla IS NOT NULL AND id IN (?)" +
+                "FROM ntrip.base_stations " +
+                "WHERE lla IS NOT NULL AND id IN (?) AND is_online = 1" +
                 "GROUP BY dist" +
                 "LIMIT 1");
 

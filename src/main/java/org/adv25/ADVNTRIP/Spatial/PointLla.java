@@ -1,6 +1,5 @@
 package org.adv25.ADVNTRIP.Spatial;
 
-import org.adv25.ADVNTRIP.Servers.MountPoint;
 import org.adv25.ADVNTRIP.Tools.NMEA;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -8,19 +7,19 @@ import org.apache.logging.log4j.Logger;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 
-public class Point_lla {
-    final static private Logger logger = LogManager.getLogger(Point_lla.class.getName());
+public class PointLla {
+    final static private Logger logger = LogManager.getLogger(PointLla.class.getName());
     private BigDecimal lat;
     private BigDecimal lon;
     private BigDecimal alt;
 
-    public Point_lla(double lat, double lon) {
+    public PointLla(double lat, double lon) {
         this.lat = new BigDecimal(lat).setScale(5, RoundingMode.HALF_EVEN);
         this.lon = new BigDecimal(lon).setScale(5, RoundingMode.HALF_EVEN);
     }
 
 
-    public Point_lla(String wkt) {
+    public PointLla(String wkt) {
         if (wkt == null)
             return;
 
@@ -29,7 +28,7 @@ public class Point_lla {
         lon = new BigDecimal(clear.split(" ")[1]).setScale(5, RoundingMode.HALF_EVEN);
     }
 
-    public Point_lla() {
+    public PointLla() {
 
     }
 
@@ -50,7 +49,7 @@ public class Point_lla {
         return distance(point.lat, point.lon);
     }
 
-    public float distance(Point_lla point) {
+    public float distance(PointLla point) {
         return distance(point.lat.floatValue(), point.lon.floatValue());
     }
 
@@ -84,7 +83,7 @@ public class Point_lla {
 
     @Override
     public String toString() {
-        return "Point_lla{" +
+        return "PointLla{" +
                 "lat=" + lat +
                 ", lon=" + lon +
                 ", alt=" + alt +

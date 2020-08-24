@@ -6,12 +6,18 @@ import java.io.*;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.TimerTask;
 
 import static org.adv25.ADVNTRIP.Tools.RTCM.RTCM.crc24q;
+import java.util.*;
 
 public class TestAnalyzer {
+
     @Test
     public void TestRtcm3Parser() {
+
+
+
         String[] rtcmTest = {
                 "Numb: 1006 Size: 27",
                 "Numb: 1008 Size: 42",
@@ -45,8 +51,6 @@ public class TestAnalyzer {
             Assert.assertArrayEquals(array, rtcmTest);
 
 
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
         }

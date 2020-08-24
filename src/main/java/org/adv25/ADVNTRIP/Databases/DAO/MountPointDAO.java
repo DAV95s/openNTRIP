@@ -3,13 +3,14 @@ package org.adv25.ADVNTRIP.Databases.DAO;
 import org.adv25.ADVNTRIP.Databases.DataSource;
 import org.adv25.ADVNTRIP.Databases.Models.MountPointModel;
 
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.Arrays;
 
-public class MountPointDAO implements DAO<MountPointModel, String> {
+public class MountPointDAO {
 
-    @Override
     public boolean create(MountPointModel model) {
 
         try (Connection con = DataSource.getConnection();
@@ -34,7 +35,7 @@ public class MountPointDAO implements DAO<MountPointModel, String> {
             statement.setInt(17, model.getBitrate());
             statement.setString(18, model.getMisc());
             statement.setInt(19, model.getCasterId());
-            statement.setString(20, "");
+            statement.setString(20, model.getBasesIdsJoin());
             statement.setBoolean(21, model.isAvailable());
             statement.setInt(22, model.getPlugin_id());
 
@@ -45,7 +46,6 @@ public class MountPointDAO implements DAO<MountPointModel, String> {
         return false;
     }
 
-    @Override
     public MountPointModel read(String s) {
         MountPointModel model = new MountPointModel();
 
@@ -87,7 +87,6 @@ public class MountPointDAO implements DAO<MountPointModel, String> {
         return model;
     }
 
-    @Override
     public boolean update(MountPointModel model) {
 
         try (Connection con = DataSource.getConnection();
@@ -111,7 +110,7 @@ public class MountPointDAO implements DAO<MountPointModel, String> {
             statement.setInt(16, model.getBitrate());
             statement.setString(17, model.getMisc());
             statement.setInt(18, model.getCasterId());
-            statement.setString(19, model.getBasesIds());//model.getBasesIds()
+            statement.setString(19, model.getBasesIdsJoin());//model.getBasesIds()
             statement.setBoolean(20, model.isAvailable());
             statement.setInt(21, model.getPlugin_id());
             statement.setString(22, model.getMountpoint());
@@ -168,10 +167,9 @@ public class MountPointDAO implements DAO<MountPointModel, String> {
         return models;
     }
 
-    @Override
-    public boolean delete(MountPointModel model) {
-        return false;
-    }
+//    public boolean delete(MountPointModel model) {
+//        return false;
+//    }
 
     enum SQL {
         CREATE("INSERT INTO ntrip.mountpoints\n" +
@@ -191,6 +189,7 @@ public class MountPointDAO implements DAO<MountPointModel, String> {
 
         GETBYID("SELECT * FROM ntrip.mountpoints\n" +
                 "WHERE caster_id = ?;");
+
         String QUERY;
 
         SQL(String query) {

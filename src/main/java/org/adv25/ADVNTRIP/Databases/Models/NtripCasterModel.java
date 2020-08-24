@@ -1,6 +1,6 @@
 package org.adv25.ADVNTRIP.Databases.Models;
 
-public class CasterModel {
+public class NtripCasterModel {
     int id;
     String address;
     int port;

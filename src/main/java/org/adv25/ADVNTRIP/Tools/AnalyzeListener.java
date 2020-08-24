@@ -1,7 +1,6 @@
 package org.adv25.ADVNTRIP.Tools;
 
-import org.adv25.ADVNTRIP.Clients.ClientListener;
-import org.adv25.ADVNTRIP.Servers.ReferenceStation;
+import org.adv25.ADVNTRIP.Servers.RefStation;
 import org.adv25.ADVNTRIP.Tools.Decoders.RTCM_3X;
 import org.apache.logging.log4j.LogManager;
 
@@ -11,7 +10,7 @@ import java.util.*;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-public class AnalyzeListener implements ClientListener, Runnable {
+public class AnalyzeListener implements Runnable {
     final static private org.apache.logging.log4j.Logger logger = LogManager.getLogger(AnalyzeListener.class.getName());
 
     final static private ExecutorService service = Executors.newCachedThreadPool();
@@ -23,28 +22,26 @@ public class AnalyzeListener implements ClientListener, Runnable {
 
     private MessagePool messagePool = new MessagePool();
     private AnalyzeTasks tasks;
-    private ReferenceStation referenceStation;
+    private RefStation refStation;
 
-    public AnalyzeListener(ReferenceStation referenceStation) {
-        this.referenceStation = referenceStation;
-        tasks = new AnalyzeTasks(referenceStation, messagePool);
+    public AnalyzeListener(RefStation refStation) {
+        this.refStation = refStation;
+        tasks = new AnalyzeTasks(refStation, messagePool);
     }
 
-    @Override
-    public void safeClose() throws IOException {
-        referenceStation.removeListener(this);
+    public void safeClose() {
+
     }
 
     public void analyzePlanner(TimerTask timerTask) {
         //for (int delay : timers) {
-            timer.schedule(timerTask, 30_000, 220_000);
+        timer.schedule(timerTask, 30_000, 220_000);
         //}
     }
 
     boolean hasAnalyzed = false;
 
-    @Override
-    public void send(ByteBuffer bytes, ReferenceStation referenceStation) throws IOException {
+    public void send(ByteBuffer bytes, RefStation refStation) {
 
         if (!hasAnalyzed) {
             logger.debug("IN");
@@ -123,10 +120,10 @@ class MessagePool {
             temp.put(msgNumberPack.get(i), delays.get(i));
         }
 
-        String response = "";
+        StringBuilder response = new StringBuilder();
 
         for (Map.Entry<Integer, Integer> entry : temp.entrySet()) {
-            response += ("," + entry.getKey() + "(" + entry.getValue() + ")");
+            response.append("," + entry.getKey() + "(" + entry.getValue() + ")");
         }
 
         return response.substring(1);

@@ -1,117 +1,126 @@
 package org.adv25.ADVNTRIP.Network;
 
 import org.adv25.ADVNTRIP.Clients.Client;
-import org.adv25.ADVNTRIP.Clients.Passwords.None;
-import org.adv25.ADVNTRIP.Databases.DAO.ReferenceStationDAO;
-import org.adv25.ADVNTRIP.Databases.Models.ReferenceStationModel;
-import org.adv25.ADVNTRIP.Servers.ReferenceStation;
-import org.adv25.ADVNTRIP.Servers.Caster;
-
+import org.adv25.ADVNTRIP.Databases.Models.MountPointModel;
+import org.adv25.ADVNTRIP.Servers.NtripCaster;
+import org.adv25.ADVNTRIP.Servers.RefStation;
+import org.adv25.ADVNTRIP.Tools.HttpRequestParser;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.io.*;
-import java.net.StandardSocketOptions;
+import java.io.IOException;
 import java.nio.ByteBuffer;
+import java.nio.channels.SelectionKey;
 import java.nio.channels.SocketChannel;
-import java.util.Hashtable;
+import java.util.ArrayList;
 
-public class ConnectHandler extends Thread {
+public class ConnectHandler implements Runnable {
     final static private Logger logger = LogManager.getLogger(ConnectHandler.class.getName());
 
-    private Caster caster;
-    private SocketChannel clientChannel;
-    private ByteBuffer bb = ByteBuffer.allocate(1024);
+    private SocketChannel socket;
+    private NtripCaster caster;
+    private ByteBuffer buffer = ByteBuffer.allocate(1024);
+    private SelectionKey key;
 
-    public ConnectHandler(SocketChannel clientChannel, Caster caster) throws IOException {
-        this.caster = caster;
-        this.clientChannel = clientChannel;
-        this.clientChannel.setOption(StandardSocketOptions.TCP_NODELAY, true);
+    public ConnectHandler(SelectionKey key) {
+        logger.info("New connection has created!");
+        this.socket = (SocketChannel) key.channel();
+        this.caster = (NtripCaster) key.attachment();
+        this.key = key;
+
     }
 
-    private String requestLine;
-    private Hashtable<String, String> requestHeaders = new Hashtable<>();
-    private StringBuffer messageBody = new StringBuffer();
+    public void close() {
+        logger.debug("Close connection");
+        try {
+            socket.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        key.cancel();
+    }
+
+    public void read() {
+        try {
+            int bytesRead = this.socket.read(buffer);
+            int totalBytesRead = bytesRead;
+
+            while (bytesRead > 0) {
+                bytesRead = this.socket.read(buffer);
+                totalBytesRead += bytesRead;
+            }
+
+            if (bytesRead == -1) {
+                throw new IOException();
+            }
+        } catch (IOException e) {
+            this.close();
+            logger.info("Closed connection");
+        }
+    }
 
     @Override
     public void run() {
         try {
-            logger.info("Caster " + caster.getPort() + " has new connection " + clientChannel.getRemoteAddress().toString());
+            buffer.flip();
+            byte[] bytes = new byte[buffer.remaining()];
+            buffer.get(bytes);
 
-            clientChannel.read(bb);
-            bb.flip();
-            System.out.println(new String(bb.array()));
-            BufferedReader reader = new BufferedReader(new InputStreamReader(new ByteArrayInputStream(bb.array())));
+            String request = new String(bytes);
+            logger.debug(request);
 
-            requestLine = reader.readLine();
+            HttpRequestParser httpParser = new HttpRequestParser();
+            httpParser.parseRequest(request);
 
-            String line = reader.readLine();
-            while (line.length() > 0) {
-                appendHeaderParameter(line);
-                line = reader.readLine();
-            }
+            //GET CONNECT
+            if (httpParser.getParam("GET") != null) {
+                Client client = new Client(this.socket, httpParser, this.caster, this.key);
+                this.caster.clientAuthorizationProcessing(client);
+            } else
+                //OR SOURCE CONNECT
+                if (httpParser.getParam("SOURCE") != null) {
 
-            String bodyLine = reader.readLine();
-            while (bodyLine != null) {
-                messageBody.append(bodyLine).append("\r\n");
-                bodyLine = reader.readLine();
-            }
+                    RefStation station = RefStation.getStationByName(httpParser.getParam("SOURCE"));
 
-            if (requestLine.matches("GET [\\S]+ HTTP[\\S]+")) {
-                logger.info("Caster " + caster.getPort() + " | " + requestLine + " " + clientChannel.getRemoteAddress().toString());
-                Client client = new Client(clientChannel, requestLine, requestHeaders, messageBody);
-                caster.newClient(client);
-            }
+                    //mb account of station not exists
+                    if (station == null)
+                        throw new IOException("MountPoint " + httpParser.getParam("SOURCE") + " is not exists.");
 
-            if (requestLine.matches("SOURCE [\\S]+ [\\S]+")) {
-                //parsing
-                String acc = requestLine.split(" ")[2];
-                String pass = requestLine.split(" ")[1];
+                    //mb password wrong
+                    if (!station.checkPassword(httpParser.getParam("PASSWORD")))
+                        throw new IOException("Bad password.");
 
-                //compare
-                ReferenceStationDAO dao = new ReferenceStationDAO();
-                ReferenceStationModel model = dao.read(acc);
-                None compare = new None();
+                    //mb station in time connect
+                    if (!station.setSocket(key))
+                        throw new IOException("Can't replace reference station socket.");
 
-                if (!compare.Compare(model.getPassword(), pass)) {
-                    logger.warn(acc + " bad password.");
-                    throw new SecurityException();
+                    sendOkMessage();
                 }
-
-                ReferenceStation bs = ReferenceStation.getBase(model.getId());
-                if (bs != null) {
-                    bs.setNewSocket(clientChannel);
-                }
-                bb.clear();
-                bb.put(Client.OK_MESSAGE);
-                bb.flip();
-                clientChannel.write(bb);
-            }
-
-        } catch (SecurityException ex) {
-            try {
-                clientChannel.write(ByteBuffer.wrap(Client.BAD_MESSAGE));
-                clientChannel.close();
-            } catch (IOException e) {
-                logger.warn("Can't send bad password message.");
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-            try {
-                clientChannel.close();
-            } catch (IOException ex) {
-                ex.printStackTrace();
-            }
+        } catch (IOException e) {
+            sendBadMessage();
         }
     }
 
-    private void appendHeaderParameter(String header) {
-        int idx = header.indexOf(":");
-        if (idx == -1) {
-            return;
+    private void sendBadMessage() {
+        try {
+            buffer.clear();
+            buffer.put(Client.BAD_MESSAGE);
+            buffer.flip();
+            socket.write(buffer);
+            socket.close();
+        } catch (IOException ex) {
+            logger.error(ex);
         }
-        requestHeaders.put(header.substring(0, idx), header.substring(idx + 1));
     }
 
-
+    private void sendOkMessage() {
+        try {
+            buffer.clear();
+            buffer.put(Client.OK_MESSAGE);
+            buffer.flip();
+            socket.write(buffer);
+        } catch (IOException e) {
+            logger.debug("fail try send ok message");
+        }
+    }
 }
