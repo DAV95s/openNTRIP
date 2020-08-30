@@ -17,21 +17,6 @@ public class Test1004 {
 
         File file = new File(path);
 
-        try {
-            InputStream input = new FileInputStream(file);
-            byte[] bytes = input.readAllBytes();
-            input.close();
 
-            RTCM_3X rtcm3X = new RTCM_3X();
-            ArrayList<Message> list = rtcm3X.separate(bytes);
-            for (Message message : list) {
-                if (message.getNmb() == 1004) {
-                    System.out.println(new MSG1004(message.getBytes()).toString());
-                }
-            }
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
     }
 }

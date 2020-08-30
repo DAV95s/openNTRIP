@@ -76,7 +76,7 @@ public class AnalyzeTasks {
                     1074, 1075, 1076, 1077};
 
             for (int i : GPS) {
-                if (messagePool.msgNumberPack.contains(i)) {
+                if (messagePool.bytePool.containsKey(i)) {
                     navSystems += "+GPS";
                     break;
                 }
@@ -86,7 +86,7 @@ public class AnalyzeTasks {
                     1083, 1084, 1085, 1086, 1087, 1230};
 
             for (int i : GLONASS) {
-                if (messagePool.msgNumberPack.contains(i)) {
+                if (messagePool.bytePool.containsKey(i)) {
                     navSystems += "+GLO";
                     break;
                 }
@@ -95,7 +95,7 @@ public class AnalyzeTasks {
             int[] GAL = {1091, 1092, 1093, 1094, 1095, 1096, 1097};
 
             for (int i : GAL) {
-                if (messagePool.msgNumberPack.contains(i)) {
+                if (messagePool.bytePool.containsKey(i)) {
                     navSystems += "+GAL";
                     break;
                 }
@@ -116,7 +116,7 @@ public class AnalyzeTasks {
             int carrier = 0;
             int[] L1 = {1001, 1002, 1009, 1010, 1071, 1081, 1091};
             for (int i : L1) {
-                if (messagePool.msgNumberPack.contains(i)) {
+                if (messagePool.bytePool.containsKey(i)) {
                     carrier = 1;
                     break;
                 }
@@ -125,7 +125,7 @@ public class AnalyzeTasks {
             int[] L2 = {1003, 1004, 1011, 1012, 1072, 1073, 1074, 1076, 1077, 1082, 1083, 1084, 1086, 1087,
                     1092, 1093, 1094, 1096, 1097, 1230};
             for (int i : L2) {
-                if (messagePool.msgNumberPack.contains(i)) {
+                if (messagePool.bytePool.containsKey(i)) {
                     carrier = 2;
                     break;
                 }

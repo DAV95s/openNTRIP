@@ -11,7 +11,7 @@ import java.io.InputStream;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
 
-public class Test1019  {
+public class Test1019 {
     @Test
     public void start() {
         String path = "src/test/resources/1019.rtcm3";
@@ -24,10 +24,10 @@ public class Test1019  {
             input.close();
             RTCM_3X decoder = new RTCM_3X();
 
-            ArrayList<Message> messages = decoder.separate(byteBuffer);
-            MSG1019 msg1019 = new MSG1019(messages.get(0).getBytes());
+            //ArrayList<Message> messages = decoder.separate(byteBuffer);
+            //MSG1019 msg1019 = new MSG1019(messages.get(0).getBytes());
 
-           System.out.println(msg1019.toString());
+            //System.out.println(msg1019.toString());
 
         } catch (IOException e) {
             e.printStackTrace();

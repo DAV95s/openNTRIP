@@ -40,9 +40,7 @@ public class PointLla {
                 Math.cos(Math.toRadians(this.lat.floatValue())) * Math.cos(Math.toRadians(lat)) *
                         Math.sin(dLng / 2) * Math.sin(dLng / 2);
         double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-        float dist = (float) (earthRadius * c);
-
-        return dist;
+        return (float) (earthRadius * c);
     }
 
     public float distance(NMEA.GPSPosition point) {

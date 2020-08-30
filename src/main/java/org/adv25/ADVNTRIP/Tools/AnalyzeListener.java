@@ -1,110 +1,71 @@
 package org.adv25.ADVNTRIP.Tools;
 
 import org.adv25.ADVNTRIP.Servers.RefStation;
+import org.adv25.ADVNTRIP.Tools.Decoders.IDecoder;
+import org.adv25.ADVNTRIP.Tools.Decoders.RAW;
 import org.adv25.ADVNTRIP.Tools.Decoders.RTCM_3X;
 import org.apache.logging.log4j.LogManager;
 
-import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.util.*;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
-public class AnalyzeListener implements Runnable {
+public class AnalyzeListener {
     final static private org.apache.logging.log4j.Logger logger = LogManager.getLogger(AnalyzeListener.class.getName());
-
-    final static private ExecutorService service = Executors.newCachedThreadPool();
     final static private Timer timer = new Timer();
 
-
-    private Queue<Long> timeMarks = new ArrayDeque<>();
-    private Queue<byte[]> bytes = new ArrayDeque<>();
-
-    private MessagePool messagePool = new MessagePool();
-    private AnalyzeTasks tasks;
     private RefStation refStation;
+    private AnalyzeTasks tasks;
+    private MessagePool messagePool = new MessagePool();
+    private boolean isAnalyzed = false;
 
     public AnalyzeListener(RefStation refStation) {
         this.refStation = refStation;
         tasks = new AnalyzeTasks(refStation, messagePool);
+        this.startAnalyzeTasks();
     }
 
-    public void safeClose() {
-
+    private void startAnalyzeTasks() {
+        timer.schedule(tasks.carrier, 30_000, 220_000);
+        timer.schedule(tasks.FormatDetails, 30_000, 220_000);
+        timer.schedule(tasks.navSystems, 30_000, 220_000);
+        timer.schedule(tasks.position, 30_000, 220_000);
+        timer.schedule(tasks.positionMetaInfo, 60_000, 220_000);
+        timer.schedule(tasks.rtcmVersion, 30_000, 220_000);
     }
 
-    public void analyzePlanner(TimerTask timerTask) {
-        //for (int delay : timers) {
-        timer.schedule(timerTask, 30_000, 220_000);
-        //}
+    public void close(){
+        tasks.carrier.cancel();
+        tasks.FormatDetails.cancel();
+        tasks.navSystems.cancel();
+        tasks.position.cancel();
+        tasks.positionMetaInfo.cancel();
+        tasks.rtcmVersion.cancel();
     }
 
-    boolean hasAnalyzed = false;
-
-    public void send(ByteBuffer bytes, RefStation refStation) {
-
-        if (!hasAnalyzed) {
-            logger.debug("IN");
-            timer.schedule(tasks.carrier, 30_000, 220_000);
-            timer.schedule(tasks.FormatDetails, 30_000, 220_000);
-            timer.schedule(tasks.navSystems, 30_000, 220_000);
-            timer.schedule(tasks.position, 30_000, 220_000);
-            timer.schedule(tasks.positionMetaInfo, 60_000);
-            timer.schedule(tasks.rtcmVersion, 30_000, 220_000);
-            hasAnalyzed = true;
+    public void putData(MessagePack messagePack) {
+        for (Map.Entry<Integer, byte[]> entry : messagePack) {
+            messagePool.putData(entry.getKey(), entry.getValue());
         }
-
-        byte[] temp = new byte[bytes.remaining()];
-        bytes.get(temp);
-        this.bytes.add(temp);
-
-        this.timeMarks.add(System.currentTimeMillis());
-
-        if (this.bytes.size() > 20) {
-            this.bytes.clear();
-            this.timeMarks.clear();
-        }
-
-        service.submit(this);
-    }
-
-    public MessagePool getMessagePool() {
-        return messagePool;
-    }
-
-    RTCM_3X rtcmSeparator = new RTCM_3X();
-
-    @Override
-    public void run() {
-        ArrayList<Message> arrayMessage = rtcmSeparator.separate(bytes.poll());
-        messagePool.putData(arrayMessage, timeMarks.poll());
     }
 }
 
 class MessagePool {
-    ArrayList<Integer> msgNumberPack = new ArrayList<>();
-    ArrayList<Long> lastTimeMark = new ArrayList<>();
-    ArrayList<Integer> delays = new ArrayList<>();
+    HashMap<Integer, Long> timeMarks = new HashMap<>();
+    TreeMap<Integer, Integer> msgDelays = new TreeMap<>();
     HashMap<Integer, byte[]> bytePool = new HashMap<>();
 
-    public void putData(Integer number, Long time) {
+    public void putData(Integer number, byte[] bytes) {
         //rewrite with "get" and "null" check
-        if (msgNumberPack.contains(number)) {
-            int index = msgNumberPack.indexOf(number);
-            int delay = Math.round((time - lastTimeMark.get(index)) / 1000f);
-            delays.set(index, Math.max(delay, 1));
-            lastTimeMark.set(index, time);
+        if (bytePool.containsKey(number)) {
+            long currentTime = System.currentTimeMillis();
+            int delay = Math.round((currentTime - timeMarks.get(number)) / 1000f);
+            bytePool.put(number, bytes);
+            msgDelays.put(number, Math.max(delay, 1));
+            timeMarks.put(number, currentTime);
         } else {
-            msgNumberPack.add(number);
-            lastTimeMark.add(time);
-            delays.add(0);
-        }
-    }
-
-    public void putData(ArrayList<Message> messages, Long time) {
-        for (Message message : messages) {
-            bytePool.put(message.nmb, message.bytes);
-            putData(message.nmb, time);
+            bytePool.put(number, bytes);
+            msgDelays.put(number, 0);
+            timeMarks.put(number, System.currentTimeMillis());
         }
     }
 
@@ -114,22 +75,15 @@ class MessagePool {
 
     @Override
     public String toString() {
-
-        TreeMap<Integer, Integer> temp = new TreeMap<>();
-        for (int i = 0; i < msgNumberPack.size(); i++) {
-            temp.put(msgNumberPack.get(i), delays.get(i));
-        }
+        if (bytePool.size() == 0)
+            return "";
 
         StringBuilder response = new StringBuilder();
 
-        for (Map.Entry<Integer, Integer> entry : temp.entrySet()) {
+        for (Map.Entry<Integer, Integer> entry : msgDelays.entrySet()) {
             response.append("," + entry.getKey() + "(" + entry.getValue() + ")");
         }
 
         return response.substring(1);
-    }
-
-    public ArrayList<Integer> getMsgNumberPack() {
-        return msgNumberPack;
     }
 }

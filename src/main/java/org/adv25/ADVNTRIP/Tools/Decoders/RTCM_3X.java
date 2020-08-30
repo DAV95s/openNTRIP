@@ -1,21 +1,24 @@
 package org.adv25.ADVNTRIP.Tools.Decoders;
 
-import org.adv25.ADVNTRIP.Tools.Message;
+import org.adv25.ADVNTRIP.Tools.MessagePack;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import java.io.IOException;
 import java.nio.BufferUnderflowException;
 import java.nio.ByteBuffer;
-import java.util.ArrayList;
 
-public class RTCM_3X {
+public class RTCM_3X implements IDecoder {
     private static Logger logger = LogManager.getLogger(RTCM_3X.class.getName());
 
-    public ArrayList<Message> separate(ByteBuffer bb) {
-        ArrayList<Message> list = new ArrayList<>();
+    DecoderType decoderType = DecoderType.RTCM3;
+
+    public MessagePack separate(ByteBuffer bb) throws IOException {
+        MessagePack messageList = new MessagePack();
+        bb.flip();
 
         if (bb.limit() == 0)
-            return list;
+            return null;
 
         int preamble, shift, nmb;
 
@@ -31,19 +34,23 @@ public class RTCM_3X {
                 bb.position(preamble);
                 byte[] msg = new byte[shift];
                 bb.get(msg, 0, shift);
-                list.add(new Message(nmb, msg));
+                messageList.addMessage(nmb, msg);
 
                 bb.position(preamble + shift);
 
             } catch (IllegalArgumentException | BufferUnderflowException e) {
-                return list;
+                throw new IOException();
             }
         }
-        return list;
+
+        if (messageList.isEmpty())
+            return null;
+
+        return messageList;
     }
 
-    public ArrayList<Message> separate(byte[] bytes) {
-        ByteBuffer bb = ByteBuffer.wrap(bytes);
-        return separate(bb);
+    @Override
+    public DecoderType getType() {
+        return decoderType;
     }
 }

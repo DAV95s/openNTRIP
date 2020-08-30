@@ -9,7 +9,7 @@ import org.apache.logging.log4j.Logger;
 public class ReferenceStationModel {
     private static Logger logger = LogManager.getLogger(ReferenceStationModel.class.getName());
     int id;
-    String mountpoint;
+    String name;
     String identifier;
     String format;
     String format_details;
@@ -32,12 +32,12 @@ public class ReferenceStationModel {
         this.id = id;
     }
 
-    public String getMountpoint() {
-        return mountpoint;
+    public String getName() {
+        return name;
     }
 
-    public void setMountpoint(String mountpoint) {
-        this.mountpoint = mountpoint;
+    public void setName(String name) {
+        this.name = name;
     }
 
     public String getIdentifier() {

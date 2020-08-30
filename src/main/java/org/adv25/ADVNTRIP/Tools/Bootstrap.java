@@ -30,9 +30,8 @@ public class Bootstrap {
     private Timer timer = new Timer();
 
     private Bootstrap() {
-        timer.schedule(refStationInit, 0);
-        timer.schedule(casterInit, 0);
-
+        timer.schedule(refStationInit, 0, 15_000);
+        timer.schedule(casterInit, 0, 15_000);
     }
 
     TimerTask refStationInit = new TimerTask() {
@@ -53,10 +52,10 @@ public class Bootstrap {
         public void run() {
             ArrayList<NtripCasterModel> casters = new NtripCasterDAO().readAll();
 
-            for (NtripCasterModel ntripCasterModel : casters) {
-                if (NtripCaster.getCasterById(ntripCasterModel.getId()) == null) {
+            for (NtripCasterModel model : casters) {
+                if (NtripCaster.getCasterById(model.getId()) == null) {
                     try {
-                        new NtripCaster(ntripCasterModel);
+                        new NtripCaster(model);
                     } catch (IOException e) {
                         logger.error(e);
                     }

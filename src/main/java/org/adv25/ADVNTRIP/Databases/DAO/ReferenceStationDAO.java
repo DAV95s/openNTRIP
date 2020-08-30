@@ -16,7 +16,7 @@ public class ReferenceStationDAO {
         try (Connection con = DataSource.getConnection();
              PreparedStatement statement = con.prepareStatement(SQL.CREATE.QUERY)) {
 
-            statement.setString(1, model.getMountpoint());
+            statement.setString(1, model.getName());
             statement.setString(2, model.getIdentifier());
             statement.setString(3, model.getFormat());
             statement.setString(4, model.getFormat_details());
@@ -51,7 +51,7 @@ public class ReferenceStationDAO {
             try (ResultSet rs = statement.executeQuery()) {
                 if (rs.next()) {
                     model.setId(rs.getInt("id"));
-                    model.setMountpoint(rs.getString("mountpoint"));
+                    model.setName(rs.getString("name"));
                     model.setIdentifier(rs.getString("identifier"));
                     model.setFormat(rs.getString("format"));
                     model.setFormat_details(rs.getString("format-details"));
@@ -83,7 +83,7 @@ public class ReferenceStationDAO {
                 while (rs.next()) {
                     ReferenceStationModel model = new ReferenceStationModel();
                     model.setId(rs.getInt("id"));
-                    model.setMountpoint(rs.getString("mountpoint"));
+                    model.setName(rs.getString("name"));
                     model.setIdentifier(rs.getString("identifier"));
                     model.setFormat(rs.getString("format"));
                     model.setFormat_details(rs.getString("format-details"));
@@ -184,23 +184,23 @@ public class ReferenceStationDAO {
     }
 
     enum SQL {
-        CREATE("INSERT INTO base_stations VALUES( DEFAULT , ?, ?, ?, ?, ?, ?, ?, GeomFromText(?),? , ?, ?, ?, ?, GeomFromText(?),? ,? );"),
-        READ("SELECT id, mountpoint, identifier, format, `format-details`, carrier, `nav-system`, country, ST_AsText(lla) as lla, altitude, bitrate, misc, is_online, password, hz\n" +
-                "FROM ntrip.base_stations" +
+        CREATE("INSERT INTO ntrip.reference_stations VALUES( DEFAULT , ?, ?, ?, ?, ?, ?, ?, GeomFromText(?),? , ?, ?, ?, ?, GeomFromText(?),? ,? );"),
+        READ("SELECT id, name, identifier, format, `format-details`, carrier, `nav-system`, country, ST_AsText(lla) as lla, altitude, bitrate, misc, is_online, password, hz\n" +
+                "FROM ntrip.reference_stations" +
                 " WHERE `id` = ?;"),
-        READALL("SELECT id, mountpoint, identifier, format, `format-details`, carrier, `nav-system`, country, ST_AsText(lla) as lla, altitude, bitrate, misc, is_online, password, hz " +
-                "FROM ntrip.base_stations"),
-        UPDATE("UPDATE ntrip.base_stations " +
+        READALL("SELECT id, name, identifier, format, `format-details`, carrier, `nav-system`, country, ST_AsText(lla) as lla, altitude, bitrate, misc, is_online, password, hz " +
+                "FROM ntrip.reference_stations"),
+        UPDATE("UPDATE ntrip.reference_stations " +
                 "SET `identifier`=?, `format`=?, `format-details`=?, `carrier`=?, `nav-system`=?, `country`=?, `lla`=ST_GeomFromText(?), `altitude`=?, `bitrate`=?, `misc`=?, `hz`=? WHERE `id` = ?"),
         DELETE(""),
 
-        SET_OFFLINE("UPDATE ntrip.base_stations " +
+        SET_OFFLINE("UPDATE ntrip.reference_stations " +
                 "SET `is_online` = 0 WHERE `id` = ?;"),
-        SET_ONLINE("UPDATE ntrip.base_stations " +
+        SET_ONLINE("UPDATE ntrip.reference_stations " +
                 "SET `is_online` = 1 WHERE `id` = ?;"),
 
         GET_NEAREST("SELECT id, lla, st_distance(lla, ST_GeomFromText(?)) AS dist " +
-                "FROM ntrip.base_stations " +
+                "FROM ntrip.reference_stations " +
                 "WHERE lla IS NOT NULL AND id IN (?) AND is_online = 1" +
                 "GROUP BY dist" +
                 "LIMIT 1");

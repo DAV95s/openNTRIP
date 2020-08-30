@@ -16,10 +16,6 @@ import java.util.Iterator;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-/*
- *
- * */
-
 public class NetworkProcessor implements Runnable {
     final static private Logger logger = LogManager.getLogger(NetworkProcessor.class.getName());
 
@@ -61,7 +57,6 @@ public class NetworkProcessor implements Runnable {
         while (true) {
             try {
                 int count = selector.select();
-                logger.debug("Selected: " + count);
 
                 if (count < 1)
                     continue;
@@ -85,8 +80,9 @@ public class NetworkProcessor implements Runnable {
                         if (key.attachment() instanceof RefStation) {
                             //Reference station sends gnss data
                             RefStation refStation = (RefStation) key.attachment();
-                            refStation.readSelf();
-                            executor.submit(refStation);
+                            if (refStation.readSelf())
+                                executor.submit(refStation);
+
                         } else if (key.attachment() instanceof Client) {
                             //Client sends nmea message
                             Client client = (Client) key.attachment();

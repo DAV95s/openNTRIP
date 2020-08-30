@@ -4,6 +4,11 @@ import org.adv25.ADVNTRIP.Clients.Client;
 import org.adv25.ADVNTRIP.Databases.DAO.ReferenceStationDAO;
 import org.adv25.ADVNTRIP.Databases.Models.ReferenceStationModel;
 import org.adv25.ADVNTRIP.Spatial.PointLla;
+import org.adv25.ADVNTRIP.Tools.AnalyzeListener;
+import org.adv25.ADVNTRIP.Tools.Decoders.IDecoder;
+import org.adv25.ADVNTRIP.Tools.Decoders.RAW;
+import org.adv25.ADVNTRIP.Tools.Decoders.RTCM_3X;
+import org.adv25.ADVNTRIP.Tools.MessagePack;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -21,15 +26,16 @@ public class RefStation implements Runnable {
     final static private Logger logger = LogManager.getLogger(RefStation.class.getName());
 
     /* static block */
-    private static Map<Integer, RefStation> refStations = new HashMap<>();
-
-    public static RefStation getStationById(int id) {
-        return refStations.get(id);
-    }
+    private static ReferenceStationDAO dao = new ReferenceStationDAO();
+    private static Map<String, RefStation> refStations = new HashMap<>();
 
     public static RefStation getStationByName(String name) {
+        return refStations.get(name);
+    }
+
+    public static RefStation getStationById(int id) {
         for (RefStation station : refStations.values()) {
-            if (station.getName().equals(name))
+            if (station.getId() == id)
                 return station;
         }
         return null;
@@ -55,25 +61,45 @@ public class RefStation implements Runnable {
     private SelectionKey key;
     private ByteBuffer buffer = ByteBuffer.allocate(32768);
     public boolean available = false;
+    private AnalyzeListener analyzeListener;
 
     public boolean setSocket(SelectionKey key) {
         if (socket == null || !socket.isRegistered()) {
-            acceptBytes = 0;
-            upTime = System.currentTimeMillis();
+            this.analyzeListener = new AnalyzeListener(this);
+            this.acceptBytes = 0;
+            this.upTime = System.currentTimeMillis();
+            dao.setOnline(model);
 
             this.socket = (SocketChannel) key.channel();
             this.key = key;
             this.key.attach(this);
             this.available = true;
-            logger.info(model.getId() + " (" + model.getMountpoint() + ") has connected.");
+            logger.info(model.getId() + " (" + model.getName() + ") has connected.");
             return true;
         } else {
-            logger.info(model.getId() + " (" + model.getMountpoint() + ") already taken.");
+            logger.info(model.getId() + " (" + model.getName() + ") already taken.");
             return false;
         }
     }
 
-    public void readSelf() {
+    public void safeClose() {
+        dao.setOffline(model);
+        this.available = false;
+        this.key.cancel();
+        analyzeListener.close();
+        try {
+            this.socket.close();
+        } catch (IOException e) {
+            logger.error(e);
+        }
+    }
+
+    private boolean readBlocking = false;
+
+    public boolean readSelf() {
+        if (this.readBlocking)
+            return false;
+
         try {
             buffer.clear();
             int bytesRead = this.socket.read(buffer);
@@ -89,36 +115,50 @@ public class RefStation implements Runnable {
                 throw new IOException();
             }
 
-            logger.debug(model.getMountpoint() + " read " + totalBytesRead + " bytes. Reference station have " + subscribers.size() + " clients");
+            logger.debug(model.getName() + " read " + totalBytesRead + " bytes. Reference station have " + subscribers.size() + " clients");
             acceptBytes += totalBytesRead;
 
+
         } catch (IOException e) {
-            logger.info(model.getMountpoint() + " closed connection");
+            logger.info(model.getName() + " closed connection");
             this.safeClose();
+            this.readBlocking = false;
         }
+        return this.readBlocking = true;
     }
 
-    public void safeClose() {
-        this.available = false;
-        this.key.cancel();
-        try {
-            this.socket.close();
-        } catch (IOException e) {
-            logger.error(e);
-        }
-    }
+    IDecoder decoder = new RTCM_3X();
 
     @Override
     public void run() {
+        MessagePack messagePack = null;
+
+        try {
+            messagePack = decoder.separate(buffer);
+        } catch (IOException e) {
+            if (decoder instanceof RTCM_3X)
+                decoder = new RAW();
+        }
+
+        this.readBlocking = false;
+
+        if (messagePack == null)
+            return;
+
+        analyzeListener.putData(messagePack);
+
+        ByteBuffer localBuffer = messagePack.getFullBytes();
+
         for (Client client : subscribers) {
-            this.buffer.flip();
+            localBuffer.flip();
             try {
-                client.write(this.buffer);
+                client.write(localBuffer);
             } catch (IOException e) {
                 client.safeClose();
             }
         }
     }
+
     /* networking */
 
     /* data model*/
@@ -126,7 +166,6 @@ public class RefStation implements Runnable {
     private long upTime;
     private long acceptBytes;
 
-    //***** model updaters
     private TimerTask updateModel = new TimerTask() {
         @Override
         public void run() {
@@ -135,7 +174,6 @@ public class RefStation implements Runnable {
             if (ref_model == null)
                 remove();
 
-            logger.debug(ref_model.getMountpoint() + " ref. update");
             model = ref_model;
         }
     };
@@ -143,7 +181,7 @@ public class RefStation implements Runnable {
     public RefStation(ReferenceStationModel model) {
         this.model = model;
         timer.schedule(updateModel, 10_000, 10_000);
-        refStations.put(model.getId(), this);
+        refStations.put(model.getName(), this);
     }
 
     private void remove() {
@@ -165,7 +203,7 @@ public class RefStation implements Runnable {
     }
 
     public String getName() {
-        return model.getMountpoint();
+        return model.getName();
     }
 
     public int getId() {
