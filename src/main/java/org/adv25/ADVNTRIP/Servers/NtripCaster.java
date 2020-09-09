@@ -49,7 +49,7 @@ public class NtripCaster {
     /* fields */
     private SelectionKey selectionKey;
     private ServerSocketChannel serverChannel;
-    private ArrayList<MountPointModel> mountPoints = new ArrayList<>();
+    protected ArrayList<MountPointModel> mountPoints = new ArrayList<>();
     private NtripCasterModel model;
     /* fields */
 
@@ -144,43 +144,43 @@ public class NtripCaster {
             if (client.getPosition() == null)
                 logger.debug("waiting for client position");
 
-            RefStation refStation = getNearestReferenceStation(requestedMountPoint, client);
+            ReferenceStation referenceStation = getNearestReferenceStation(requestedMountPoint, client);
 
-            if (refStation != null)
-                client.setReferenceStation(refStation);
+            if (referenceStation != null)
+                client.setReferenceStation(referenceStation);
             else
                 logger.debug("no suitable reference station");
         } else {
-            RefStation refStation = getReferenceStation(requestedMountPoint);
+            ReferenceStation referenceStation = getReferenceStation(requestedMountPoint);
 
-            if (refStation != null)
-                client.setReferenceStation(refStation);
+            if (referenceStation != null)
+                client.setReferenceStation(referenceStation);
             else
                 logger.debug("no suitable reference station");
         }
     }
 
-    private RefStation getReferenceStation(MountPointModel model) {
-        ArrayList<RefStation> refStations = model.getBasesIds();
-        if (refStations.size() == 0)
+    protected ReferenceStation getReferenceStation(MountPointModel model) {
+        ArrayList<ReferenceStation> referenceStations = model.getBasesIds();
+        if (referenceStations.size() == 0)
             logger.error(model.getMountpoint() + " have not reference station!");
 
-        if (refStations.size() > 1)
+        if (referenceStations.size() > 1)
             logger.error("MountPoint " + model.getMountpoint() + " have more than one ref station but nmea off.");
 
-        for (RefStation refStation : refStations) {
-            if (refStation.available)
-                return refStation;
+        for (ReferenceStation referenceStation : referenceStations) {
+            if (referenceStation.available)
+                return referenceStation;
         }
         return null;
     }
 
-    private RefStation getNearestReferenceStation(MountPointModel model, Client client) {
-        ArrayList<RefStation> refStations = model.getBasesIds();
-        TreeMap<Float, RefStation> sortedRange = new TreeMap<>();
+    protected ReferenceStation getNearestReferenceStation(MountPointModel model, Client client) {
+        ArrayList<ReferenceStation> referenceStations = model.getBasesIds();
+        TreeMap<Float, ReferenceStation> sortedRange = new TreeMap<>();
         NMEA.GPSPosition clientPosition = client.getPosition();
 
-        for (RefStation station : refStations) {
+        for (ReferenceStation station : referenceStations) {
             if (station.available)
                 sortedRange.put(station.getPosition().distance(clientPosition), station);
         }

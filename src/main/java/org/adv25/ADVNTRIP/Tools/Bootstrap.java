@@ -6,7 +6,7 @@ import org.adv25.ADVNTRIP.Databases.Models.NtripCasterModel;
 import org.adv25.ADVNTRIP.Databases.Models.ReferenceStationModel;
 
 import org.adv25.ADVNTRIP.Servers.NtripCaster;
-import org.adv25.ADVNTRIP.Servers.RefStation;
+import org.adv25.ADVNTRIP.Servers.ReferenceStation;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -41,8 +41,8 @@ public class Bootstrap {
             ArrayList<ReferenceStationModel> refStations = dao.readAll();
 
             for (ReferenceStationModel model : refStations) {
-                if (RefStation.getStationById(model.getId()) == null)
-                    new RefStation(model);
+                if (ReferenceStation.getStationById(model.getId()) == null)
+                    new ReferenceStation(model);
             }
         }
     };

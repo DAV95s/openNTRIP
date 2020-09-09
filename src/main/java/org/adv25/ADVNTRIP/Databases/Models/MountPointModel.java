@@ -4,7 +4,7 @@ import org.adv25.ADVNTRIP.Clients.Authentication.Authentication;
 import org.adv25.ADVNTRIP.Clients.Authentication.Basic;
 import org.adv25.ADVNTRIP.Clients.Authentication.Digest;
 import org.adv25.ADVNTRIP.Clients.Authentication.None;
-import org.adv25.ADVNTRIP.Servers.RefStation;
+import org.adv25.ADVNTRIP.Servers.ReferenceStation;
 import org.adv25.ADVNTRIP.Spatial.PointLla;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -34,7 +34,7 @@ public class MountPointModel {
     private String misc;
     private boolean available;
     private int casterId;
-    private ArrayList<RefStation> baseIds;
+    private ArrayList<ReferenceStation> baseIds;
     private int plugin_id;
 
     public long getId() {
@@ -217,17 +217,22 @@ public class MountPointModel {
         this.casterId = casterId;
     }
 
-    public ArrayList<RefStation> getBasesIds() {
+    public ArrayList<ReferenceStation> getBasesIds() {
         return baseIds;
     }
 
     public String getBasesIdsJoin() {
         StringBuilder sb = new StringBuilder();
 
-        for (RefStation refStation : baseIds) {
-            sb.append(refStation.getId());
+        for (ReferenceStation referenceStation : baseIds) {
+            sb.append(referenceStation.getId());
         }
         return sb.toString();
+    }
+
+    /* for unit test */
+    public void setBaseIds(ArrayList<ReferenceStation> referenceStations) {
+        this.baseIds = referenceStations;
     }
 
     public void setBasesIds(String ids) {
@@ -235,7 +240,7 @@ public class MountPointModel {
 
         for (String id : ids.split(",")) {
             int i_id = Integer.parseInt(id);
-            RefStation station = RefStation.getStationById(i_id);
+            ReferenceStation station = ReferenceStation.getStationById(i_id);
             if (station != null) {
                 baseIds.add(station);
             } else {

@@ -2,7 +2,7 @@ package org.adv25.ADVNTRIP.Network;
 
 import org.adv25.ADVNTRIP.Clients.Client;
 import org.adv25.ADVNTRIP.Servers.NtripCaster;
-import org.adv25.ADVNTRIP.Servers.RefStation;
+import org.adv25.ADVNTRIP.Servers.ReferenceStation;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -77,11 +77,11 @@ public class NetworkProcessor implements Runnable {
                         logger.debug("Socket accept.");
 
                     } else if (key.isReadable()) {
-                        if (key.attachment() instanceof RefStation) {
+                        if (key.attachment() instanceof ReferenceStation) {
                             //Reference station sends gnss data
-                            RefStation refStation = (RefStation) key.attachment();
-                            if (refStation.readSelf())
-                                executor.submit(refStation);
+                            ReferenceStation referenceStation = (ReferenceStation) key.attachment();
+                            if (referenceStation.readSelf())
+                                executor.submit(referenceStation);
 
                         } else if (key.attachment() instanceof Client) {
                             //Client sends nmea message

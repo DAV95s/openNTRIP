@@ -1,9 +1,8 @@
 package org.adv25.ADVNTRIP.Network;
 
 import org.adv25.ADVNTRIP.Clients.Client;
-import org.adv25.ADVNTRIP.Databases.Models.MountPointModel;
 import org.adv25.ADVNTRIP.Servers.NtripCaster;
-import org.adv25.ADVNTRIP.Servers.RefStation;
+import org.adv25.ADVNTRIP.Servers.ReferenceStation;
 import org.adv25.ADVNTRIP.Tools.HttpRequestParser;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -12,7 +11,6 @@ import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.channels.SelectionKey;
 import java.nio.channels.SocketChannel;
-import java.util.ArrayList;
 
 public class ConnectHandler implements Runnable {
     final static private Logger logger = LogManager.getLogger(ConnectHandler.class.getName());
@@ -80,7 +78,7 @@ public class ConnectHandler implements Runnable {
                 //OR SOURCE CONNECT
                 if (httpParser.getParam("SOURCE") != null) {
 
-                    RefStation station = RefStation.getStationByName(httpParser.getParam("SOURCE"));
+                    ReferenceStation station = ReferenceStation.getStationByName(httpParser.getParam("SOURCE"));
 
                     //mb account of station not exists
                     if (station == null)

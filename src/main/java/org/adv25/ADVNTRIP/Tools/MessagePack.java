@@ -25,7 +25,7 @@ public class MessagePack extends ArrayList<Map.Entry<Integer, byte[]>> {
     }
 
     public ByteBuffer getFullBytes() {
-        ByteBuffer buffer = ByteBuffer.allocate(32000);
+        ByteBuffer buffer = ByteBuffer.allocate(1024*1024);
         for (Map.Entry<Integer, byte[]> msg : this) {
             buffer.put(msg.getValue());
         }

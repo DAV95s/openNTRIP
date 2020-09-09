@@ -2,23 +2,21 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="b7aa1f89-fb3e-44e2-a0de-b72c0eae2f41" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/adv25/ADVNTRIP/Tools/Decoders/DecoderType.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/adv25/ADVNTRIP/Tools/Decoders/IDecoder.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/adv25/ADVNTRIP/Tools/Decoders/RAW.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/adv25/ADVNTRIP/Tools/MessagePack.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/test/java/TestReferenceStation.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/test/java/TestSeparators.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/adv25/ADVNTRIP/Databases/DAO/ReferenceStationDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/adv25/ADVNTRIP/Databases/DAO/ReferenceStationDAO.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/adv25/ADVNTRIP/Databases/Models/ReferenceStationModel.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/adv25/ADVNTRIP/Databases/Models/ReferenceStationModel.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/adv25/ADVNTRIP/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/adv25/ADVNTRIP/Main.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/adv25/ADVNTRIP/Clients/Client.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/adv25/ADVNTRIP/Clients/Client.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/adv25/ADVNTRIP/Databases/Models/MountPointModel.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/adv25/ADVNTRIP/Databases/Models/MountPointModel.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/adv25/ADVNTRIP/Network/ConnectHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/adv25/ADVNTRIP/Network/ConnectHandler.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/adv25/ADVNTRIP/Network/NetworkProcessor.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/adv25/ADVNTRIP/Network/NetworkProcessor.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/adv25/ADVNTRIP/Servers/RefStation.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/adv25/ADVNTRIP/Servers/RefStation.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/adv25/ADVNTRIP/Spatial/PointLla.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/adv25/ADVNTRIP/Spatial/PointLla.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/adv25/ADVNTRIP/Servers/NtripCaster.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/adv25/ADVNTRIP/Servers/NtripCaster.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/adv25/ADVNTRIP/Servers/RefStation.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/adv25/ADVNTRIP/Servers/ReferenceStation.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/adv25/ADVNTRIP/Tools/AnalyzeListener.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/adv25/ADVNTRIP/Tools/AnalyzeListener.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/adv25/ADVNTRIP/Tools/AnalyzeTasks.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/adv25/ADVNTRIP/Tools/AnalyzeTasks.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/adv25/ADVNTRIP/Tools/Bootstrap.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/adv25/ADVNTRIP/Tools/Bootstrap.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/adv25/ADVNTRIP/Tools/Decoders/RTCM_3X.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/adv25/ADVNTRIP/Tools/Decoders/RTCM_3X.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/Test1004.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/Test1004.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/Test1019.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/Test1019.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/adv25/ADVNTRIP/Tools/MessagePack.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/adv25/ADVNTRIP/Tools/MessagePack.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/TestAnalyzer.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/TestConnect.java" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -131,23 +129,21 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="TestPasswordAlgorithm.none" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+    <configuration name="TestReferenceStation.getStationFromPool" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="ADVNTRIP" />
-      <extension name="recording" autostart="true" />
       <option name="PACKAGE_NAME" value="" />
-      <option name="MAIN_CLASS_NAME" value="TestPasswordAlgorithm" />
-      <option name="METHOD_NAME" value="none" />
+      <option name="MAIN_CLASS_NAME" value="TestReferenceStation" />
+      <option name="METHOD_NAME" value="getStationFromPool" />
       <option name="TEST_OBJECT" value="method" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="TestSpatials.lea_distentions" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+    <configuration name="TestSeparators.rtcm3x_separator" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="ADVNTRIP" />
-      <extension name="recording" autostart="true" />
       <option name="PACKAGE_NAME" value="" />
-      <option name="MAIN_CLASS_NAME" value="TestSpatials" />
-      <option name="METHOD_NAME" value="lea_distentions" />
+      <option name="MAIN_CLASS_NAME" value="TestSeparators" />
+      <option name="METHOD_NAME" value="rtcm3x_separator" />
       <option name="TEST_OBJECT" value="method" />
       <method v="2">
         <option name="Make" enabled="true" />
@@ -157,17 +153,17 @@
       <item itemvalue="Application.Start" />
       <item itemvalue="JUnit.Test1004.start" />
       <item itemvalue="JUnit.Test1019.start" />
-      <item itemvalue="JUnit.TestPasswordAlgorithm.none" />
-      <item itemvalue="JUnit.TestSpatials.lea_distentions" />
       <item itemvalue="JUnit.TestAnalyzer.test1" />
+      <item itemvalue="JUnit.TestSeparators.rtcm3x_separator" />
+      <item itemvalue="JUnit.TestReferenceStation.getStationFromPool" />
     </list>
     <recent_temporary>
       <list>
+        <item itemvalue="JUnit.TestReferenceStation.getStationFromPool" />
+        <item itemvalue="JUnit.TestSeparators.rtcm3x_separator" />
         <item itemvalue="JUnit.TestAnalyzer.test1" />
         <item itemvalue="JUnit.Test1019.start" />
         <item itemvalue="JUnit.Test1004.start" />
-        <item itemvalue="JUnit.TestSpatials.lea_distentions" />
-        <item itemvalue="JUnit.TestPasswordAlgorithm.none" />
       </list>
     </recent_temporary>
   </component>
@@ -215,7 +211,14 @@
       <option name="project" value="LOCAL" />
       <updated>1598279831116</updated>
     </task>
-    <option name="localTasksCounter" value="4" />
+    <task id="LOCAL-00004" summary="fix network layout">
+      <created>1598812258608</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1598812258608</updated>
+    </task>
+    <option name="localTasksCounter" value="5" />
     <servers />
   </component>
   <component name="Vcs.Log.History.Properties">
@@ -232,7 +235,8 @@
     <MESSAGE value="add crc24q and fix authorization" />
     <MESSAGE value="3" />
     <MESSAGE value="rewrite network layout" />
-    <option name="LAST_COMMIT_MESSAGE" value="rewrite network layout" />
+    <MESSAGE value="fix network layout" />
+    <option name="LAST_COMMIT_MESSAGE" value="fix network layout" />
   </component>
   <component name="WindowStateProjectService">
     <state x="361" y="70" key="#Auto_Import" timestamp="1598278270785">
@@ -247,6 +251,10 @@
       <screen x="0" y="0" width="1536" height="824" />
     </state>
     <state x="223" y="67" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.0.1536.824@0.0.1536.824" timestamp="1598261259724" />
+    <state x="93" y="93" width="1350" height="638" key="#com.intellij.execution.junit2.states.ComparisonFailureState$DiffDialog" timestamp="1598894586849">
+      <screen x="0" y="0" width="1536" height="824" />
+    </state>
+    <state x="93" y="93" width="1350" height="638" key="#com.intellij.execution.junit2.states.ComparisonFailureState$DiffDialog/0.0.1536.824@0.0.1536.824" timestamp="1598894586849" />
     <state x="719" y="322" key="#com.intellij.fileTypes.FileTypeChooser" timestamp="1593104828986">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
@@ -255,15 +263,15 @@
       <screen x="0" y="0" width="1536" height="824" />
     </state>
     <state x="476" y="125" key="#com.intellij.ide.macro.MacrosDialog/0.0.1536.824@0.0.1536.824" timestamp="1598260221447" />
-    <state x="612" y="161" key="#com.intellij.ide.util.MemberChooser" timestamp="1598641942921">
+    <state x="612" y="161" key="#com.intellij.ide.util.MemberChooser" timestamp="1598906010332">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
-    <state x="612" y="161" key="#com.intellij.ide.util.MemberChooser/0.0.1536.824@0.0.1536.824" timestamp="1598641942921" />
+    <state x="612" y="161" key="#com.intellij.ide.util.MemberChooser/0.0.1536.824@0.0.1536.824" timestamp="1598906010332" />
     <state x="765" y="203" key="#com.intellij.ide.util.MemberChooser/0.0.1920.1040@0.0.1920.1040" timestamp="1593450673223" />
-    <state x="0" y="0" key="#com.intellij.refactoring.rename.AutomaticRenamingDialog" timestamp="1597596003919">
+    <state x="0" y="0" key="#com.intellij.refactoring.rename.AutomaticRenamingDialog" timestamp="1598896685703">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
-    <state x="0" y="0" key="#com.intellij.refactoring.rename.AutomaticRenamingDialog/0.0.1536.824@0.0.1536.824" timestamp="1597596003919" />
+    <state x="0" y="0" key="#com.intellij.refactoring.rename.AutomaticRenamingDialog/0.0.1536.824@0.0.1536.824" timestamp="1598896685703" />
     <state x="0" y="0" key="#com.intellij.refactoring.rename.AutomaticRenamingDialog/0.0.1920.1040@0.0.1920.1040" timestamp="1593018649368" />
     <state x="552" y="211" key="#com.intellij.refactoring.safeDelete.UnsafeUsagesDialog" timestamp="1598273502468">
       <screen x="0" y="0" width="1536" height="824" />
@@ -274,10 +282,10 @@
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="690" y="266" key="#com.intellij.refactoring.typeMigration.ui.FailedConversionsDialog/0.0.1920.1040@0.0.1920.1040" timestamp="1593287193785" />
-    <state x="491" y="10" key="CommitChangelistDialog2" timestamp="1598279829695">
+    <state x="491" y="10" key="CommitChangelistDialog2" timestamp="1598812257262">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
-    <state x="491" y="10" key="CommitChangelistDialog2/0.0.1536.824@0.0.1536.824" timestamp="1598279829695" />
+    <state x="491" y="10" key="CommitChangelistDialog2/0.0.1536.824@0.0.1536.824" timestamp="1598812257262" />
     <state x="648" y="315" width="298" height="245" key="DBNavigator.ConnectionAuthenticationDialog" timestamp="1598259275279">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
@@ -288,62 +296,62 @@
     </state>
     <state x="392" y="134" key="DBNavigator.ProjectSettingsDialog/0.0.1536.824@0.0.1536.824" timestamp="1598263014227" />
     <state x="490" y="174" key="DBNavigator.ProjectSettingsDialog/0.0.1920.1040@0.0.1920.1040" timestamp="1592321804528" />
-    <state width="463" height="370" key="DebuggerActiveHint" timestamp="1598686568455">
+    <state width="463" height="370" key="DebuggerActiveHint" timestamp="1598894101790">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
-    <state width="463" height="370" key="DebuggerActiveHint/0.0.1536.824@0.0.1536.824" timestamp="1598686568455" />
+    <state width="463" height="370" key="DebuggerActiveHint/0.0.1536.824@0.0.1536.824" timestamp="1598894101790" />
     <state width="479" height="466" key="DebuggerActiveHint/0.0.1920.1040@0.0.1920.1040" timestamp="1591822590114" />
     <state x="592" y="217" key="FileChooserDialogImpl" timestamp="1596901311308">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
     <state x="592" y="217" key="FileChooserDialogImpl/0.0.1536.824@0.0.1536.824" timestamp="1596901311308" />
-    <state width="1493" height="200" key="GridCell.Tab.0.bottom" timestamp="1598809457593">
+    <state width="1493" height="200" key="GridCell.Tab.0.bottom" timestamp="1598959343242">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
     <state width="1493" height="261" key="GridCell.Tab.0.bottom/0.0.1536.824/-1920.0.1920.1040@0.0.1536.824" timestamp="1594675170717" />
-    <state width="1493" height="200" key="GridCell.Tab.0.bottom/0.0.1536.824@0.0.1536.824" timestamp="1598809457593" />
+    <state width="1493" height="200" key="GridCell.Tab.0.bottom/0.0.1536.824@0.0.1536.824" timestamp="1598959343242" />
     <state width="1877" height="207" key="GridCell.Tab.0.bottom/0.0.1920.1040@0.0.1920.1040" timestamp="1593450976976" />
-    <state width="1493" height="200" key="GridCell.Tab.0.center" timestamp="1598809457592">
+    <state width="1493" height="200" key="GridCell.Tab.0.center" timestamp="1598959343227">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
     <state width="1493" height="261" key="GridCell.Tab.0.center/0.0.1536.824/-1920.0.1920.1040@0.0.1536.824" timestamp="1594675170717" />
-    <state width="1493" height="200" key="GridCell.Tab.0.center/0.0.1536.824@0.0.1536.824" timestamp="1598809457592" />
+    <state width="1493" height="200" key="GridCell.Tab.0.center/0.0.1536.824@0.0.1536.824" timestamp="1598959343227" />
     <state width="1877" height="207" key="GridCell.Tab.0.center/0.0.1920.1040@0.0.1920.1040" timestamp="1593450976976" />
-    <state width="1493" height="200" key="GridCell.Tab.0.left" timestamp="1598809457592">
+    <state width="1493" height="200" key="GridCell.Tab.0.left" timestamp="1598959343227">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
     <state width="1493" height="261" key="GridCell.Tab.0.left/0.0.1536.824/-1920.0.1920.1040@0.0.1536.824" timestamp="1594675170717" />
-    <state width="1493" height="200" key="GridCell.Tab.0.left/0.0.1536.824@0.0.1536.824" timestamp="1598809457592" />
+    <state width="1493" height="200" key="GridCell.Tab.0.left/0.0.1536.824@0.0.1536.824" timestamp="1598959343227" />
     <state width="1877" height="207" key="GridCell.Tab.0.left/0.0.1920.1040@0.0.1920.1040" timestamp="1593450976976" />
-    <state width="1493" height="200" key="GridCell.Tab.0.right" timestamp="1598809457593">
+    <state width="1493" height="200" key="GridCell.Tab.0.right" timestamp="1598959343227">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
     <state width="1493" height="261" key="GridCell.Tab.0.right/0.0.1536.824/-1920.0.1920.1040@0.0.1536.824" timestamp="1594675170717" />
-    <state width="1493" height="200" key="GridCell.Tab.0.right/0.0.1536.824@0.0.1536.824" timestamp="1598809457593" />
+    <state width="1493" height="200" key="GridCell.Tab.0.right/0.0.1536.824@0.0.1536.824" timestamp="1598959343227" />
     <state width="1877" height="207" key="GridCell.Tab.0.right/0.0.1920.1040@0.0.1920.1040" timestamp="1593450976976" />
-    <state width="1493" height="261" key="GridCell.Tab.1.bottom" timestamp="1598796536044">
+    <state width="1493" height="261" key="GridCell.Tab.1.bottom" timestamp="1598906269882">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
     <state width="1493" height="261" key="GridCell.Tab.1.bottom/0.0.1536.824/-1920.0.1920.1040@0.0.1536.824" timestamp="1594675170718" />
-    <state width="1493" height="261" key="GridCell.Tab.1.bottom/0.0.1536.824@0.0.1536.824" timestamp="1598796536044" />
+    <state width="1493" height="261" key="GridCell.Tab.1.bottom/0.0.1536.824@0.0.1536.824" timestamp="1598906269882" />
     <state width="1877" height="348" key="GridCell.Tab.1.bottom/0.0.1920.1040@0.0.1920.1040" timestamp="1593194712319" />
-    <state width="1493" height="261" key="GridCell.Tab.1.center" timestamp="1598796536044">
+    <state width="1493" height="261" key="GridCell.Tab.1.center" timestamp="1598906269882">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
     <state width="1493" height="261" key="GridCell.Tab.1.center/0.0.1536.824/-1920.0.1920.1040@0.0.1536.824" timestamp="1594675170717" />
-    <state width="1493" height="261" key="GridCell.Tab.1.center/0.0.1536.824@0.0.1536.824" timestamp="1598796536044" />
+    <state width="1493" height="261" key="GridCell.Tab.1.center/0.0.1536.824@0.0.1536.824" timestamp="1598906269882" />
     <state width="1877" height="348" key="GridCell.Tab.1.center/0.0.1920.1040@0.0.1920.1040" timestamp="1593194712319" />
-    <state width="1493" height="261" key="GridCell.Tab.1.left" timestamp="1598796536044">
+    <state width="1493" height="261" key="GridCell.Tab.1.left" timestamp="1598906269882">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
     <state width="1493" height="261" key="GridCell.Tab.1.left/0.0.1536.824/-1920.0.1920.1040@0.0.1536.824" timestamp="1594675170717" />
-    <state width="1493" height="261" key="GridCell.Tab.1.left/0.0.1536.824@0.0.1536.824" timestamp="1598796536044" />
+    <state width="1493" height="261" key="GridCell.Tab.1.left/0.0.1536.824@0.0.1536.824" timestamp="1598906269882" />
     <state width="1877" height="348" key="GridCell.Tab.1.left/0.0.1920.1040@0.0.1920.1040" timestamp="1593194712319" />
-    <state width="1493" height="261" key="GridCell.Tab.1.right" timestamp="1598796536044">
+    <state width="1493" height="261" key="GridCell.Tab.1.right" timestamp="1598906269882">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
     <state width="1493" height="261" key="GridCell.Tab.1.right/0.0.1536.824/-1920.0.1920.1040@0.0.1536.824" timestamp="1594675170717" />
-    <state width="1493" height="261" key="GridCell.Tab.1.right/0.0.1536.824@0.0.1536.824" timestamp="1598796536044" />
+    <state width="1493" height="261" key="GridCell.Tab.1.right/0.0.1536.824@0.0.1536.824" timestamp="1598906269882" />
     <state width="1877" height="348" key="GridCell.Tab.1.right/0.0.1920.1040@0.0.1920.1040" timestamp="1593194712319" />
     <state x="352" y="0" key="SettingsEditor" timestamp="1598263077944">
       <screen x="0" y="0" width="1536" height="824" />
@@ -358,10 +366,10 @@
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state width="968" height="528" key="XDebugger.FullValuePopup/0.0.1920.1040@0.0.1920.1040" timestamp="1590516162228" />
-    <state x="578" y="329" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2" timestamp="1597760092781">
+    <state x="578" y="329" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2" timestamp="1598905752950">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
-    <state x="578" y="329" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2/0.0.1536.824@0.0.1536.824" timestamp="1597760092781" />
+    <state x="578" y="329" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2/0.0.1536.824@0.0.1536.824" timestamp="1598905752950" />
     <state x="274" y="65" key="new project wizard" timestamp="1597413642431">
       <screen x="0" y="0" width="1536" height="824" />
     </state>

@@ -22,19 +22,19 @@ import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.CopyOnWriteArrayList;
 
-public class RefStation implements Runnable {
-    final static private Logger logger = LogManager.getLogger(RefStation.class.getName());
+public class ReferenceStation implements Runnable {
+    final static private Logger logger = LogManager.getLogger(ReferenceStation.class.getName());
 
     /* static block */
     private static ReferenceStationDAO dao = new ReferenceStationDAO();
-    private static Map<String, RefStation> refStations = new HashMap<>();
+    private static Map<String, ReferenceStation> refStations = new HashMap<>();
 
-    public static RefStation getStationByName(String name) {
+    public static ReferenceStation getStationByName(String name) {
         return refStations.get(name);
     }
 
-    public static RefStation getStationById(int id) {
-        for (RefStation station : refStations.values()) {
+    public static ReferenceStation getStationById(int id) {
+        for (ReferenceStation station : refStations.values()) {
             if (station.getId() == id)
                 return station;
         }
@@ -111,14 +111,11 @@ public class RefStation implements Runnable {
                 totalBytesRead += bytesRead;
             }
 
-            if (bytesRead == -1) {
+            if (bytesRead == -1)
                 throw new IOException();
-            }
 
             logger.debug(model.getName() + " read " + totalBytesRead + " bytes. Reference station have " + subscribers.size() + " clients");
             acceptBytes += totalBytesRead;
-
-
         } catch (IOException e) {
             logger.info(model.getName() + " closed connection");
             this.safeClose();
@@ -158,7 +155,6 @@ public class RefStation implements Runnable {
             }
         }
     }
-
     /* networking */
 
     /* data model*/
@@ -178,7 +174,7 @@ public class RefStation implements Runnable {
         }
     };
 
-    public RefStation(ReferenceStationModel model) {
+    public ReferenceStation(ReferenceStationModel model) {
         this.model = model;
         timer.schedule(updateModel, 10_000, 10_000);
         refStations.put(model.getName(), this);

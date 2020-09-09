@@ -1,26 +1,22 @@
 package org.adv25.ADVNTRIP.Tools;
 
-import org.adv25.ADVNTRIP.Servers.RefStation;
-import org.adv25.ADVNTRIP.Tools.Decoders.IDecoder;
-import org.adv25.ADVNTRIP.Tools.Decoders.RAW;
-import org.adv25.ADVNTRIP.Tools.Decoders.RTCM_3X;
+import org.adv25.ADVNTRIP.Servers.ReferenceStation;
 import org.apache.logging.log4j.LogManager;
 
-import java.nio.ByteBuffer;
 import java.util.*;
 
 public class AnalyzeListener {
     final static private org.apache.logging.log4j.Logger logger = LogManager.getLogger(AnalyzeListener.class.getName());
     final static private Timer timer = new Timer();
 
-    private RefStation refStation;
+    private ReferenceStation referenceStation;
     private AnalyzeTasks tasks;
     private MessagePool messagePool = new MessagePool();
     private boolean isAnalyzed = false;
 
-    public AnalyzeListener(RefStation refStation) {
-        this.refStation = refStation;
-        tasks = new AnalyzeTasks(refStation, messagePool);
+    public AnalyzeListener(ReferenceStation referenceStation) {
+        this.referenceStation = referenceStation;
+        tasks = new AnalyzeTasks(referenceStation, messagePool);
         this.startAnalyzeTasks();
     }
 

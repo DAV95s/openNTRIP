@@ -3,7 +3,7 @@ package org.adv25.ADVNTRIP.Clients;
 import org.adv25.ADVNTRIP.Databases.Models.ClientModel;
 import org.adv25.ADVNTRIP.Databases.Models.MountPointModel;
 import org.adv25.ADVNTRIP.Servers.NtripCaster;
-import org.adv25.ADVNTRIP.Servers.RefStation;
+import org.adv25.ADVNTRIP.Servers.ReferenceStation;
 import org.adv25.ADVNTRIP.Tools.HttpRequestParser;
 import org.adv25.ADVNTRIP.Tools.NMEA;
 import org.apache.logging.log4j.LogManager;
@@ -17,7 +17,7 @@ import java.nio.channels.SocketChannel;
 public class Client implements Runnable {
     final static private Logger logger = LogManager.getLogger(Client.class.getName());
 
-    private RefStation refStation;
+    private ReferenceStation referenceStation;
     private MountPointModel mountPoint;
     private NtripCaster caster;
     private SelectionKey key;
@@ -44,8 +44,8 @@ public class Client implements Runnable {
         this.key.attach(this);
     }
 
-    public void setReferenceStation(RefStation referenceStation) {
-        this.refStation = referenceStation;
+    public void setReferenceStation(ReferenceStation referenceStation) {
+        this.referenceStation = referenceStation;
         referenceStation.addClient(this);
     }
 
@@ -59,7 +59,7 @@ public class Client implements Runnable {
 
     public void safeClose() {
         this.key.cancel();
-        this.refStation.removeClient(this);
+        this.referenceStation.removeClient(this);
         try {
             this.socket.close();
         } catch (IOException e) {

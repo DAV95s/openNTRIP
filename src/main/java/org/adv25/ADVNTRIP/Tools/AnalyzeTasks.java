@@ -1,7 +1,7 @@
 package org.adv25.ADVNTRIP.Tools;
 
 import org.adv25.ADVNTRIP.Databases.Models.ReferenceStationModel;
-import org.adv25.ADVNTRIP.Servers.RefStation;
+import org.adv25.ADVNTRIP.Servers.ReferenceStation;
 import org.adv25.ADVNTRIP.Spatial.PointLla;
 import org.adv25.ADVNTRIP.Tools.RTCM.MSG1005;
 import org.apache.logging.log4j.LogManager;
@@ -19,14 +19,14 @@ import java.util.*;
 
 public class AnalyzeTasks {
     final static private Logger logger = LogManager.getLogger(AnalyzeTasks.class.getName());
-    RefStation refStation;
+    ReferenceStation referenceStation;
     ReferenceStationModel model;
     MessagePool messagePool;
 
 
-    public AnalyzeTasks(RefStation refStation, MessagePool messagePool) {
-        this.refStation = refStation;
-        this.model = refStation.getModel();
+    public AnalyzeTasks(ReferenceStation referenceStation, MessagePool messagePool) {
+        this.referenceStation = referenceStation;
+        this.model = referenceStation.getModel();
         this.messagePool = messagePool;
 
     }
@@ -64,7 +64,7 @@ public class AnalyzeTasks {
 
             model.update();
 
-            logger.debug(refStation.getName() + ": update RTCM Version");
+            logger.debug(referenceStation.getName() + ": update RTCM Version");
         }
     };
 
@@ -106,7 +106,7 @@ public class AnalyzeTasks {
                 model.update();
             }
 
-            logger.debug(refStation.getName() + ": update Nav Systems");
+            logger.debug(referenceStation.getName() + ": update Nav Systems");
         }
     };
 
@@ -133,7 +133,7 @@ public class AnalyzeTasks {
 
             model.setCarrier(carrier);
             model.update();
-            logger.debug(refStation.getName() + ": update Carrier");
+            logger.debug(referenceStation.getName() + ": update Carrier");
         }
     };
 
@@ -160,7 +160,7 @@ public class AnalyzeTasks {
 
             model.setLla(position);
             model.update();
-            logger.debug(refStation.getName() + ": update position " + position.toString());
+            logger.debug(referenceStation.getName() + ": update position " + position.toString());
         }
     };
 
