@@ -2,7 +2,7 @@
 --
 -- Host: localhost    Database: ntrip
 -- ------------------------------------------------------
--- Server version	5.5.5-10.4.13-MariaDB
+-- Server version	5.5.5-10.4.13-MariaDB-log
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -16,70 +16,32 @@
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
--- Table structure for table `base_stations`
+-- Table structure for table `casters`
 --
 
-DROP TABLE IF EXISTS `base_stations`;
+DROP TABLE IF EXISTS `casters`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `base_stations` (
+CREATE TABLE `casters` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `mountpoint` varchar(100) NOT NULL,
-  `identifier` varchar(255) DEFAULT NULL,
-  `format` varchar(255) DEFAULT NULL,
-  `format-details` varchar(255) DEFAULT NULL,
-  `carrier` int(1) DEFAULT NULL,
-  `nav-system` varchar(255) DEFAULT NULL,
-  `country` varchar(3) DEFAULT NULL,
-  `lla` point DEFAULT NULL,
-  `altitude` decimal(15,10) DEFAULT NULL,
-  `bitrate` int(11) NOT NULL DEFAULT 0,
-  `misc` varchar(255) DEFAULT '',
-  `is_online` int(1) DEFAULT 0,
-  `password` varchar(255) NOT NULL DEFAULT '',
-  `hz` int(2) DEFAULT 0,
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `mountpoint` (`mountpoint`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `base_stations`
---
-
-LOCK TABLES `base_stations` WRITE;
-/*!40000 ALTER TABLE `base_stations` DISABLE KEYS */;
-INSERT INTO `base_stations` VALUES (1,'AL1','1231aa','fafaf','123',2,'dddaGFPS','RUS','\0\0\0\0\0\0\0\0\0\0\0\0ï¿½@@\0\0\0\0\0\0F@',0.0000000000,123,'',1,'44444',4),(2,'AL2',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,0,'',0,'44444',0);
-/*!40000 ALTER TABLE `base_stations` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `ntripCasters`
---
-
-DROP TABLE IF EXISTS `ntripCasters`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `ntripCasters` (
-  `id` int(11) NOT NULL,
-  `address` varchar(40) NOT NULL,
+  `address` varchar(40) DEFAULT 'localhost',
   `port` int(5) NOT NULL,
-  `group_id` int(11) NOT NULL,
-  `status` int(1) NOT NULL,
+  `group_id` int(11) DEFAULT 1,
+  `status` int(1) DEFAULT 1,
   PRIMARY KEY (`id`),
   UNIQUE KEY `port` (`port`),
   KEY `group_id` (`group_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `ntripCasters`
+-- Dumping data for table `casters`
 --
 
-LOCK TABLES `ntripCasters` WRITE;
-/*!40000 ALTER TABLE `ntripCasters` DISABLE KEYS */;
-INSERT INTO `ntripCasters` VALUES (0,'localhost',8500,1,1);
-/*!40000 ALTER TABLE `ntripCasters` ENABLE KEYS */;
+LOCK TABLES `casters` WRITE;
+/*!40000 ALTER TABLE `casters` DISABLE KEYS */;
+INSERT INTO `casters` VALUES (1,'localhost',8500,1,1);
+/*!40000 ALTER TABLE `casters` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -177,7 +139,7 @@ CREATE TABLE `login_attempts` (
   `login` varchar(100) NOT NULL,
   `time` int(11) unsigned DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -186,7 +148,6 @@ CREATE TABLE `login_attempts` (
 
 LOCK TABLES `login_attempts` WRITE;
 /*!40000 ALTER TABLE `login_attempts` DISABLE KEYS */;
-INSERT INTO `login_attempts` VALUES (2,'::1','administrator',1592912712);
 /*!40000 ALTER TABLE `login_attempts` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -209,21 +170,22 @@ CREATE TABLE `mountpoints` (
   `country` varchar(3) DEFAULT NULL,
   `latitude` double DEFAULT NULL,
   `longitude` double DEFAULT NULL,
-  `nmea` int(1) NOT NULL DEFAULT 0,
-  `solution` int(1) NOT NULL DEFAULT 0,
+  `nmea` tinyint(1) NOT NULL DEFAULT 0,
+  `solution` tinyint(1) NOT NULL DEFAULT 0,
   `generator` varchar(255) DEFAULT NULL,
   `compression` varchar(255) DEFAULT NULL,
   `authentication` varchar(50) NOT NULL DEFAULT 'None',
-  `fee` int(1) NOT NULL DEFAULT 0,
-  `bitrate` int(11) NOT NULL DEFAULT 0,
-  `misc` varchar(255) NOT NULL,
+  `fee` tinyint(1) DEFAULT 0,
+  `bitrate` int(11) DEFAULT 0,
+  `misc` varchar(255) DEFAULT NULL,
   `caster_id` int(11) NOT NULL,
-  `bases_id` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL,
-  `available` int(1) NOT NULL DEFAULT 0,
+  `stations_id` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL,
+  `available` tinyint(1) NOT NULL DEFAULT 0,
   `plugin_id` int(11) DEFAULT 0,
   PRIMARY KEY (`id`),
+  UNIQUE KEY `mountpoints_un` (`mountpoint`,`caster_id`),
   KEY `mountpoint` (`mountpoint`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=20 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -232,8 +194,46 @@ CREATE TABLE `mountpoints` (
 
 LOCK TABLES `mountpoints` WRITE;
 /*!40000 ALTER TABLE `mountpoints` DISABLE KEYS */;
-INSERT INTO `mountpoints` VALUES (1,'test1','Juneau','RTCM 3.1','1004(1),1005(30),1007(30),1033(30)',2,'GPS',NULL,'USA',58.416774365884315,-134.5453031026356,1,0,'',NULL,'Basic',0,0,'',0,'1,2',1,NULL),(2,'test2','Juneau','RTCM 3.0','1004(1)',2,'GPS',NULL,'USA',58.416774365884315,-134.5453031026356,1,0,'',NULL,'Basic',0,0,'',0,'1,2',1,NULL);
+INSERT INTO `mountpoints` VALUES (1,'test1','Juneau','RTCM 3.1','1004(1),1005(30),1007(30),1033(30)',2,'GPS',NULL,'USA',58.416774365884315,-134.5453031026356,1,0,'',NULL,'Basic',0,0,'',1,'1',1,NULL),(2,'test2','Juneau','RTCM 3.0','1004(1)',2,'GPS',NULL,'USA',58.416774365884315,-134.5453031026356,0,0,'',NULL,'Basic',0,0,'',1,'1,2',1,NULL),(3,'ffffa',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,0,0,NULL,NULL,'None',0,0,'',9,'2',1,0),(4,'asd',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,NULL,NULL,'Basic',0,0,'',5,'1,2,11,12,13,14,15,16,17,18,19,20,21,22,23,26,28,29,31,32,33,37,38,40,42',0,0),(9,'asd',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,NULL,NULL,'Basic',0,0,NULL,3,'1,2,11,12,13,14,15,16,17,18,19,20,21,22,23,26,28,29,31,32,33,37,38,40,42',0,0);
 /*!40000 ALTER TABLE `mountpoints` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `reference_stations`
+--
+
+DROP TABLE IF EXISTS `reference_stations`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `reference_stations` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(100) NOT NULL,
+  `identifier` varchar(255) DEFAULT NULL,
+  `format` varchar(255) DEFAULT NULL,
+  `format-details` varchar(255) DEFAULT NULL,
+  `carrier` int(1) DEFAULT NULL,
+  `nav-system` varchar(255) DEFAULT NULL,
+  `country` varchar(3) DEFAULT NULL,
+  `lla` point DEFAULT NULL,
+  `altitude` decimal(15,10) DEFAULT NULL,
+  `bitrate` int(11) DEFAULT 0,
+  `misc` varchar(255) DEFAULT '',
+  `is_online` int(1) DEFAULT 0,
+  `password` varchar(255) NOT NULL DEFAULT '',
+  `hz` int(2) DEFAULT 0,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `mountpoint` (`name`)
+) ENGINE=InnoDB AUTO_INCREMENT=50 DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `reference_stations`
+--
+
+LOCK TABLES `reference_stations` WRITE;
+/*!40000 ALTER TABLE `reference_stations` DISABLE KEYS */;
+INSERT INTO `reference_stations` VALUES (1,'AL1','Washtenaw County','RTCM 3.2','1004(1),1006(5),1008(5),1012(1),1033(5),1230(5)',2,'GPS+GLO','USA','\0\0\0\0\0\0\0YÀnÝ%E@«[=\'½õTÀ',NULL,123,'',0,'44444',4),(2,'AL2','Redlands','RTCM 3.2','1004(1),1005(10),1008(10),1012(1),1013(10),1033(10),1230(10)',2,'GPS+GLO','USA','\0\0\0\0\0\0\0pÎˆÒÞA@¼W­LøM]À',NULL,0,'',0,'44444',0);
+/*!40000 ALTER TABLE `reference_stations` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -277,7 +277,7 @@ CREATE TABLE `users` (
 
 LOCK TABLES `users` WRITE;
 /*!40000 ALTER TABLE `users` DISABLE KEYS */;
-INSERT INTO `users` VALUES (1,'127.0.0.1','administrator','$2y$12$c8pG2YTdvnTPbaxafH1aH.NDvcibJ8HbzRrXyYfiDkHB8pShZBxnq','admin@admin.com',NULL,'',NULL,NULL,NULL,NULL,NULL,1268889823,1592912719,1,'Admin','istrator','ADMIN','0');
+INSERT INTO `users` VALUES (1,'127.0.0.1','administrator','$2y$12$c8pG2YTdvnTPbaxafH1aH.NDvcibJ8HbzRrXyYfiDkHB8pShZBxnq','admin@admin.com',NULL,'',NULL,NULL,NULL,NULL,NULL,1268889823,1599681037,1,'Admin','istrator','ADMIN','0');
 /*!40000 ALTER TABLE `users` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -324,4 +324,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2020-06-23 17:57:53
+-- Dump completed on 2020-09-09 23:25:28
