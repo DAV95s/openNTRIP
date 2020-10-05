@@ -174,7 +174,7 @@ CREATE TABLE `mountpoints` (
   `solution` tinyint(1) NOT NULL DEFAULT 0,
   `generator` varchar(255) DEFAULT NULL,
   `compression` varchar(255) DEFAULT NULL,
-  `authentication` varchar(50) NOT NULL DEFAULT 'None',
+  `authenticator` varchar(50) NOT NULL DEFAULT 'None',
   `fee` tinyint(1) DEFAULT 0,
   `bitrate` int(11) DEFAULT 0,
   `misc` varchar(255) DEFAULT NULL,
@@ -232,7 +232,7 @@ CREATE TABLE `reference_stations` (
 
 LOCK TABLES `reference_stations` WRITE;
 /*!40000 ALTER TABLE `reference_stations` DISABLE KEYS */;
-INSERT INTO `reference_stations` VALUES (1,'AL1','Washtenaw County','RTCM 3.2','1004(1),1006(5),1008(5),1012(1),1033(5),1230(5)',2,'GPS+GLO','USA','\0\0\0\0\0\0\0YÀnÝ%E@«[=\'½õTÀ',NULL,123,'',0,'44444',4),(2,'AL2','Redlands','RTCM 3.2','1004(1),1005(10),1008(10),1012(1),1013(10),1033(10),1230(10)',2,'GPS+GLO','USA','\0\0\0\0\0\0\0pÎˆÒÞA@¼W­LøM]À',NULL,0,'',0,'44444',0);
+INSERT INTO `reference_stations` VALUES (1,'AL1','Washtenaw County','RTCM 3.2','1004(1),1006(5),1008(5),1012(1),1033(5),1230(5)',2,'GPS+GLO','USA','\0\0\0\0\0\0\0Yï¿½nï¿½%E@ï¿½[=\'ï¿½ï¿½Tï¿½',NULL,123,'',0,'44444',4),(2,'AL2','Redlands','RTCM 3.2','1004(1),1005(10),1008(10),1012(1),1013(10),1033(10),1230(10)',2,'GPS+GLO','USA','\0\0\0\0\0\0\0pÎˆï¿½ï¿½A@ï¿½Wï¿½Lï¿½M]ï¿½',NULL,0,'',0,'44444',0);
 /*!40000 ALTER TABLE `reference_stations` ENABLE KEYS */;
 UNLOCK TABLES;
 

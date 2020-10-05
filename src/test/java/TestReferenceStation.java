@@ -1,15 +1,13 @@
-import org.adv25.ADVNTRIP.Clients.Client;
-import org.adv25.ADVNTRIP.Databases.Models.MountPointModel;
-import org.adv25.ADVNTRIP.Databases.Models.NtripCasterModel;
-import org.adv25.ADVNTRIP.Databases.Models.ReferenceStationModel;
-import org.adv25.ADVNTRIP.Servers.NtripCaster;
-import org.adv25.ADVNTRIP.Servers.ReferenceStation;
-import org.adv25.ADVNTRIP.Spatial.PointLla;
+import org.adv25.openNTRIP.Databases.Models.MountPointModel;
+import org.adv25.openNTRIP.Databases.Models.NtripCasterModel;
+import org.adv25.openNTRIP.Databases.Models.ReferenceStationModel;
+import org.adv25.openNTRIP.Servers.NtripCaster;
+import org.adv25.openNTRIP.Servers.ReferenceStation;
+import org.adv25.openNTRIP.Spatial.PointLla;
 import org.junit.Test;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Collections;
 
 public class TestReferenceStation extends NtripCaster {
     public TestReferenceStation(NtripCasterModel model) throws IOException {
@@ -33,7 +31,7 @@ public class TestReferenceStation extends NtripCaster {
         referenceStations.add(Warszawa);
         referenceStations.add(Lisboa);
 
-        this.mountPoints.add(mountPointModel);
+        //this.mountPoints.add(mountPointModel);
 
     }
 }

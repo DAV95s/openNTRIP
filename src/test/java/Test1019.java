@@ -1,7 +1,5 @@
 
-import org.adv25.ADVNTRIP.Tools.Decoders.RTCM_3X;
-import org.adv25.ADVNTRIP.Tools.Message;
-import org.adv25.ADVNTRIP.Tools.RTCM.MSG1019;
+import org.adv25.openNTRIP.Tools.Decoders.RTCM_3X;
 import org.junit.Test;
 
 import java.io.File;
@@ -9,7 +7,6 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.ByteBuffer;
-import java.util.ArrayList;
 
 public class Test1019 {
     @Test

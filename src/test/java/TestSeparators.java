@@ -1,5 +1,5 @@
-import org.adv25.ADVNTRIP.Tools.Decoders.RTCM_3X;
-import org.adv25.ADVNTRIP.Tools.MessagePack;
+import org.adv25.openNTRIP.Tools.Decoders.RTCM_3X;
+import org.adv25.openNTRIP.Tools.MessagePack;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -8,7 +8,7 @@ import java.io.RandomAccessFile;
 import java.nio.ByteBuffer;
 import java.nio.channels.FileChannel;
 
-public class TestSeparators {
+public class TestSeparators extends RTCM_3X {
 
     @Test
     public void rtcm3x_separator() throws IOException {
@@ -66,4 +66,24 @@ public class TestSeparators {
         messagePack = rtcm3X.separate(buffer);
         Assert.assertEquals(buffer.flip(), messagePack.getFullBytes().flip());
     }
+
+    @Test
+    public void testConcat() {
+        RTCM_3X rtcm3X = new RTCM_3X();
+        ByteBuffer b1 = ByteBuffer.allocate(3);
+        b1.put((byte) 1);
+        b1.put((byte) 2);
+        b1.put((byte) 3);
+
+        ByteBuffer b2 = ByteBuffer.allocate(2);
+        b2.put((byte) 4);
+        b2.put((byte) 5);
+
+        ByteBuffer result = rtcm3X.concatByteBuffer(b1, b2);
+
+        byte[] bytes = new byte[]{1, 2, 3, 4, 5};
+
+        Assert.assertArrayEquals(result.array(), bytes);
+    }
 }
+

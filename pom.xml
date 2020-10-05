@@ -17,7 +17,7 @@
                 <configuration>
                     <archive>
                         <manifest>
-                            <mainClass>org.adv25.ADVNTRIP.Main</mainClass>
+                            <mainClass>org.adv25.openNTRIP.Main</mainClass>
                         </manifest>
                     </archive>
                 </configuration>

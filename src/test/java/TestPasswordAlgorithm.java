@@ -1,6 +1,6 @@
-import org.adv25.ADVNTRIP.Clients.Passwords.BCrypt;
-import org.adv25.ADVNTRIP.Clients.Passwords.None;
-import org.adv25.ADVNTRIP.Clients.Passwords.SHA256;
+import org.adv25.openNTRIP.Clients.Passwords.BCrypt;
+import org.adv25.openNTRIP.Clients.Passwords.None;
+import org.adv25.openNTRIP.Clients.Passwords.SHA256;
 import org.junit.Assert;
 import org.junit.Test;
 
