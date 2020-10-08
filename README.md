@@ -13,7 +13,7 @@ For reference station
 SOURCE: AL1 or AL2
 PASSWORD: 1234
 
-For client (if mountpoint authentification set 1)
+For client (if mountpoint authentication set 1)
 Account: Administrator
 Password: password
 
