@@ -8,10 +8,9 @@ openNTRIP is multi-caster server for transverse RTCM data to internet.
 4. Try to run
 
 ## Usage
-Test data:
 For reference station
 SOURCE: AL1 or AL2
-PASSWORD: 1234
+PASSWORD: 44444
 
 For client (if mountpoint authentication set 1)
 Account: Administrator
