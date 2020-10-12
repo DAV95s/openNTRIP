@@ -10,6 +10,7 @@ import org.apache.logging.log4j.Logger;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;
+import java.nio.ByteBuffer;
 import java.nio.channels.SelectionKey;
 import java.nio.channels.ServerSocketChannel;
 import java.util.HashMap;
@@ -17,10 +18,10 @@ import java.util.HashMap;
 public class NtripCaster extends NtripCasterUpdater {
     final static private Logger logger = LogManager.getLogger(NtripCaster.class.getName());
 
-    private static HashMap<Integer, NtripCaster> ntripCasters = new HashMap<>();
+    private static final HashMap<Integer, NtripCaster> ntripCasters = new HashMap<>();
 
-    private SelectionKey selectionKey;
-    private ServerSocketChannel serverChannel;
+    private final SelectionKey selectionKey;
+    private final ServerSocketChannel serverChannel;
 
     public NtripCaster(NtripCasterModel model) throws IOException {
         super.model = model;
@@ -59,16 +60,17 @@ public class NtripCaster extends NtripCasterUpdater {
                 "Content-Type: text/html\r\n" +
                 "Connection: close\r\n";
 
-        String body = "";
 
+        StringBuilder body = new StringBuilder();
         for (MountPointModel mountPoint : super.mountPoints.values()) {
-            body += mountPoint.toString();
+            body.append(mountPoint.toString());
         }
 
-        body += "ENDSOURCETABLE\r\n";
-        header += "Content-Length: " + body.getBytes().length + "\r\n\n";
+        body.append("ENDSOURCETABLE\r\n");
+        String bodyString = body.toString();
+        header += "Content-Length: " + bodyString.getBytes().length + "\r\n\n";
 
-        return (header + body).getBytes();
+        return (header + bodyString).getBytes();
     }
 
     /**
@@ -78,12 +80,13 @@ public class NtripCaster extends NtripCasterUpdater {
      * @throws IOException
      */
     public void clientAuthorizationProcessing(Client client) throws IOException {
-        logger.debug(client.getHttpHeader("GET"));
         MountPointModel requestedMountPoint = super.mountPoints.get(client.getHttpHeader("GET"));
+        logger.debug("Connection " + client.getSocketId() + " requested mountpoint " + client.getHttpHeader("GET"));
 
         //requested mountpoint not exists. Send sourcetable.
         if (requestedMountPoint == null) {
-            client.sendMessageAndClose(sourceTable());
+            client.write(ByteBuffer.wrap(sourceTable()));
+            client.close();
             logger.debug("Caster " + model.getPort() + ": MountPoint " + client.getHttpHeader("GET") + " is not exists!");
             return;
         }
@@ -102,7 +105,7 @@ public class NtripCaster extends NtripCasterUpdater {
         logger.debug("Caster " + model.getPort() + ": MountPoint " + requestedMountPoint.getMountpoint() + " authenticator " + authenticator);
         if (!authenticator.authentication(client)) {
             logger.info("Caster " + model.getPort() + ": MountPoint " + requestedMountPoint.getMountpoint() + " bad password!");
-            client.sendMessageAndClose(Client.BAD_MESSAGE);
+            client.sendBadMessageAndClose();
             return;
         }
 
@@ -111,7 +114,7 @@ public class NtripCaster extends NtripCasterUpdater {
             try {
                 client.subscribe(requestedMountPoint.getNearestReferenceStation(client));
             } catch (IllegalStateException e) {
-                logger.debug("Let's try another time!");
+                logger.debug("Error authentication");
             }
         } else {
             ReferenceStation ref = requestedMountPoint.getReferenceStation();

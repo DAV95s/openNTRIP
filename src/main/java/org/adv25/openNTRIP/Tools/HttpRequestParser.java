@@ -7,11 +7,11 @@ import java.util.Hashtable;
 
 public class HttpRequestParser {
     private String requestLine;
-    private Hashtable<String, String> requestHeaders;
-    private StringBuffer messageBody;
+    private final Hashtable<String, String> requestHeaders;
+    private final StringBuffer messageBody;
 
     public HttpRequestParser(String request) throws IOException {
-        requestHeaders = new Hashtable<String, String>();
+        requestHeaders = new Hashtable<>();
         messageBody = new StringBuffer();
         parseRequest(request);
     }
@@ -33,24 +33,16 @@ public class HttpRequestParser {
             bodyLine = reader.readLine();
         }
 
-        String[] splitedLine = requestLine.split(" ");
+        String[] splitLine = requestLine.split(" ");
 
         if (requestLine.matches("GET [\\S]+ HTTP[\\S]+")) {
-            requestHeaders.put("GET", splitedLine[1].replaceAll("/", ""));
+            requestHeaders.put("GET", splitLine[1].replaceAll("/", ""));
         }
 
         if (requestLine.matches("SOURCE [\\S]+ [\\S]+")) {
-            requestHeaders.put("SOURCE", splitedLine[2]);
-            requestHeaders.put("PASSWORD", splitedLine[1]);
+            requestHeaders.put("SOURCE", splitLine[2]);
+            requestHeaders.put("PASSWORD", splitLine[1]);
         }
-    }
-
-    public String getRequestLine() {
-        return requestLine;
-    }
-
-    public String getMessageBody() {
-        return messageBody.toString();
     }
 
     private void setRequestLine(String requestLine) {

@@ -3,6 +3,7 @@ package org.adv25.openNTRIP.Clients;
 import org.adv25.openNTRIP.Databases.Models.ClientModel;
 import org.adv25.openNTRIP.Databases.Models.MountPointModel;
 import org.adv25.openNTRIP.Network.IWork;
+import org.adv25.openNTRIP.Network.Socket;
 import org.adv25.openNTRIP.Servers.NtripCaster;
 import org.adv25.openNTRIP.Servers.ReferenceStation;
 import org.adv25.openNTRIP.Tools.HttpRequestParser;
@@ -12,52 +13,54 @@ import org.apache.logging.log4j.Logger;
 
 import java.io.IOException;
 import java.nio.ByteBuffer;
-import java.nio.channels.SocketChannel;
+import java.util.ArrayDeque;
+import java.util.Queue;
 
 public class Client implements IWork {
     final static private Logger logger = LogManager.getLogger(Client.class.getName());
 
     private ReferenceStation referenceStation;
     private MountPointModel mountPoint;
-    private NtripCaster caster;
-    private SocketChannel socket;
+    private final NtripCaster caster;
+    private final Socket socket;
     private ClientModel model;
     private NMEA.GPSPosition position;
-    private HttpRequestParser httpRequest;
-    private ByteBuffer input = ByteBuffer.allocate(2048);
-    private ByteBuffer output = ByteBuffer.allocate(32768);
+    private final HttpRequestParser httpRequest;
+    private final ByteBuffer input = ByteBuffer.allocate(1024);
 
-    private long connectionTimeStamp = System.currentTimeMillis();
-    private long bytesReceived = 0;
+    private final long connectionTimeStamp = System.currentTimeMillis();
+    private long bytesReceive = 0;
+    private long bytesSent = 0;
 
-    public static final byte[] OK_MESSAGE = "ICY 200 OK\r\n".getBytes();
-    public static final byte[] BAD_MESSAGE = "ERROR - Bad Password\r\n".getBytes();
-
-
-    public Client(SocketChannel socket, HttpRequestParser httpRequest, NtripCaster caster) {
-        logger.debug("New client!");
+    public Client(Socket socket, HttpRequestParser httpRequest, NtripCaster caster) {
+        logger.debug("Connection " + socket.socketId + " create new client.");
         this.socket = socket;
         this.httpRequest = httpRequest;
         this.caster = caster;
     }
 
     public void subscribe(ReferenceStation referenceStation) {
+        if (referenceStation == null)
+            return;
+
         this.referenceStation = referenceStation;
-        referenceStation.addClient(this);
+        this.referenceStation.addClient(this);
     }
 
-    public void sendMessageAndClose(byte[] msg) throws IOException {
-        output.clear();
-        output.put(msg);
-        output.flip();
-        this.socket.write(output);
-        this.close();
+    public void sendBadMessageAndClose() throws IOException {
+        this.socket.sendBadMessageAndClose();
+    }
+
+    public long getSocketId() {
+        return socket.socketId;
     }
 
     @Override
     public void close() {
         try {
-            this.referenceStation.removeClient(this);
+            if (this.referenceStation != null)
+                this.referenceStation.removeClient(this);
+
             this.socket.close();
         } catch (IOException e) {
             logger.error(e);
@@ -65,32 +68,47 @@ public class Client implements IWork {
     }
 
     public int write(ByteBuffer byteBuffer) throws IOException {
-        int bytesWritten = this.socket.write(byteBuffer);
-        int totalBytesWritten = bytesWritten;
-
-        while (bytesWritten > 0 && byteBuffer.hasRemaining()) {
-            bytesWritten = this.socket.write(byteBuffer);
-            totalBytesWritten += bytesWritten;
-        }
-
-        return totalBytesWritten;
+        return this.socket.write(byteBuffer);
     }
 
+    private final Queue<byte[]> dataQueue = new ArrayDeque<>();
+
     public void readSelf() throws IOException {
-        input.clear();
-        int bytesRead = this.socket.read(input);
-        int totalBytesRead = bytesRead;
+        int count = 0;
+        this.input.clear();
 
-        while (bytesRead > 0) {
-            bytesRead = this.socket.read(input);
-            totalBytesRead += bytesRead;
+        if (!this.socket.endOfStreamReached) {
+            count = this.socket.read(input);
+        } else {
+            throw new IOException("Connection " + socket.socketId + " end of stream reached.");
         }
 
-        if (bytesRead == -1) {
-            throw new IOException();
+        if (logger.isDebugEnabled()) {
+            logger.debug("Connection " + socket.socketId + " accept bytes " + count + " bytes receive: " + bytesReceive);
         }
 
-        bytesReceived += totalBytesRead;
+        this.input.flip();
+        byte[] bytes = new byte[input.remaining()];
+        this.input.get(bytes, 0, bytes.length);
+        this.dataQueue.add(bytes);
+    }
+
+    @Override
+    public void run() {
+        if (dataQueue.peek() == null)
+            return;
+
+        String line = new String(dataQueue.poll());
+
+        logger.debug("Connection " + socket.socketId + " accept nmea from client -> " + line);
+        this.setPosition(line);
+
+        try {
+            caster.clientAuthorizationProcessing(this);
+        } catch (IOException e) {
+            logger.error("Connection " + socket.socketId + "Re-authorization error", e);
+            this.close();
+        }
     }
 
     /* getters and setters */
@@ -99,7 +117,7 @@ public class Client implements IWork {
     }
 
     public void setPosition(String nmea_str) {
-        position = new NMEA().parse(nmea_str);
+        this.position = new NMEA().parse(nmea_str);
     }
 
     public NMEA.GPSPosition getPosition() {
@@ -119,20 +137,4 @@ public class Client implements IWork {
     }
     /* getters and setters */
 
-    @Override
-    public void run() {
-        input.flip();
-        byte[] bytes = new byte[input.remaining()];
-        input.get(bytes);
-        input.clear();
-        logger.debug(() -> "Accept nmea from client -> " + new String(bytes));
-        setPosition(new String(bytes));
-
-        try {
-            caster.clientAuthorizationProcessing(this);
-        } catch (IOException e) {
-            this.close();
-            logger.error(e);
-        }
-    }
 }

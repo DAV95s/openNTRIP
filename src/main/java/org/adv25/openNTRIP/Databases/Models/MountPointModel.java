@@ -289,14 +289,17 @@ public class MountPointModel {
                     try {
                         sortedRange.put(station.distance(clientPosition), station);
                     } catch (IllegalStateException e) {
-                        logger.debug("Error distance measurement!");
+                        logger.error(e.getMessage());
                     }
                 }
             }
+        } else {
+            logger.error("Connection " + client.getSocketId() + " hasn't position for nearest reference station!");
+            return null;
         }
 
         if (sortedRange.size() > 0) {
-            logger.info("Nearest reference station " + sortedRange.firstEntry());
+            logger.info("Nearest reference station " + sortedRange.firstEntry().getValue().getName());
             return sortedRange.firstEntry().getValue();
         }
 

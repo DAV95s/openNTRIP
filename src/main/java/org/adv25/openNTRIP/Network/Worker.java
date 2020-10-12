@@ -27,7 +27,7 @@ public class Worker implements Runnable {
 
     private ArrayBlockingQueue<IWork> queue = new ArrayBlockingQueue(WORK_QUEUE);
 
-    private ExecutorService executor = Executors.newCachedThreadPool();
+    private final ExecutorService executor = Executors.newCachedThreadPool();
 
     public void addWork(IWork work) throws InterruptedException {
         queue.add(work);

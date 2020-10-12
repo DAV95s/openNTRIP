@@ -1,16 +1,17 @@
 package org.adv25.openNTRIP.Tools;
 
 import org.adv25.openNTRIP.Clients.Passwords.*;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.Properties;
 import java.util.logging.Level;
-import java.util.logging.Logger;
 
 public class Config {
-    public static final Logger log = Logger.getLogger(Config.class.getName());
+    final static private Logger logger = LogManager.getLogger(Config.class.getName());
     private static Config instance;
 
     public static Config getInstance() {
@@ -23,19 +24,18 @@ public class Config {
         }
     }
 
-    private File configFile = new File("config.ini");
+    private File configFile = new File("src/main/resources/app.properties");
     private Properties properties = new Properties();
     private PasswordHandler passwordHandler;
 
     private Config() {
 
         try {
-
             if (!configFile.exists()) {
                 configFile.createNewFile();
+                properties.load(new FileReader(configFile));
+                properties.setProperty("passwordHashAlgorithm", "None");
             }
-
-            properties.load(new FileReader(configFile));
 
         } catch (IOException e) {
             e.printStackTrace();
@@ -44,13 +44,14 @@ public class Config {
         //Hash Algorithm
         String hashAlgorithm = properties.getProperty("passwordHashAlgorithm");
         if (hashAlgorithm == null)
-            hashAlgorithm = "none";
+            hashAlgorithm = "None";
 
         try {
             passwordHandler = HashAlgorithm.valueOf(hashAlgorithm).passwordHandler;
         } catch (IllegalArgumentException e) {
-            e.printStackTrace();
-            log.log(Level.WARNING, "'passwordHashAlgorithm' have illegalArgument!");
+            logger.info("'app.properties' -> 'passwordHashAlgorithm' have illegalArgument!");
+            logger.info("'passwordHashAlgorithm' set None");
+            passwordHandler = HashAlgorithm.None.passwordHandler;
         }
     }
 

@@ -19,7 +19,7 @@ public class NetworkProcessor implements Runnable {
     private Thread thread;
 
     private static NetworkProcessor instance;
-    private Worker worker = Worker.getInstance();
+    private final Worker worker = Worker.getInstance();
 
     public static NetworkProcessor getInstance() {
         if (instance == null)
@@ -64,7 +64,7 @@ public class NetworkProcessor implements Runnable {
                 if (count < 1)
                     continue;
 
-                logger.debug(count + " selected");
+                System.out.println(1);
                 Iterator<SelectionKey> iterator = selector.selectedKeys().iterator();
 
                 while (iterator.hasNext()) {
@@ -77,11 +77,10 @@ public class NetworkProcessor implements Runnable {
 
                     if (selectionKey.isAcceptable()) {
                         ServerSocketChannel server = (ServerSocketChannel) selectionKey.channel();
-                        SocketChannel socket = server.accept();
-                        socket.configureBlocking(false);
-                        SelectionKey clientKey = socket.register(selector, SelectionKey.OP_READ);   //attached caster
-                        ConnectHandler connect = new ConnectHandler(clientKey, (NtripCaster) selectionKey.attachment());
-                        clientKey.attach(connect);
+                        SocketChannel connectSocket = server.accept();
+                        connectSocket.configureBlocking(false);
+                        SelectionKey clientKey = connectSocket.register(this.selector, SelectionKey.OP_READ);
+                        new ConnectHandler(clientKey, (NtripCaster) selectionKey.attachment());
                         logger.debug("Socket accept.");
 
                     } else if (selectionKey.isReadable()) {

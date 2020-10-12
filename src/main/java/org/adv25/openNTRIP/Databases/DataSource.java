@@ -12,18 +12,6 @@ public class DataSource {
     private static HikariDataSource ds;
 
     static {
-//        Config config = Config.getInstance();
-//        String host = config.getProperties("mysqlHost");
-//        String user = config.getProperties("mysqlUser");
-//        String db = config.getProperties("mysqlDb");
-//        String port = config.getProperties("mysqlPort");
-
-//        configHikari.setJdbcUrl("jdbc:mysql://" + host + ":" + port + "/" + db + "?serverTimezone=" + ZoneId.systemDefault());
-//        configHikari.setUsername(config.getProperties("mysqlUser"));
-//        configHikari.setPassword(config.getProperties("mysqlPass"));
-//        configHikari.addDataSourceProperty( "cachePrepStmts" , "true" );
-//        configHikari.addDataSourceProperty( "prepStmtCacheSize" , "250" );
-//        configHikari.addDataSourceProperty( "prepStmtCacheSqlLimit" , "2048" );
 
         String configFile = "src/main/resources/db.properties";
         HikariConfig cfg = new HikariConfig(configFile);

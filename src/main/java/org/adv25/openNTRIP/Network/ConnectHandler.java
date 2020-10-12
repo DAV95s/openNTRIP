@@ -17,21 +17,20 @@ import java.util.Queue;
 public class ConnectHandler implements IWork {
     final static private Logger logger = LogManager.getLogger(ConnectHandler.class.getName());
 
-    private SocketChannel socket;
-    private NtripCaster caster;
-    private ByteBuffer buffer = ByteBuffer.allocate(1024);
-    private SelectionKey key;
+    private Socket socket;
+    private final NtripCaster caster;
+    private final ByteBuffer buffer = ByteBuffer.allocate(1024);
+    private final SelectionKey key;
 
-    public ConnectHandler(SelectionKey key, NtripCaster caster) {
-        logger.info("New connection has created!");
-        this.socket = (SocketChannel) key.channel();
+    public ConnectHandler(SelectionKey key, NtripCaster caster) throws IOException {
+        this.socket = new Socket((SocketChannel) key.channel());
         this.caster = caster;
         this.key = key;
-        key.attach(this);
+        this.key.attach(this);
     }
 
     public void close() {
-        logger.debug("Close connection");
+        logger.debug("Connection " + socket.socketId + " close");
         try {
             socket.close();
         } catch (IOException e) {
@@ -41,35 +40,35 @@ public class ConnectHandler implements IWork {
 
     public void readSelf() throws IOException {
         buffer.clear();
-        int bytesRead = this.socket.read(buffer);
-        int totalBytesRead = bytesRead;
-
-        while (bytesRead > 0) {
-            bytesRead = this.socket.read(buffer);
-            totalBytesRead += bytesRead;
+        if (!socket.endOfStreamReached) {
+            socket.read(buffer);
+        } else {
+            throw new IOException("Connection " + socket.socketId + " end of stream reached.");
         }
-
-        if (bytesRead == -1) {
-            throw new IOException();
-        }
-
         buffer.flip();
         byte[] bytes = new byte[buffer.remaining()];
         buffer.get(bytes, 0, bytes.length);
-        dataBuffer.add(bytes);
-
+        dataQueue.add(bytes);
     }
 
-    Queue<byte[]> dataBuffer = new ArrayDeque<>();
+    Queue<byte[]> dataQueue = new ArrayDeque<>();
 
     @Override
     public void run() {
         try {
-            if (dataBuffer.peek() == null)
+            if (dataQueue.peek() == null)
                 return;
 
-            String request = new String(dataBuffer.peek());
-            logger.debug(request);
+            String request = new String(dataQueue.poll());
+
+            if (logger.isDebugEnabled()) {
+                StringBuilder stringBuilder = new StringBuilder();
+                stringBuilder.append("Connection ");
+                stringBuilder.append(socket.socketId);
+                stringBuilder.append(" send request:\r\n");
+                stringBuilder.append(request);
+                logger.debug(stringBuilder);
+            }
 
             HttpRequestParser httpParser = new HttpRequestParser(request);
 
@@ -90,40 +89,21 @@ public class ConnectHandler implements IWork {
 
                     //mb password wrong
                     if (!station.checkPassword(httpParser.getParam("PASSWORD")))
-                        throw new IOException("Bad password.");
+                        throw new IOException("Connection " + socket.socketId + " Bad password.");
 
                     //mb station in time connect
-                    if (!station.setSocket(socket))
-                        throw new IOException("Can't replace reference station socket.");
+                    station.setSocket(socket);
 
-                    sendOkMessage();
+                    this.socket.sendOkMessage();
                     this.key.attach(station);
                 }
         } catch (IOException e) {
-            sendBadMessage();
-        }
-    }
-
-    private void sendBadMessage() {
-        try {
-            buffer.clear();
-            buffer.put(Client.BAD_MESSAGE);
-            buffer.flip();
-            socket.write(buffer);
-            socket.close();
-        } catch (IOException ex) {
-            logger.error(ex);
-        }
-    }
-
-    private void sendOkMessage() {
-        try {
-            buffer.clear();
-            buffer.put(Client.OK_MESSAGE);
-            buffer.flip();
-            socket.write(buffer);
-        } catch (IOException e) {
-            logger.debug("fail try send ok message");
+            try {
+                logger.error(e);
+                this.socket.sendBadMessageAndClose();
+            } catch (IOException ex) {
+                logger.error(ex);
+            }
         }
     }
 }

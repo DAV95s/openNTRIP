@@ -3,6 +3,7 @@ package org.adv25.openNTRIP.Servers;
 import org.adv25.openNTRIP.Clients.Client;
 import org.adv25.openNTRIP.Databases.Models.ReferenceStationModel;
 import org.adv25.openNTRIP.Network.IWork;
+import org.adv25.openNTRIP.Network.Socket;
 import org.adv25.openNTRIP.Tools.Analyzer;
 import org.adv25.openNTRIP.Tools.Decoders.IDecoder;
 import org.adv25.openNTRIP.Tools.Decoders.RAW;
@@ -16,7 +17,6 @@ import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.channels.SocketChannel;
 import java.util.ArrayDeque;
-import java.util.Arrays;
 import java.util.Queue;
 import java.util.concurrent.CopyOnWriteArrayList;
 
@@ -27,14 +27,18 @@ import java.util.concurrent.CopyOnWriteArrayList;
 public class ReferenceStation extends ReferenceStationUpdater implements IWork {
     final static private Logger logger = LogManager.getLogger(ReferenceStation.class.getName());
 
-    private CopyOnWriteArrayList<Client> subscribers = new CopyOnWriteArrayList<>();
-    private SocketChannel socket;
-    private ByteBuffer buffer = ByteBuffer.allocate(32768);
+    private final CopyOnWriteArrayList<Client> subscribers = new CopyOnWriteArrayList<>();
+    private final ByteBuffer buffer = ByteBuffer.allocate(32768);
+
+    private Socket socket;
     private Analyzer analyzer;
+
+    private long connectTimeMark;
+    private long acceptBytes;
 
     public boolean available = false;
     //accepted bytes pack
-    private Queue<byte[]> dataBuffer = new ArrayDeque<>();
+    private final Queue<byte[]> dataBuffer = new ArrayDeque<>();
 
     //The decoder can change.
     private IDecoder decoder = new RTCM_3X();
@@ -45,21 +49,18 @@ public class ReferenceStation extends ReferenceStationUpdater implements IWork {
         refStations.put(model.getName(), this);
     }
 
-    public boolean setSocket(SocketChannel channel) {
-        if (socket == null || !socket.isRegistered()) {
+    public void setSocket(Socket socket) throws IOException {
+        if (this.socket == null || !this.socket.isRegistered()) {
             dao.setOnline(model);
             this.decoder = new RTCM_3X();
             this.analyzer = new Analyzer(this);
             this.acceptBytes = 0;
-            this.upTime = System.currentTimeMillis();
-            this.socket = channel;
+            this.connectTimeMark = System.currentTimeMillis();
+            this.socket = socket;
             this.available = true;
-
-            logger.info(model.getId() + " (" + model.getName() + ") has connected.");
-            return true;
+            logger.info("Connection " + socket.socketId + " (" + model.getName() + ") was logged in.");
         } else {
-            logger.info(model.getId() + " (" + model.getName() + ") already taken.");
-            return false;
+            throw new IOException("Connection " + socket.socketId + " " + model.getName() + " socket already taken.");
         }
     }
 
@@ -79,22 +80,16 @@ public class ReferenceStation extends ReferenceStationUpdater implements IWork {
     }
 
     public void readSelf() throws IOException {
-        buffer.clear();
+        int count = 0;
+        this.buffer.clear();
 
-        int bytesRead = this.socket.read(buffer);
-
-        int totalBytesRead = bytesRead;
-
-        while (bytesRead > 0) {
-            bytesRead = this.socket.read(buffer);
-            totalBytesRead += bytesRead;
+        if (!this.socket.endOfStreamReached) {
+            count = this.socket.read(buffer);
+        } else {
+            throw new IOException("Connection " + socket.socketId + " RefSt: " + model.getName() + " end of stream reached.");
         }
 
-        if (bytesRead == -1)
-            throw new IOException();
-
-        logger.debug(model.getName() + " read " + totalBytesRead + " bytes. Reference station have " + subscribers.size() + " clients");
-        acceptBytes += totalBytesRead;
+        logger.info("Connection " + socket.socketId + " RefSt: " + model.getName() + " accept " + count);
 
         buffer.flip();
         byte[] bytes = new byte[buffer.remaining()];
@@ -109,11 +104,15 @@ public class ReferenceStation extends ReferenceStationUpdater implements IWork {
 
         try {
             byte[] bytes = dataBuffer.poll();
+
             MessagePack messagePack = decoder.separate(ByteBuffer.wrap(bytes));
-            logger.debug(model.getName() + " " + messagePack.toString());
+
+            logger.info(model.getName() + " decode: " + messagePack.toString());
+
             analyzer.analyze(messagePack);
+
             sendMessageToClients(messagePack);
-        } catch (IOException e) {
+        } catch (IllegalArgumentException e) {
             logger.info(model.getName() + " error " + decoder.getType());
             if (decoder instanceof RTCM_3X) {
                 decoder = new RAW();
@@ -154,12 +153,10 @@ public class ReferenceStation extends ReferenceStationUpdater implements IWork {
      */
     public float distance(NMEA.GPSPosition position) throws NullPointerException {
         if (model.getLla() == null) {
-            logger.error("Reference station not have coordinate position!");
-            throw new NullPointerException();
+            throw new NullPointerException("Reference station not have coordinate position!");
         }
         if (position == null) {
-            logger.error("Client not have position!");
-            throw new NullPointerException();
+            throw new NullPointerException("Client not have position!");
         }
 
         return model.getLla().distance(position);

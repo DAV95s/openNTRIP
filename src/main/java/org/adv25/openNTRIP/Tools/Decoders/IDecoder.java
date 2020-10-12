@@ -7,7 +7,7 @@ import java.nio.ByteBuffer;
 
 public interface IDecoder {
 
-    MessagePack separate(ByteBuffer bb) throws IOException;
+    MessagePack separate(ByteBuffer bb) throws IllegalArgumentException;
 
     DecoderType getType();
 
