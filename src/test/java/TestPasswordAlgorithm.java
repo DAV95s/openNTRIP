@@ -1,6 +1,6 @@
-import org.adv25.openNTRIP.Clients.Passwords.BCrypt;
-import org.adv25.openNTRIP.Clients.Passwords.None;
-import org.adv25.openNTRIP.Clients.Passwords.SHA256;
+import org.dav95s.openNTRIP.Clients.Passwords.BCrypt;
+import org.dav95s.openNTRIP.Clients.Passwords.None;
+import org.dav95s.openNTRIP.Clients.Passwords.SHA256;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -10,7 +10,7 @@ public class TestPasswordAlgorithm {
     public void none() {
         None none = new None();
 
-        Assert.assertTrue(none.Compare("123", "123"));
+        Assert.assertTrue(none.Compare("hibernate.cfg.xml", "hibernate.cfg.xml"));
         
         Assert.assertFalse(none.Compare("", ""));
         Assert.assertFalse(none.Compare("", "!2@@#31"));

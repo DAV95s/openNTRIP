@@ -1,9 +1,9 @@
-import org.adv25.openNTRIP.Databases.Models.MountPointModel;
-import org.adv25.openNTRIP.Databases.Models.NtripCasterModel;
-import org.adv25.openNTRIP.Databases.Models.ReferenceStationModel;
-import org.adv25.openNTRIP.Servers.NtripCaster;
-import org.adv25.openNTRIP.Servers.ReferenceStation;
-import org.adv25.openNTRIP.Spatial.PointLla;
+import org.dav95s.openNTRIP.Databases.Models.MountPointModel;
+import org.dav95s.openNTRIP.Databases.Models.NtripCasterModel;
+import org.dav95s.openNTRIP.Databases.Models.ReferenceStationModel;
+import org.dav95s.openNTRIP.Servers.NtripCaster;
+import org.dav95s.openNTRIP.Servers.ReferenceStation;
+import org.dav95s.openNTRIP.Spatial.PointLla;
 import org.junit.Test;
 
 import java.io.IOException;
@@ -18,12 +18,12 @@ public class TestReferenceStation extends NtripCaster {
     public void getStationFromPool() throws IOException {
         ReferenceStationModel WarszawaStationModel = new ReferenceStationModel();
         WarszawaStationModel.setLla(new PointLla("POINT(52.238056 21.011723)"));
-        WarszawaStationModel.setIs_online(true);
+        WarszawaStationModel.setOnline(true);
         ReferenceStation Warszawa = new ReferenceStation(WarszawaStationModel);
 
         ReferenceStationModel LisboaStationModel = new ReferenceStationModel();
         LisboaStationModel.setLla(new PointLla("POINT(38.736964 -9.140344)"));
-        LisboaStationModel.setIs_online(true);
+        LisboaStationModel.setOnline(true);
         ReferenceStation Lisboa = new ReferenceStation(LisboaStationModel);
 
         MountPointModel mountPointModel = new MountPointModel();

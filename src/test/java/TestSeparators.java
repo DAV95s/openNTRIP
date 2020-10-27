@@ -1,5 +1,5 @@
-import org.adv25.openNTRIP.Tools.Decoders.RTCM_3X;
-import org.adv25.openNTRIP.Tools.MessagePack;
+import org.dav95s.openNTRIP.Tools.Decoders.RTCM_3X;
+import org.dav95s.openNTRIP.Tools.MessagePack;
 import org.junit.Assert;
 import org.junit.Test;
 

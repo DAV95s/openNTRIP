@@ -4,8 +4,8 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>org.adv25</groupId>
-    <artifactId>ADVNTRIP</artifactId>
+    <groupId>org.dav95s</groupId>
+    <artifactId>openNTRIP</artifactId>
     <version>1.0-SNAPSHOT</version>
 
     <build>
@@ -17,7 +17,7 @@
                 <configuration>
                     <archive>
                         <manifest>
-                            <mainClass>org.adv25.openNTRIP.Main</mainClass>
+                            <mainClass>org.dav95s.openNTRIP.Main</mainClass>
                         </manifest>
                     </archive>
                 </configuration>
@@ -42,6 +42,13 @@
             <artifactId>json-simple</artifactId>
             <version>1.1.1</version>
         </dependency>
+        <!-- https://mvnrepository.com/artifact/org.hibernate/hibernate-core -->
+        <dependency>
+            <groupId>org.hibernate</groupId>
+            <artifactId>hibernate-core</artifactId>
+            <version>5.4.22.Final</version>
+        </dependency>
+
         <!-- https://mvnrepository.com/artifact/com.zaxxer/HikariCP -->
         <dependency>
             <groupId>com.zaxxer</groupId>
