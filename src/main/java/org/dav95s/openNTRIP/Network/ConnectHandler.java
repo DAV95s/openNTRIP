@@ -1,34 +1,35 @@
 package org.dav95s.openNTRIP.Network;
 
-import org.dav95s.openNTRIP.Clients.Client;
+import com.github.pbbl.heap.ByteBufferPool;
+import org.dav95s.openNTRIP.Clients.User;
+import org.dav95s.openNTRIP.ServerBootstrap;
 import org.dav95s.openNTRIP.Servers.NtripCaster;
 import org.dav95s.openNTRIP.Servers.ReferenceStation;
 import org.dav95s.openNTRIP.Tools.HttpParser;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.json.simple.JSONObject;
 
 import java.io.IOException;
 import java.nio.ByteBuffer;
-import java.nio.channels.SelectionKey;
-import java.nio.channels.SocketChannel;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayDeque;
 import java.util.Queue;
 
-public class ConnectHandler implements IWork {
+public class ConnectHandler implements INetworkHandler {
     final static private Logger logger = LogManager.getLogger(ConnectHandler.class.getName());
 
     private final Socket socket;
     private final NtripCaster caster;
-    private final ByteBuffer buffer = ByteBuffer.allocate(1024);
-    private final SelectionKey key;
+    private static final ByteBufferPool bufferPool = new ByteBufferPool();
 
-    public ConnectHandler(SelectionKey key, NtripCaster caster) throws IOException {
-        this.socket = new Socket((SocketChannel) key.channel());
+    public ConnectHandler(Socket socket, NtripCaster caster) {
+        this.socket = socket;
         this.caster = caster;
-        this.key = key;
-        this.key.attach(this);
+        this.socket.attach(this);
     }
 
+    @Override
     public void close() {
         try {
             socket.close();
@@ -38,23 +39,30 @@ public class ConnectHandler implements IWork {
         logger.debug(socket.toString() + " closed!");
     }
 
-    public void readSelf() throws IOException {
-        this.buffer.clear();
+    @Override
+    public void readChannel() throws IOException {
+        ByteBuffer buffer = bufferPool.take(1024);
 
-        if (socket.endOfStreamReached){
+        if (socket.endOfStreamReached) {
             throw new IOException(socket.toString() + " end of stream reached.");
         }
 
-
         int count = this.socket.read(buffer);
-        logger.debug(() -> socket.toString() + "read bytes: " + count);
-        this.buffer.flip();
-        byte[] bytes = new byte[buffer.remaining()];
-        this.buffer.get(bytes, 0, bytes.length);
-        this.dataQueue.add(bytes);
+
+        buffer.flip();
+        this.dataQueue.add(buffer);
+
+        if (logger.isDebugEnabled()) {
+            JSONObject object = new JSONObject();
+            object.put("from", "ConnectHandler");
+            object.put("socket", socket.toString());
+            object.put("read", count);
+            object.put("", count);
+            logger.debug(object);
+        }
     }
 
-    Queue<byte[]> dataQueue = new ArrayDeque<>();
+    Queue<ByteBuffer> dataQueue = new ArrayDeque<>();
 
     @Override
     public void run() {
@@ -62,22 +70,30 @@ public class ConnectHandler implements IWork {
             if (dataQueue.peek() == null)
                 return;
 
-            String request = new String(dataQueue.poll());
+            ByteBuffer buffer = dataQueue.poll();
+            String request = StandardCharsets.US_ASCII.decode(buffer).toString();
+            bufferPool.give(buffer);
 
-            logger.debug(() -> socket.toString() + "send request:\r\b" + request);
+            if (logger.isDebugEnabled()) {
+                JSONObject object = new JSONObject();
+                object.put("from", "ConnectHandler");
+                object.put("socket", socket.toString());
+                object.put("request", request);
+                logger.debug(object);
+            }
 
             HttpParser httpParser = new HttpParser(request);
 
             if (httpParser.getParam("GET") != null) {
                 //GET CONNECT
-                Client client = new Client(this.socket, httpParser, this.caster);
-                this.caster.clientAuthorizationProcessing(client);
-                this.key.attach(client);
-
+                User user = new User(this.socket, httpParser, this.caster);
+                this.caster.clientAuthorization(user);
+                this.socket.attach(user);
             } else if (httpParser.getParam("SOURCE") != null) {
-                //OR SOURCE CONNECT
-                ReferenceStation station = ReferenceStation.refStationAuth(socket, httpParser);
-                this.key.attach(station);
+                //SOURCE CONNECT
+                ReferenceStation referenceStation = ServerBootstrap.getReferenceStationByName(httpParser.getParam("SOURCE"));
+                referenceStation.refStationAuth(socket, httpParser);
+                this.socket.attach(referenceStation);
             }
 
         } catch (Exception e) {

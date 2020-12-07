@@ -49,7 +49,6 @@ public class RTCM_3X implements IDecoder {
             buffer.position(preamble);
 
             if (!checkExistsMessageNumber(nmb)) {
-                logger.error("RTCM decode error!");
                 break;
             }
 
@@ -64,7 +63,6 @@ public class RTCM_3X implements IDecoder {
                 if (buffer.get(preamble + shift) == RTCM_PREAMBLE) {
                     preamble = preamble + shift;
                 } else {
-                    logger.error("MISS");
                     break;
                 }
 
@@ -75,7 +73,6 @@ public class RTCM_3X implements IDecoder {
                 previousResidue = ByteBuffer.allocate(buffer.remaining());
                 previousResidue.put(buffer);
                 previousResidue.flip();
-                logger.debug("stream was cut off");
             }
         }
 

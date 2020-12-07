@@ -5,6 +5,7 @@ import org.apache.logging.log4j.Logger;
 
 import java.io.IOException;
 import java.nio.ByteBuffer;
+import java.nio.channels.SelectionKey;
 import java.nio.channels.SocketChannel;
 
 public class Socket {
@@ -16,15 +17,16 @@ public class Socket {
     final private static byte[] BAD_MESSAGE = "ERROR - Bad Password\r\n".getBytes();
 
     final private long socketId;
-
+    final private SelectionKey key;
     final private SocketChannel socketChannel;
 
     public boolean endOfStreamReached = false;
 
-    public Socket(SocketChannel socketChannel) throws IOException {
+    public Socket(SelectionKey key) throws IOException {
         prevSocketId++;
+        this.key = key;
         this.socketId = prevSocketId;
-        this.socketChannel = socketChannel;
+        this.socketChannel = (SocketChannel) key.channel();
 
         logger.info("New connection: " + this.toString() + socketChannel.getRemoteAddress());
     }
@@ -78,7 +80,12 @@ public class Socket {
     }
 
     public void close() throws IOException {
+        this.key.cancel();
         this.socketChannel.close();
+    }
+
+    public void attach(INetworkHandler handler) {
+        this.key.attach(handler);
     }
 
     public boolean isRegistered() {

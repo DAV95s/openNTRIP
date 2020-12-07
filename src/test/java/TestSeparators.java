@@ -22,7 +22,7 @@ public class TestSeparators extends RTCM_3X {
 
         fileChannel.read(buffer);
         MessagePack messagePack = rtcm3X.separate(buffer);
-        Assert.assertEquals(buffer.flip(), messagePack.getFullBytes().flip());
+        Assert.assertEquals(buffer.flip(), messagePack.getByteBuffer().flip());
         Assert.assertNotNull(messagePack.getMessageByNmb(1004));
         Assert.assertNotNull(messagePack.getMessageByNmb(1005));
         Assert.assertNotNull(messagePack.getMessageByNmb(1007));
@@ -37,7 +37,7 @@ public class TestSeparators extends RTCM_3X {
         fileChannel = reader.getChannel();
         fileChannel.read(buffer);
         messagePack = rtcm3X.separate(buffer);
-        Assert.assertEquals(buffer.flip(), messagePack.getFullBytes().flip());
+        Assert.assertEquals(buffer.flip(), messagePack.getByteBuffer().flip());
         Assert.assertNotNull(messagePack.getMessageByNmb(1004));
         fileChannel.close();
 
@@ -47,7 +47,7 @@ public class TestSeparators extends RTCM_3X {
         fileChannel = reader.getChannel();
         fileChannel.read(buffer);
         messagePack = rtcm3X.separate(buffer);
-        Assert.assertEquals(buffer.flip(), messagePack.getFullBytes().flip());
+        Assert.assertEquals(buffer.flip(), messagePack.getByteBuffer().flip());
         Assert.assertNotNull(messagePack.getMessageByNmb(1006));
         Assert.assertNotNull(messagePack.getMessageByNmb(1004));
         Assert.assertNotNull(messagePack.getMessageByNmb(1012));
@@ -64,7 +64,7 @@ public class TestSeparators extends RTCM_3X {
 
         fileChannel.read(buffer);
         messagePack = rtcm3X.separate(buffer);
-        Assert.assertEquals(buffer.flip(), messagePack.getFullBytes().flip());
+        Assert.assertEquals(buffer.flip(), messagePack.getByteBuffer().flip());
     }
 
     @Test

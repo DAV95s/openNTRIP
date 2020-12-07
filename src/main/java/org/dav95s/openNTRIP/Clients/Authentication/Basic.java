@@ -1,18 +1,18 @@
 package org.dav95s.openNTRIP.Clients.Authentication;
 
-import org.dav95s.openNTRIP.Clients.Client;
 import org.dav95s.openNTRIP.Clients.Passwords.PasswordHandler;
-import org.dav95s.openNTRIP.Databases.DAO.ClientDAO;
+import org.dav95s.openNTRIP.Clients.User;
+import org.dav95s.openNTRIP.Databases.Models.UserModel;
 import org.dav95s.openNTRIP.Tools.Config;
 
+import java.sql.SQLException;
 import java.util.Base64;
-import java.util.logging.Logger;
 
-public class Basic implements Authenticator {
+public class Basic implements IAuthenticator {
 
     @Override
-    public boolean authentication(Client client) {
-        String basicAuth = client.getHttpHeader("Authorization");
+    public boolean authentication(User user) throws SQLException {
+        String basicAuth = user.getHttpHeader("Authorization");
         if (basicAuth == null)
             return false;
 
@@ -21,17 +21,19 @@ public class Basic implements Authenticator {
 
         basicAuth = basicAuth.trim();
 
-        String[] accPass = basicAuthorizationDecode(basicAuth.split(" ")[1]);
+        String[] accountAndPassword = basicAuthorizationDecode(basicAuth.split(" ")[1]);
 
         PasswordHandler passwordHandler = Config.getInstance().getPasswordHandler();
 
-        ClientDAO dao = new ClientDAO();
+        UserModel model = new UserModel();
+        model.setUsername(accountAndPassword[0]);
 
-        client.setModel(dao.read(accPass[0]));
+        if (!model.read())
+            return false;
 
-        return passwordHandler.Compare(client.getPassword(), accPass[1]);
+        user.setModel(model);
 
-
+        return passwordHandler.compare(user.getPassword(), accountAndPassword[1]);
     }
 
     @Override

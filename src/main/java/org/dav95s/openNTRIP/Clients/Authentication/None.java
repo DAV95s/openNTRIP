@@ -1,10 +1,10 @@
 package org.dav95s.openNTRIP.Clients.Authentication;
 
-import org.dav95s.openNTRIP.Clients.Client;
+import org.dav95s.openNTRIP.Clients.User;
 
-public class None implements Authenticator {
+public class None implements IAuthenticator {
     @Override
-    public boolean authentication(Client client) {
+    public boolean authentication(User user) {
         return true;
     }
 

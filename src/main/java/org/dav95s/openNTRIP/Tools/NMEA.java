@@ -115,6 +115,10 @@ public class NMEA {
         sentenceParsers.put("GPVTG", new GPVTG());
     }
 
+    public GPSPosition getPosition() {
+        return position;
+    }
+
     public GPSPosition parse(String line) {
 
         if (line.startsWith("$")) {

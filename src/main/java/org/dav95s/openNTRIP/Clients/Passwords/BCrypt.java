@@ -1,5 +1,8 @@
 package org.dav95s.openNTRIP.Clients.Passwords;
 
+import lombok.NonNull;
+
+import java.security.SecureRandom;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -9,7 +12,7 @@ public class BCrypt implements PasswordHandler {
     public static final Logger log = Logger.getLogger(SHA256.class.getName());
 
     @Override
-    public boolean Compare(String fromDB, String fromUser) {
+    public boolean compare(String fromDB, String fromUser) {
         if (fromDB == null) {
             log.log(Level.WARNING, "Password fromDB is NULL");
             return false;
@@ -32,4 +35,17 @@ public class BCrypt implements PasswordHandler {
 
         return false;
     }
+
+    //todo need write
+    @Override
+    public String hash(@NonNull String rawPassword) {
+
+        if (rawPassword == "")
+            throw new IllegalArgumentException("Can't hash of empty string!");
+
+        byte[] rawResult = at.favre.lib.crypto.bcrypt.BCrypt.withDefaults().hash(12, rawPassword.getBytes());
+        return new String(rawResult);
+    }
+
+
 }

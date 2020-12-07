@@ -1,169 +1,84 @@
 package org.dav95s.openNTRIP.Databases.Models;
 
-import org.dav95s.openNTRIP.Clients.Authentication.Authenticator;
+import lombok.Getter;
+import lombok.Setter;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import org.dav95s.openNTRIP.Clients.Authentication.IAuthenticator;
 import org.dav95s.openNTRIP.Clients.Authentication.Basic;
 import org.dav95s.openNTRIP.Clients.Authentication.Digest;
 import org.dav95s.openNTRIP.Clients.Authentication.None;
-import org.dav95s.openNTRIP.Clients.Client;
+import org.dav95s.openNTRIP.Clients.User;
+import org.dav95s.openNTRIP.Databases.DataSource;
+import org.dav95s.openNTRIP.ServerBootstrap;
+import org.dav95s.openNTRIP.Servers.MountPoint;
 import org.dav95s.openNTRIP.Servers.ReferenceStation;
-import org.dav95s.openNTRIP.Spatial.PointLla;
 import org.dav95s.openNTRIP.Tools.NMEA;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.json.simple.JSONObject;
 
-import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.TreeMap;
+import java.sql.*;
+import java.util.*;
 
 public class MountPointModel {
     final static private Logger logger = LogManager.getLogger(MountPointModel.class.getName());
-    private long id;
-    private String mountpoint = "";
-    private String identifier = "";
-    private String format = "";
-    private String formatDetails = "";
+
+    @Getter @Setter
+    private int id;
+    @Getter @Setter
+    private String name;
+    @Getter @Setter
+    private String identifier;
+    @Getter @Setter
+    private String format;
+    @Getter @Setter
+    private String format_details;
+    @Getter @Setter
     private int carrier;
-    private String navSystem = "";
-    private String network = "";
-    private String country = "";
-    private PointLla lla;
+    @Getter @Setter
+    private String nav_system;
+    @Getter @Setter
+    private String network;
+    @Getter @Setter
+    private String country;
+    @Getter @Setter
+    private double lat;
+    @Getter @Setter
+    private double lon;
+    @Getter @Setter
     private boolean nmea;
+    @Getter @Setter
     private boolean solution;
-    private String generator = "";
-    private String compression = "";
-    private Authenticator authenticator;
+    @Getter @Setter
+    private String generator;
+    @Getter @Setter
+    private String compression;
+    @Getter
+    private IAuthenticator authenticator;
+    @Getter @Setter
     private boolean fee;
+    @Getter @Setter
     private int bitrate;
-    private String misc = "";
+    @Getter @Setter
+    private String misc;
+    @Getter @Setter
+    private int caster_id;
+    @Getter @Setter
     private boolean available;
-    private int casterId;
-    private ArrayList<ReferenceStation> stationsPool;
+    @Getter @Setter
     private int plugin_id;
 
-    public long getId() {
-        return id;
+    @Getter
+    private ArrayList<ReferenceStation> stationsPool;
+
+
+    public MountPointModel() {
+
     }
 
-    public void setId(long id) {
+    public MountPointModel(int id) throws SQLException {
         this.id = id;
-    }
-
-    public String getMountpoint() {
-        return mountpoint == null ? "" : mountpoint;
-    }
-
-    public void setMountpoint(String mountpoint) {
-        this.mountpoint = mountpoint;
-    }
-
-    public String getIdentifier() {
-        return identifier == null ? "" : identifier;
-    }
-
-    public void setIdentifier(String identifier) {
-        this.identifier = identifier;
-    }
-
-    public String getFormat() {
-        return format == null ? "" : format;
-    }
-
-    public void setFormat(String format) {
-        this.format = format;
-    }
-
-    public String getFormatDetails() {
-        return formatDetails == null ? "" : formatDetails;
-    }
-
-    public void setFormatDetails(String formatDetails) {
-        this.formatDetails = formatDetails;
-    }
-
-    public int getCarrier() {
-        return carrier;
-    }
-
-    public void setCarrier(int carrier) {
-        this.carrier = carrier;
-    }
-
-    public String getNavSystem() {
-        return navSystem == null ? "" : navSystem;
-    }
-
-    public void setNavSystem(String navSystem) {
-        this.navSystem = navSystem;
-    }
-
-    public String getNetwork() {
-        return network == null ? "" : network;
-    }
-
-    public void setNetwork(String network) {
-        this.network = network;
-    }
-
-    public String getCountry() {
-        return country == null ? "" : country;
-    }
-
-    public void setCountry(String country) {
-        this.country = country;
-    }
-
-    public PointLla getLla() {
-        return lla;
-    }
-
-    public void setLatitude(Double lat) {
-        if (this.lla == null) {
-            lla = new PointLla();
-        }
-        lla.setLat(new BigDecimal(lat));
-    }
-
-    public void setLongitude(Double lon) {
-        if (this.lla == null) {
-            lla = new PointLla();
-        }
-        lla.setLon(new BigDecimal(lon));
-    }
-
-    public boolean isNmea() {
-        return nmea;
-    }
-
-    public void setNmea(boolean nmea) {
-        this.nmea = nmea;
-    }
-
-    public boolean isSolution() {
-        return solution;
-    }
-
-    public void setSolution(boolean solution) {
-        this.solution = solution;
-    }
-
-    public String getGenerator() {
-        return generator == null ? "" : generator;
-    }
-
-    public void setGenerator(String generator) {
-        this.generator = generator;
-    }
-
-    public String getCompression() {
-        return compression == null ? "none" : compression;
-    }
-
-    public void setCompression(String compression) {
-        this.compression = compression;
-    }
-
-    public Authenticator getAuthenticator() {
-        return this.authenticator;
+        this.read();
+        this.readAccessibleReferenceStations();
     }
 
     public void setAuthenticator(String authenticator) {
@@ -180,136 +95,196 @@ public class MountPointModel {
         }
     }
 
-    public boolean isFee() {
-        return fee;
-    }
+    public ReferenceStation getReferenceStation(User user) {
+        if (nmea) {
+            if (user.getPosition() == null)
+                return null;
 
-    public void setFee(boolean fee) {
-        this.fee = fee;
-    }
-
-    public int getBitrate() {
-        return bitrate;
-    }
-
-    public void setBitrate(int bitrate) {
-        this.bitrate = bitrate;
-    }
-
-    public String getMisc() {
-        return misc == null ? "none" : misc;
-    }
-
-    public void setMisc(String misc) {
-        this.misc = misc;
-    }
-
-    public boolean isAvailable() {
-        return available;
-    }
-
-    public void setAvailable(boolean available) {
-        this.available = available;
-    }
-
-    public int getCasterId() {
-        return casterId;
-    }
-
-    public void setCasterId(int casterId) {
-        this.casterId = casterId;
-    }
-
-    public ArrayList<ReferenceStation> getStationsPool() {
-        return stationsPool;
-    }
-
-    public String getBasesIdsJoin() {
-        StringBuilder sb = new StringBuilder();
-
-        for (ReferenceStation referenceStation : stationsPool) {
-            sb.append(referenceStation.getId());
-        }
-        return sb.toString();
-    }
-
-    public void setStationsPool(String ids) {
-        this.stationsPool = new ArrayList<>();
-
-        for (String id : ids.split(",")) {
-            int i_id = Integer.parseInt(id);
-            ReferenceStation station = ReferenceStation.getStationById(i_id);
-            if (station != null) {
-                stationsPool.add(station);
-            } else {
-                logger.error(mountpoint + ": station by id " + i_id + " not exists.");
-            }
-        }
-    }
-
-    public int getPlugin_id() {
-        return plugin_id;
-    }
-
-    public void setPlugin_id(int plugin_id) {
-        this.plugin_id = plugin_id;
-    }
-
-    //todo if not have suitable station need throw exception
-    public ReferenceStation getReferenceStation() throws IllegalStateException {
-
-        //available have priority
-        for (ReferenceStation referenceStation : stationsPool) {
-            if (referenceStation.getModel().isOnline())
-                return referenceStation;
+            return getNearestStation(user);
         }
 
-        //any
-        for (ReferenceStation referenceStation : stationsPool) {
-            return referenceStation;
-        }
-        //no one
-        throw new IllegalStateException("Not have suitable reference station!");
+        return stationsPool.get(0);
     }
 
-    /**
-     * Return nearest available reference station from station pool.
-     * If not have suitable station throw Exception.
-     *
-     * @param client
-     * @return Return nearest reference station for client, from mountpoint station pool.
-     */
-    public ReferenceStation getNearestReferenceStation(Client client) throws IllegalStateException {
+    private ReferenceStation getNearestStation(User user) {
         TreeMap<Float, ReferenceStation> sortedRange = new TreeMap<>();
-        NMEA.GPSPosition clientPosition = client.getPosition();
+        NMEA.GPSPosition clientPosition = user.getPosition();
 
-        if (clientPosition != null) {
-            for (ReferenceStation station : stationsPool) {
-                if (station.getModel().isOnline()) {
-                    try {
-                        sortedRange.put(station.distance(clientPosition), station);
-                    } catch (IllegalStateException e) {
-                        logger.error(e.getMessage());
-                    }
-                }
+        for (ReferenceStation station : stationsPool) {
+            if (station.getModel().isOnline() || station.getModel().getPosition().isSet()) {
+                sortedRange.put(station.distance(clientPosition), station);
             }
-        } else {
-            logger.error(client.toString() + " hasn't position for nearest reference station!");
-            return null;
         }
 
-        if (sortedRange.size() > 0) {
-            logger.info("Nearest reference station " + sortedRange.firstEntry().getValue().getName());
-            return sortedRange.firstEntry().getValue();
+        if (logger.isDebugEnabled()) {
+            JSONObject object = new JSONObject();
+            object.put("from", "getNearestStation");
+            object.put("user", user.toString());
+            object.put("userPosition", user.getPosition().toString());
+            object.put("mountpoint", name);
+            object.put("pull", Arrays.toString(stationsPool.toArray()));
+            object.put("ranges", Arrays.toString(sortedRange.keySet().toArray()));
+            logger.debug(object);
         }
 
-        throw new IllegalStateException();
+        return sortedRange.firstEntry().getValue();
     }
 
     @Override
     public String toString() {
-        return "STR" + ';' + getMountpoint() + ';' + getIdentifier() + ';' + getFormat() + ';' + getFormatDetails() + ';' + getCarrier() + ';' + getNavSystem() + ';' + getNetwork() + ';' + getCountry()
-                + ';' + String.format("%.2f", getLla().getLat()) + ';' + String.format("%.2f", getLla().getLon()) + ';' + (isNmea() ? 1 : 0) + ';' + (isSolution() ? 1 : 0) + ';' + getGenerator() + ';' + getCompression()
+        return "STR" + ';' + getName() + ';' + getIdentifier() + ';' + getFormat() + ';' + getFormat_details() + ';' + getCarrier() + ';' + getNav_system() + ';' + getNetwork() + ';' + getCountry()
+                + ';' + String.format("%.2f", getLat()) + ';' + String.format("%.2f", getLon()) + ';' + (isNmea() ? 1 : 0) + ';' + (isSolution() ? 1 : 0) + ';' + getGenerator() + ';' + getCompression()
                 + ';' + getAuthenticator().toString() + ';' + (isFee() ? 'Y' : 'N') + ';' + getBitrate() + ';' + getMisc() + "\r\n";
+    }
+
+    public int create() throws SQLException {
+        String sql = "INSERT INTO `mountpoints`(`name`, `identifier`, `format`, `format_details`, `carrier`, `nav_system`, `network`, `country`, `latitude`, `longitude`, `nmea`, `solution`, `generator`, `compression`, `authenticator`, `fee`, `bitrate`, `misc`, `caster_id`, `available`, `plugin_id`) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+
+        try (Connection con = DataSource.getConnection();
+             PreparedStatement statement = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+
+            statement.setString(1, name);
+            statement.setString(2, identifier);
+            statement.setString(3, format);
+            statement.setString(4, format_details);
+            statement.setInt(5, carrier);
+            statement.setString(6, nav_system);
+            statement.setString(7, network);
+            statement.setString(8, country);
+            statement.setDouble(9, lat);
+            statement.setDouble(10, lon);
+            statement.setBoolean(11, nmea);
+            statement.setBoolean(12, solution);
+            statement.setString(13, generator);
+            statement.setString(14, compression);
+            statement.setString(15, authenticator.toString());
+            statement.setBoolean(16, fee);
+            statement.setInt(17, bitrate);
+            statement.setString(18, misc);
+            statement.setInt(19, caster_id);
+            statement.setBoolean(20, available);
+            statement.setInt(21, plugin_id);
+            statement.executeUpdate();
+            ResultSet rs = statement.getGeneratedKeys();
+
+            if (rs.next()) {
+                id = rs.getInt(1);
+                return id;
+            } else {
+                throw new SQLException("The database did not return the id.");
+            }
+
+        } catch (SQLException e) {
+            throw new SQLException("Can't create new mountpoint", e);
+        }
+    }
+
+    public boolean read() throws SQLException {
+        String sql = "SELECT * FROM `mountpoints` WHERE `id` = ?";
+
+        try (Connection con = DataSource.getConnection();
+             PreparedStatement statement = con.prepareStatement(sql)) {
+
+            statement.setInt(1, id);
+
+            try (ResultSet rs = statement.executeQuery()) {
+                if (rs.next()) {
+                    name = rs.getString("name");
+                    identifier = rs.getString("identifier");
+                    format = rs.getString("format");
+                    format_details = rs.getString("format_details");
+                    carrier = rs.getInt("carrier");
+                    nav_system = rs.getString("nav_system");
+                    network = rs.getString("network");
+                    country = rs.getString("country");
+                    lat = rs.getDouble("latitude");
+                    lon = rs.getDouble("longitude");
+                    nmea = rs.getBoolean("nmea");
+                    solution = rs.getBoolean("solution");
+                    generator = rs.getString("generator");
+                    compression = rs.getString("compression");
+                    setAuthenticator(rs.getString("authenticator"));
+                    fee = rs.getBoolean("fee");
+                    bitrate = rs.getInt("bitrate");
+                    misc = rs.getString("misc");
+                    caster_id = rs.getInt("caster_id");
+                    available = rs.getBoolean("available");
+                    plugin_id = rs.getInt("plugin_id");
+                    return true;
+                } else {
+                    return false;
+                }
+            }
+        } catch (SQLException e) {
+            throw new SQLException(e);
+        }
+    }
+
+    public boolean update() throws SQLException {
+        String sql = "UPDATE `mountpoints` SET `name`=?,`identifier`=?,`format`=?,`format_details`=?,`carrier`=?,`nav_system`=?,`network`=?,`country`=?,`latitude`=?,`longitude`=?,`nmea`=?,`solution`=?,`generator`=?,`compression`=?,`authenticator`=?,`fee`=?,`bitrate`=?,`misc`=?,`caster_id`=?,`available`=?,`plugin_id`=? WHERE `id` = ?";
+
+        try (Connection con = DataSource.getConnection();
+             PreparedStatement statement = con.prepareStatement(sql)) {
+            statement.setString(1, name);
+            statement.setString(2, identifier);
+            statement.setString(3, format);
+            statement.setString(4, format_details);
+            statement.setInt(5, carrier);
+            statement.setString(6, nav_system);
+            statement.setString(7, network);
+            statement.setString(8, country);
+            statement.setDouble(9, lat);
+            statement.setDouble(10, lon);
+            statement.setBoolean(11, nmea);
+            statement.setBoolean(12, solution);
+            statement.setString(13, generator);
+            statement.setString(14, compression);
+            statement.setString(15, getAuthenticator().toString());
+            statement.setBoolean(16, fee);
+            statement.setInt(17, bitrate);
+            statement.setString(18, misc);
+            statement.setInt(19, caster_id);
+            statement.setBoolean(20, available);
+            statement.setInt(21, plugin_id);
+
+            statement.setInt(22, id);
+
+            return statement.executeUpdate() > 0;
+        } catch (SQLException e) {
+            throw new SQLException(e);
+        }
+    }
+
+    public boolean delete() throws SQLException {
+        String sql = "DELETE FROM `mountpoints` WHERE `id` = ?";
+
+        try (Connection con = DataSource.getConnection();
+             PreparedStatement statement = con.prepareStatement(sql)) {
+            statement.setInt(1, id);
+
+            return statement.executeUpdate() > 0;
+
+        } catch (SQLException e) {
+            throw new SQLException(e);
+        }
+    }
+
+    public void readAccessibleReferenceStations() throws SQLException {
+        String sql = "SELECT `station_id` FROM `mountpoints_stations` WHERE `mountpoint_id` = ?";
+
+        ArrayList<ReferenceStation> pool = new ArrayList<>();
+
+        try (Connection con = DataSource.getConnection();
+             PreparedStatement statement = con.prepareStatement(sql)) {
+
+            statement.setInt(1, id);
+
+            try (ResultSet rs = statement.executeQuery()) {
+                while (rs.next()) {
+                    pool.add(ServerBootstrap.getReferenceStationById(rs.getInt("station_id")));
+                }
+                stationsPool = pool;
+            }
+        }
     }
 }

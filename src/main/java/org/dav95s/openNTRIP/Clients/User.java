@@ -1,9 +1,11 @@
 package org.dav95s.openNTRIP.Clients;
 
 
-import org.dav95s.openNTRIP.Databases.Models.ClientModel;
-import org.dav95s.openNTRIP.Network.IWork;
+import com.github.pbbl.heap.ByteBufferPool;
+import org.dav95s.openNTRIP.Databases.Models.UserModel;
+import org.dav95s.openNTRIP.Network.INetworkHandler;
 import org.dav95s.openNTRIP.Network.Socket;
+import org.dav95s.openNTRIP.Servers.MountPoint;
 import org.dav95s.openNTRIP.Servers.NtripCaster;
 import org.dav95s.openNTRIP.Servers.ReferenceStation;
 import org.dav95s.openNTRIP.Tools.HttpParser;
@@ -13,24 +15,29 @@ import org.apache.logging.log4j.Logger;
 
 import java.io.IOException;
 import java.nio.ByteBuffer;
+import java.nio.charset.StandardCharsets;
+import java.sql.SQLException;
 import java.util.ArrayDeque;
 import java.util.Queue;
 
-public class Client implements IWork {
-    final static private Logger logger = LogManager.getLogger(Client.class.getName());
+public class User implements INetworkHandler {
+    final static private Logger logger = LogManager.getLogger(User.class.getName());
+
+    final private long TIME_POSITION_UPDATE = 30_000;
 
     final private NtripCaster caster;
     final private Socket socket;
     final private HttpParser httpRequest;
-    final private ByteBuffer input = ByteBuffer.allocate(1024);
+    final static private ByteBufferPool bufferPool = new ByteBufferPool();
 
     private ReferenceStation referenceStation;
-    private ClientModel model;
+    private UserModel model;
     private NMEA.GPSPosition position;
+    private boolean isAuthenticated = false;
+    private long updateTimeMark;
+    private MountPoint mountPoint;
 
-    private boolean isAuthentication = false;
-
-    public Client(Socket socket, HttpParser httpRequest, NtripCaster caster) {
+    public User(Socket socket, HttpParser httpRequest, NtripCaster caster) {
         logger.debug(socket.toString() + "is new client.");
         this.socket = socket;
         this.httpRequest = httpRequest;
@@ -43,6 +50,8 @@ public class Client implements IWork {
 
         this.referenceStation = referenceStation;
         this.referenceStation.addClient(this);
+        this.isAuthenticated = true;
+        this.updateTimeMark = System.currentTimeMillis();
     }
 
     public void sendBadMessageAndClose() {
@@ -69,45 +78,46 @@ public class Client implements IWork {
         return this.socket.write(byteBuffer);
     }
 
-    private final Queue<byte[]> dataQueue = new ArrayDeque<>();
+    private final Queue<ByteBuffer> dataQueue = new ArrayDeque<>();
 
-    public void readSelf() throws IOException {
-        this.input.clear();
+    public void readChannel() throws IOException {
+        ByteBuffer buffer = bufferPool.take(2048);
 
-        if (socket.endOfStreamReached){
+        if (socket.endOfStreamReached) {
             throw new IOException(this.toString() + "end of stream reached.");
         }
 
+        int count = this.socket.read(buffer);
 
-        int count = this.socket.read(input);
         logger.debug(() -> this.toString() + "read bytes: " + count);
+
         if (count == 0)
             return;
 
-        this.input.flip();
-        byte[] bytes = new byte[input.remaining()];
-        this.input.get(bytes, 0, bytes.length);
-        this.dataQueue.add(bytes);
+        buffer.flip();
+        this.dataQueue.add(buffer);
     }
 
     @Override
     public void run() {
         if (dataQueue.peek() == null)
             return;
+        ByteBuffer buffer = dataQueue.poll();
+        String line = StandardCharsets.UTF_8.decode(buffer).toString();
+        bufferPool.give(buffer);
 
-        String line = new String(dataQueue.poll());
+        if (System.currentTimeMillis() - this.updateTimeMark < TIME_POSITION_UPDATE)
+            return;
 
         logger.debug(socket.toString() + " accept nmea from client -> " + line);
         this.setPosition(line);
 
         try {
-            caster.clientAuthorizationProcessing(this);
-        } catch (IOException e) {
-            logger.error(socket.toString() + "Re-authorization error", e);
+            mountPoint.clientAuthorization(this);
+        } catch (IOException | SQLException e) {
+            logger.error(socket.toString() + "authorization error", e);
             this.close();
         }
-
-
     }
 
     public void setPosition(String nmea_str) {
@@ -126,12 +136,20 @@ public class Client implements IWork {
         return this.model.getPassword();
     }
 
-    public void setModel(ClientModel model) {
+    public void setModel(UserModel model) {
         this.model = model;
     }
 
     @Override
     public String toString() {
-        return "Client " + socket.toString();
+        return "User " + socket.toString();
+    }
+
+    public void setMountPoint(MountPoint mountPoint) {
+        this.mountPoint = mountPoint;
+    }
+
+    public boolean isAuthenticated() {
+        return isAuthenticated;
     }
 }

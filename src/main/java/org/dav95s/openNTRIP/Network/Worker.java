@@ -11,10 +11,8 @@ public class Worker implements Runnable {
 
     private static Worker instance;
 
-    private Thread workingThread;
-
     private Worker() {
-        workingThread = new Thread(this);
+        Thread workingThread = new Thread(this);
         workingThread.start();
     }
 
@@ -25,11 +23,11 @@ public class Worker implements Runnable {
         return instance;
     }
 
-    private final ArrayBlockingQueue<IWork> queue = new ArrayBlockingQueue<>(WORK_QUEUE);
+    private final ArrayBlockingQueue<INetworkHandler> queue = new ArrayBlockingQueue<>(WORK_QUEUE);
 
     private final ExecutorService executor = Executors.newCachedThreadPool();
 
-    public void addWork(IWork work) {
+    public void addWork(INetworkHandler work) {
         queue.add(work);
     }
 
@@ -37,7 +35,7 @@ public class Worker implements Runnable {
     public void run() {
         while (true) {
             try {
-                IWork work = queue.poll(BLOCKING_TIMEOUT_MLS, TimeUnit.MILLISECONDS);
+                INetworkHandler work = queue.poll(BLOCKING_TIMEOUT_MLS, TimeUnit.MILLISECONDS);
 
                 if (work == null)
                     continue;

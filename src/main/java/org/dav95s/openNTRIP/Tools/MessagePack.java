@@ -26,7 +26,7 @@ public class MessagePack {
         messagePack.removeIf(msg -> msg.nmb == nmb);
     }
 
-    public ByteBuffer getFullBytes() {
+    public ByteBuffer getByteBuffer() {
         int capacity = 0;
         for (Message msg : messagePack) {
             capacity += msg.bytes.length;

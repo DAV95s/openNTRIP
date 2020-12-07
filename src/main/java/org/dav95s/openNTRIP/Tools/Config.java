@@ -28,16 +28,18 @@ public class Config {
     private Properties properties = new Properties();
     private PasswordHandler passwordHandler;
 
+    //todo rewrite this bullshit
     private Config() {
         if (configFile.exists()) {
             logger.info("'app.properties' config file loading..");
             try {
                 properties.load(new FileReader(configFile));
+                logger.info("'Config file ok!");
             } catch (IOException e) {
                 e.printStackTrace();
             }
         } else {
-            logger.info("main/resources/app.properties not exists.");
+            logger.info("app.properties doesn't exist.");
             try {
                 configFile.createNewFile();
                 properties.load(new FileReader(configFile));
@@ -56,20 +58,26 @@ public class Config {
         } catch (IllegalArgumentException e) {
             logger.error("'app.properties' -> 'passwordHashAlgorithm' have illegalArgument!");
             logger.error("'passwordHashAlgorithm' set BCrypt");
-            passwordHandler = HashAlgorithms.None.passwordHandler;
+            passwordHandler = HashAlgorithms.BCrypt.passwordHandler;
         }
     }
 
-    public PasswordHandler getPasswordHandler() {
-        return passwordHandler;
-    }
-
+    //todo rewrite
     public String getProperties(String key) {
         String prop = properties.getProperty(key);
         if (prop == null)
             return null;
 
         return prop.replaceAll("\"", "");
+    }
+
+    public String getDefaultEmailDomain() {
+        String domain = this.getProperties("defaultEmailDomain");
+        return domain == null ? "localhost" : domain;
+    }
+
+    public PasswordHandler getPasswordHandler() {
+        return passwordHandler;
     }
 
 }

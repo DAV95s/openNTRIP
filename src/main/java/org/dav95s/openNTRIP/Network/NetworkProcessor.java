@@ -1,9 +1,9 @@
 package org.dav95s.openNTRIP.Network;
 
-import org.dav95s.openNTRIP.Servers.NtripCaster;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.dav95s.openNTRIP.Servers.NtripCaster;
 
 import java.io.IOException;
 import java.nio.channels.SelectionKey;
@@ -38,17 +38,15 @@ public class NetworkProcessor implements Runnable {
     }
 
     /**
-     * When the new caster has created, this method registered his server socket channel in the selector.
+     * When new caster has created, this method registered his server channel in the selector.
      *
-     * @param socket
+     * @param channel
      * @param caster
-     * @return SelectionKey
      * @throws IOException
      */
-     public SelectionKey registerServerChannel(ServerSocketChannel socket, NtripCaster caster) throws IOException {
-        SelectionKey key = socket.register(this.selector, SelectionKey.OP_ACCEPT, caster);
+    public void registerServerChannel(ServerSocketChannel channel, NtripCaster caster) throws IOException {
+        channel.register(this.selector, SelectionKey.OP_ACCEPT, caster);
         selector.wakeup();
-        return key;
     }
 
     public void close() throws IOException {
@@ -72,7 +70,6 @@ public class NetworkProcessor implements Runnable {
                     SelectionKey selectionKey = iterator.next();
 
                     if (!selectionKey.isValid()) {
-                        logger.debug("The selected key was not valid!");
                         continue;
                     }
 
@@ -81,16 +78,16 @@ public class NetworkProcessor implements Runnable {
                         SocketChannel connectSocket = server.accept();
                         connectSocket.configureBlocking(false);
                         SelectionKey clientKey = connectSocket.register(this.selector, SelectionKey.OP_READ);
-                        new ConnectHandler(clientKey, (NtripCaster) selectionKey.attachment());
+                        new ConnectHandler(new Socket(clientKey), (NtripCaster) selectionKey.attachment());
 
                     } else if (selectionKey.isReadable()) {
-                        IWork work = (IWork) selectionKey.attachment();
+                        INetworkHandler handler = (INetworkHandler) selectionKey.attachment();
                         try {
-                            work.readSelf();
-                            worker.addWork(work);
+                            handler.readChannel();
+                            worker.addWork(handler);
                         } catch (IOException e) {
                             logger.error("Event Error", e);
-                            work.close();
+                            handler.close();
                             selectionKey.cancel();
                         }
                     }

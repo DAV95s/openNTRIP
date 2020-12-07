@@ -1,5 +1,7 @@
 package org.dav95s.openNTRIP.Clients.Passwords;
 
+import lombok.NonNull;
+
 import java.security.MessageDigest;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -8,7 +10,7 @@ public class SHA256 implements PasswordHandler {
     public static final Logger log = Logger.getLogger(SHA256.class.getName());
 
     @Override
-    public boolean Compare(String fromDB, String fromUser) {
+    public boolean compare(String fromDB, String fromUser) {
         if (fromDB == null) {
             log.log(Level.WARNING, "Password fromDB is NULL");
             return false;
@@ -19,24 +21,27 @@ public class SHA256 implements PasswordHandler {
             return false;
         }
 
-        if (fromDB == "") {
-            log.log(Level.WARNING, "Password fromDB is empty");
-            return false;
-        }
-
         String userHash = sha256(fromUser);
         return fromDB.toLowerCase().equals(userHash);
 
     }
 
-    public static String sha256(String base) {
+    @Override
+    public String hash(@NonNull String rawPassword) {
+        if (rawPassword == "")
+            throw new IllegalArgumentException("Can't hash of empty string!");
+
+        return sha256(rawPassword);
+    }
+
+    private static String sha256(String base) {
         try {
             MessageDigest digest = MessageDigest.getInstance("SHA-256");
             byte[] hash = digest.digest(base.getBytes("UTF-8"));
             StringBuffer hexString = new StringBuffer();
 
-            for (int i = 0; i < hash.length; i++) {
-                String hex = Integer.toHexString(0xff & hash[i]);
+            for (byte b : hash) {
+                String hex = Integer.toHexString(0xff & b);
                 if (hex.length() == 1) hexString.append('0');
                 hexString.append(hex);
             }

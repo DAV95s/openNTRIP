@@ -1,11 +1,11 @@
 package org.dav95s.openNTRIP.Tools;
 
-import org.dav95s.openNTRIP.Databases.Models.ReferenceStationModel;
-import org.dav95s.openNTRIP.Servers.ReferenceStation;
-import org.dav95s.openNTRIP.Spatial.PointLla;
-import org.dav95s.openNTRIP.Tools.RTCM.MSG1005;
+import lombok.SneakyThrows;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.dav95s.openNTRIP.Databases.Models.ReferenceStationModel;
+import org.dav95s.openNTRIP.Servers.ReferenceStation;
+import org.dav95s.openNTRIP.Tools.RTCM.MSG1005;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
@@ -15,7 +15,8 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.util.*;
+import java.util.Locale;
+import java.util.TimerTask;
 
 public class AnalyzeTasks {
     final static private Logger logger = LogManager.getLogger(AnalyzeTasks.class.getName());
@@ -32,6 +33,7 @@ public class AnalyzeTasks {
     }
 
     public TimerTask rtcmVersion = new TimerTask() {
+        @SneakyThrows
         @Override
         public void run() {
             if (messagePool.bytePool.size() == 0) {
@@ -73,6 +75,7 @@ public class AnalyzeTasks {
     };
 
     public TimerTask navSystems = new TimerTask() {
+        @SneakyThrows
         @Override
         public void run() {
             String navSystems = "";
@@ -110,12 +113,13 @@ public class AnalyzeTasks {
             } else {
                 model.setNav_system("");
             }
-           model.update();
+            model.update();
             logger.debug(referenceStation.getName() + ": update Nav Systems -> " + model.getNav_system());
         }
     };
 
     public TimerTask carrier = new TimerTask() {
+        @SneakyThrows
         @Override
         public void run() {
             int carrier = 0;
@@ -143,6 +147,7 @@ public class AnalyzeTasks {
     };
 
     public TimerTask position = new TimerTask() {
+        @SneakyThrows
         @Override
         public void run() {
             double[] lla;
@@ -161,25 +166,25 @@ public class AnalyzeTasks {
                 lla = new double[]{0, 0};
             }
 
-            PointLla position = new PointLla(lla[0], lla[1]);
-
-            model.setLla(position);
+            model.getPosition().lat = (float) lla[0];
+            model.getPosition().lon = (float) lla[1];
             model.update();
             logger.debug(referenceStation.getName() + ": update position " + position.toString());
         }
     };
 
     public TimerTask positionMetaInfo = new TimerTask() {
+        @SneakyThrows
         @Override
         public void run() {
-            if (model.getLla().isZero()) {
+            if (model.getPosition().lat == 0.0d || model.getPosition().lon == 0.0d) {
                 model.setIdentifier("");
                 model.setCountry("");
                 model.update();
                 return;
             }
 
-            String rawJson = osmApi(model.getLla());
+            String rawJson = osmApi(model.getPosition().lat, model.getPosition().lon);
 
             String[] identifier = {"suburb", "village", "city", "county", "state"};
 
@@ -209,10 +214,11 @@ public class AnalyzeTasks {
     };
 
     public TimerTask FormatDetails = new TimerTask() {
+        @SneakyThrows
         @Override
         public void run() {
             model.setFormat_details(messagePool.toString());
-           model.update();
+            model.update();
         }
     };
 
@@ -243,9 +249,7 @@ public class AnalyzeTasks {
         return response;
     }
 
-    public String osmApi(PointLla point) {
-        double lat = point.getLat().doubleValue();
-        double lon = point.getLon().doubleValue();
+    public String osmApi(double lat, double lon) {
 
         try {
             String url = "https://nominatim.openstreetmap.org/reverse.php?lat=" + lat + "&lon=" + lon + "&format=json&accept-language=en&zoom=14";

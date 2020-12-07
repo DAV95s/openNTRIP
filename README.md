@@ -12,14 +12,14 @@ For reference station
 SOURCE: AL1 or AL2
 PASSWORD: 44444
 
-For client (if mountpoint authentication set 1)
+For user (if mountpoint authentication set 1)
 Account: Administrator
 Password: password
 
 You can use RtkLib for retranslating gnns data to openNTRIP.
 
 ## Roadmap
-1. Test client nmea processing.
+1. Test user nmea processing.
 2. Save rtcm stream and convert to RINEX format.
 3. To implement console commands.
 4. Add support RTCM 1021-1027 message.
