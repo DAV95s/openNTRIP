@@ -1,7 +1,5 @@
 package org.dav95s.openNTRIP.Databases.Models;
 
-import lombok.Getter;
-import lombok.Setter;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.dav95s.openNTRIP.Databases.DataSource;
@@ -21,15 +19,10 @@ public class NtripCasterModel {
 
     }
 
-    @Getter @Setter
     private int id;
-    @Getter @Setter
     private String address;
-    @Getter @Setter
     private int port;
-    @Getter @Setter
     private int group_id;
-    @Getter @Setter
     private boolean status;
 
     public int create() throws SQLException {
@@ -137,4 +130,43 @@ public class NtripCasterModel {
         }
     }
 
+    public int getId() {
+        return this.id;
+    }
+
+    public String getAddress() {
+        return this.address;
+    }
+
+    public int getPort() {
+        return this.port;
+    }
+
+    public int getGroup_id() {
+        return this.group_id;
+    }
+
+    public boolean isStatus() {
+        return this.status;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    public void setPort(int port) {
+        this.port = port;
+    }
+
+    public void setGroup_id(int group_id) {
+        this.group_id = group_id;
+    }
+
+    public void setStatus(boolean status) {
+        this.status = status;
+    }
 }

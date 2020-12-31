@@ -22,57 +22,30 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="b7aa1f89-fb3e-44e2-a0de-b72c0eae2f41" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/dav95s/openNTRIP/Databases/Models/UserGroupModel.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/dav95s/openNTRIP/Databases/Models/UserModel.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/dav95s/openNTRIP/Servers/Handlers/Handler.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/dav95s/openNTRIP/Servers/MountPoint.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/dav95s/openNTRIP/Tools/StreamSaver.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/test/java/TestDB.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/compiler.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
+    <list default="true" id="b7aa1f89-fb3e-44e2-a0de-b72c0eae2f41" name="Default Changelist" comment="new db pattern, new object model">
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/dav95s/openNTRIP/Servers/Handlers/FixPosition.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/dav95s/openNTRIP/Tools/BitUtil.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/test/java/TestBitUtil.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/dav95s/openNTRIP/Clients/Authentication/Authenticator.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/dav95s/openNTRIP/Clients/Authentication/IAuthenticator.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/dav95s/openNTRIP/Clients/Authentication/Basic.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/dav95s/openNTRIP/Clients/Authentication/Basic.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/dav95s/openNTRIP/Clients/Authentication/Digest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/dav95s/openNTRIP/Clients/Authentication/Digest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/dav95s/openNTRIP/Clients/Authentication/None.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/dav95s/openNTRIP/Clients/Authentication/None.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/dav95s/openNTRIP/Clients/Client.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/dav95s/openNTRIP/Clients/User.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/dav95s/openNTRIP/Clients/Passwords/BCrypt.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/dav95s/openNTRIP/Clients/Passwords/BCrypt.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/dav95s/openNTRIP/Clients/Passwords/None.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/dav95s/openNTRIP/Clients/Passwords/None.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/dav95s/openNTRIP/Clients/Passwords/PasswordHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/dav95s/openNTRIP/Clients/Passwords/PasswordHandler.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/dav95s/openNTRIP/Clients/Passwords/SHA256.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/dav95s/openNTRIP/Clients/Passwords/SHA256.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/dav95s/openNTRIP/Databases/DAO/ClientDAO.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/dav95s/openNTRIP/Databases/DAO/MountPointDAO.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/dav95s/openNTRIP/Databases/DAO/NtripCasterDAO.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/dav95s/openNTRIP/Databases/DAO/ReferenceStationDAO.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/dav95s/openNTRIP/Databases/HibernateSessionFactoryUtil.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/dav95s/openNTRIP/Databases/Models/ClientModel.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/dav95s/openNTRIP/Clients/User.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/dav95s/openNTRIP/Clients/User.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/dav95s/openNTRIP/Databases/Models/MountPointModel.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/dav95s/openNTRIP/Databases/Models/MountPointModel.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/dav95s/openNTRIP/Databases/Models/NtripCasterModel.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/dav95s/openNTRIP/Databases/Models/NtripCasterModel.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/dav95s/openNTRIP/Databases/Models/ReferenceStationModel.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/dav95s/openNTRIP/Databases/Models/ReferenceStationModel.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/dav95s/openNTRIP/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/dav95s/openNTRIP/Main.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/dav95s/openNTRIP/Network/ConnectHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/dav95s/openNTRIP/Network/ConnectHandler.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/dav95s/openNTRIP/Network/IWork.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/dav95s/openNTRIP/Network/INetworkHandler.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/dav95s/openNTRIP/Network/NetworkProcessor.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/dav95s/openNTRIP/Network/NetworkProcessor.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/dav95s/openNTRIP/Network/Socket.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/dav95s/openNTRIP/Network/Socket.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/dav95s/openNTRIP/Network/Worker.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/dav95s/openNTRIP/Network/Worker.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/dav95s/openNTRIP/Servers/NtripCaster.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/dav95s/openNTRIP/Servers/NtripCaster.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/dav95s/openNTRIP/Databases/Models/UserGroupModel.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/dav95s/openNTRIP/Databases/Models/UserGroupModel.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/dav95s/openNTRIP/Databases/Models/UserModel.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/dav95s/openNTRIP/Databases/Models/UserModel.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/dav95s/openNTRIP/Servers/Handlers/Handler.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/dav95s/openNTRIP/Servers/Handlers/Handler.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/dav95s/openNTRIP/Servers/MountPoint.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/dav95s/openNTRIP/Servers/MountPoint.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/dav95s/openNTRIP/Servers/ReferenceStation.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/dav95s/openNTRIP/Servers/ReferenceStation.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/dav95s/openNTRIP/Spatial/Point.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/dav95s/openNTRIP/Spatial/PointLla.java" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/dav95s/openNTRIP/Tools/AnalyzeTasks.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/dav95s/openNTRIP/Tools/AnalyzeTasks.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/dav95s/openNTRIP/Tools/Bootstrap.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/dav95s/openNTRIP/ServerBootstrap.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/dav95s/openNTRIP/Tools/Config.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/dav95s/openNTRIP/Tools/Config.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/dav95s/openNTRIP/Tools/Decoders/RTCM_3X.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/dav95s/openNTRIP/Tools/Decoders/RTCM_3X.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/dav95s/openNTRIP/Tools/MessagePack.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/dav95s/openNTRIP/Tools/MessagePack.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/dav95s/openNTRIP/Tools/NMEA.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/dav95s/openNTRIP/Tools/NMEA.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/app.properties" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/app.properties" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/hibernate.cfg.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/Hibernate.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/TestPasswordAlgorithm.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/TestPasswordAlgorithm.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/TestReferenceStation.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/TestReferenceStation.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/TestSeparators.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/TestSeparators.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/dav95s/openNTRIP/Tools/RTCM/MSG1005.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/dav95s/openNTRIP/Tools/RTCM/MSG1006.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/dav95s/openNTRIP/Tools/RTCM/MSG1006.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/dav95s/openNTRIP/Tools/RTCM/RTCM.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/dav95s/openNTRIP/Tools/RTCM/RTCM.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/Test1004.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/Test1004.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/Test1019.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/Test1019.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -83,8 +56,8 @@
     <option name="RECENT_TEMPLATES">
       <list>
         <option value="Enum" />
-        <option value="Class" />
         <option value="Interface" />
+        <option value="Class" />
       </list>
     </option>
   </component>
@@ -118,6 +91,7 @@
   </component>
   <component name="PropertiesComponent">
     <property name="ASKED_ADD_EXTERNAL_FILES" value="true" />
+    <property name="LombokPluginEnabledInProject" value="true" />
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
@@ -151,7 +125,7 @@
       <recent name="C:\Users\Main\Documents\ADVNTRIP\src\main\java\org\adv25\ADVNTRIP" />
     </key>
   </component>
-  <component name="RunManager" selected="Application.Start">
+  <component name="RunManager" selected="JUnit.Test1004.start">
     <configuration name="Start" type="Application" factoryName="Application">
       <option name="ALTERNATIVE_JRE_PATH" value="11" />
       <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="true" />
@@ -175,51 +149,51 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="TestDB.conf" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+    <configuration name="Test1004.benchmark" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="openNTRIP" />
       <option name="PACKAGE_NAME" value="" />
-      <option name="MAIN_CLASS_NAME" value="TestDB" />
-      <option name="METHOD_NAME" value="conf" />
+      <option name="MAIN_CLASS_NAME" value="Test1004" />
+      <option name="METHOD_NAME" value="benchmark" />
       <option name="TEST_OBJECT" value="method" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="TestDB.mp" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+    <configuration name="Test1004.start" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="openNTRIP" />
       <option name="PACKAGE_NAME" value="" />
-      <option name="MAIN_CLASS_NAME" value="TestDB" />
-      <option name="METHOD_NAME" value="mp" />
+      <option name="MAIN_CLASS_NAME" value="Test1004" />
+      <option name="METHOD_NAME" value="start" />
       <option name="TEST_OBJECT" value="method" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="TestPasswordAlgorithm.BCrypt" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+    <configuration name="Test1019.s1" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="openNTRIP" />
       <option name="PACKAGE_NAME" value="" />
-      <option name="MAIN_CLASS_NAME" value="TestPasswordAlgorithm" />
-      <option name="METHOD_NAME" value="BCrypt" />
+      <option name="MAIN_CLASS_NAME" value="Test1019" />
+      <option name="METHOD_NAME" value="s1" />
       <option name="TEST_OBJECT" value="method" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="TestPasswordAlgorithm.sha256null" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+    <configuration name="TestBitUtil.BooleanTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="openNTRIP" />
       <option name="PACKAGE_NAME" value="" />
-      <option name="MAIN_CLASS_NAME" value="TestPasswordAlgorithm" />
-      <option name="METHOD_NAME" value="sha256null" />
+      <option name="MAIN_CLASS_NAME" value="TestBitUtil" />
+      <option name="METHOD_NAME" value="BooleanTest" />
       <option name="TEST_OBJECT" value="method" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="TestReferenceStation.getStationFromPool" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+    <configuration name="TestSeparators.dasd" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="openNTRIP" />
       <option name="PACKAGE_NAME" value="" />
-      <option name="MAIN_CLASS_NAME" value="TestReferenceStation" />
-      <option name="METHOD_NAME" value="getStationFromPool" />
+      <option name="MAIN_CLASS_NAME" value="TestSeparators" />
+      <option name="METHOD_NAME" value="dasd" />
       <option name="TEST_OBJECT" value="method" />
       <method v="2">
         <option name="Make" enabled="true" />
@@ -227,19 +201,19 @@
     </configuration>
     <list>
       <item itemvalue="Application.Start" />
-      <item itemvalue="JUnit.TestPasswordAlgorithm.sha256null" />
-      <item itemvalue="JUnit.TestPasswordAlgorithm.BCrypt" />
-      <item itemvalue="JUnit.TestDB.conf" />
-      <item itemvalue="JUnit.TestDB.mp" />
-      <item itemvalue="JUnit.TestReferenceStation.getStationFromPool" />
+      <item itemvalue="JUnit.Test1004.benchmark" />
+      <item itemvalue="JUnit.Test1004.start" />
+      <item itemvalue="JUnit.Test1019.s1" />
+      <item itemvalue="JUnit.TestBitUtil.BooleanTest" />
+      <item itemvalue="JUnit.TestSeparators.dasd" />
     </list>
     <recent_temporary>
       <list>
-        <item itemvalue="JUnit.TestReferenceStation.getStationFromPool" />
-        <item itemvalue="JUnit.TestDB.mp" />
-        <item itemvalue="JUnit.TestDB.conf" />
-        <item itemvalue="JUnit.TestPasswordAlgorithm.BCrypt" />
-        <item itemvalue="JUnit.TestPasswordAlgorithm.sha256null" />
+        <item itemvalue="JUnit.Test1004.start" />
+        <item itemvalue="JUnit.Test1004.benchmark" />
+        <item itemvalue="JUnit.TestBitUtil.BooleanTest" />
+        <item itemvalue="JUnit.Test1019.s1" />
+        <item itemvalue="JUnit.TestSeparators.dasd" />
       </list>
     </recent_temporary>
   </component>
@@ -283,7 +257,14 @@
       <option name="project" value="LOCAL" />
       <updated>1598812258608</updated>
     </task>
-    <option name="localTasksCounter" value="5" />
+    <task id="LOCAL-00005" summary="new db pattern, new object model">
+      <created>1607375054140</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1607375054140</updated>
+    </task>
+    <option name="localTasksCounter" value="6" />
     <servers />
   </component>
   <component name="Vcs.Log.History.Properties">
@@ -314,7 +295,8 @@
     <MESSAGE value="3" />
     <MESSAGE value="rewrite network layout" />
     <MESSAGE value="fix network layout" />
-    <option name="LAST_COMMIT_MESSAGE" value="fix network layout" />
+    <MESSAGE value="new db pattern, new object model" />
+    <option name="LAST_COMMIT_MESSAGE" value="new db pattern, new object model" />
   </component>
   <component name="WindowStateProjectService">
     <state x="599" y="267" key="#com.intellij.debugger.actions.ViewTextAction" timestamp="1601825450823">
@@ -333,10 +315,10 @@
       <screen x="0" y="0" width="1440" height="920" />
     </state>
     <state x="487" y="263" key="#com.intellij.fileTypes.FileTypeChooser/0.0.1440.920@0.0.1440.920" timestamp="1603742274089" />
-    <state x="574" y="180" key="#com.intellij.ide.util.MemberChooser" timestamp="1606946275651">
+    <state x="574" y="180" key="#com.intellij.ide.util.MemberChooser" timestamp="1608323536968">
       <screen x="0" y="0" width="1440" height="920" />
     </state>
-    <state x="574" y="180" key="#com.intellij.ide.util.MemberChooser/0.0.1440.920@0.0.1440.920" timestamp="1606946275651" />
+    <state x="574" y="180" key="#com.intellij.ide.util.MemberChooser/0.0.1440.920@0.0.1440.920" timestamp="1608323536968" />
     <state x="612" y="161" key="#com.intellij.ide.util.MemberChooser/0.0.1536.824@0.0.1536.824" timestamp="1600115118655" />
     <state x="484" y="234" key="#com.intellij.ide.util.TreeClassChooserDialog" timestamp="1603469268518">
       <screen x="0" y="0" width="1440" height="920" />
@@ -350,72 +332,96 @@
       <screen x="0" y="0" width="1440" height="920" />
     </state>
     <state x="504" y="330" width="432" height="267" key="#com.intellij.refactoring.move.moveClassesOrPackages.MoveClassesOrPackagesDialog.classes/0.0.1440.920@0.0.1440.920" timestamp="1602780990121" />
-    <state x="0" y="0" key="#com.intellij.refactoring.rename.AutomaticRenamingDialog" timestamp="1604951880126">
-      <screen x="0" y="0" width="1440" height="920" />
+    <state x="118" y="-1080" key="#com.intellij.refactoring.rename.AutomaticRenamingDialog" timestamp="1608479371262">
+      <screen x="118" y="-1080" width="1920" height="1040" />
     </state>
-    <state x="0" y="0" key="#com.intellij.refactoring.rename.AutomaticRenamingDialog/0.0.1440.920@0.0.1440.920" timestamp="1604951880126" />
+    <state x="118" y="-1080" key="#com.intellij.refactoring.rename.AutomaticRenamingDialog/0.0.1440.920/118.-1080.1920.1040@118.-1080.1920.1040" timestamp="1608479371262" />
+    <state x="0" y="0" key="#com.intellij.refactoring.rename.AutomaticRenamingDialog/0.0.1440.920@0.0.1440.920" timestamp="1608422537072" />
     <state x="0" y="0" key="#com.intellij.refactoring.rename.AutomaticRenamingDialog/0.0.1536.824@0.0.1536.824" timestamp="1600618070198" />
     <state x="518" y="236" key="#com.intellij.refactoring.safeDelete.UnsafeUsagesDialog" timestamp="1606673901916">
       <screen x="0" y="0" width="1440" height="920" />
     </state>
     <state x="518" y="236" key="#com.intellij.refactoring.safeDelete.UnsafeUsagesDialog/0.0.1440.920@0.0.1440.920" timestamp="1606673901916" />
-    <state x="653" y="165" key="#xdebugger.XInspectDialog" timestamp="1600691118002">
-      <screen x="0" y="0" width="1536" height="824" />
+    <state x="2976" y="208" key="#xdebugger.XInspectDialog" timestamp="1608286950863">
+      <screen x="2160" y="0" width="1920" height="1040" />
     </state>
+    <state x="2976" y="208" key="#xdebugger.XInspectDialog/0.0.1440.920/2160.0.1920.1040@2160.0.1920.1040" timestamp="1608286950863" />
     <state x="653" y="165" key="#xdebugger.XInspectDialog/0.0.1536.824@0.0.1536.824" timestamp="1600691118002" />
     <state x="469" y="305" key="ANALYSIS_DLG_com.intellij.analysis.BaseAnalysisAction$1" timestamp="1602782317840">
       <screen x="0" y="0" width="1440" height="920" />
     </state>
     <state x="469" y="305" key="ANALYSIS_DLG_com.intellij.analysis.BaseAnalysisAction$1/0.0.1440.920@0.0.1440.920" timestamp="1602782317840" />
-    <state x="491" y="10" key="CommitChangelistDialog2" timestamp="1598812257262">
-      <screen x="0" y="0" width="1536" height="824" />
+    <state width="775" height="468" key="DebuggerActiveHint" timestamp="1608286985711">
+      <screen x="2160" y="0" width="1920" height="1040" />
     </state>
-    <state x="491" y="10" key="CommitChangelistDialog2/0.0.1536.824@0.0.1536.824" timestamp="1598812257262" />
-    <state width="581" height="414" key="DebuggerActiveHint" timestamp="1607009419202">
-      <screen x="0" y="0" width="1440" height="920" />
-    </state>
+    <state width="775" height="468" key="DebuggerActiveHint/0.0.1440.920/2160.0.1920.1040@2160.0.1920.1040" timestamp="1608286985711" />
     <state width="581" height="414" key="DebuggerActiveHint/0.0.1440.920@0.0.1440.920" timestamp="1607009419202" />
     <state width="463" height="370" key="DebuggerActiveHint/0.0.1536.824@0.0.1536.824" timestamp="1601919389492" />
-    <state width="1397" height="296" key="GridCell.Tab.0.bottom" timestamp="1607374612748">
+    <state width="1397" height="339" key="GridCell.Tab.0.bottom" timestamp="1608756672829">
       <screen x="0" y="0" width="1440" height="920" />
     </state>
-    <state width="1397" height="296" key="GridCell.Tab.0.bottom/0.0.1440.920@0.0.1440.920" timestamp="1607374612748" />
+    <state width="1397" height="339" key="GridCell.Tab.0.bottom/0.0.1440.920/118.-1080.1920.1040@0.0.1440.920" timestamp="1608756672829" />
+    <state width="1877" height="216" key="GridCell.Tab.0.bottom/0.0.1440.920/118.-1080.1920.1040@118.-1080.1920.1040" timestamp="1608479935799" />
+    <state width="1877" height="368" key="GridCell.Tab.0.bottom/0.0.1440.920/2160.0.1920.1040@2160.0.1920.1040" timestamp="1608295125085" />
+    <state width="1411" height="216" key="GridCell.Tab.0.bottom/0.0.1440.920@0.0.1440.920" timestamp="1608481343502" />
     <state width="1493" height="231" key="GridCell.Tab.0.bottom/0.0.1536.824@0.0.1536.824" timestamp="1601928639264" />
-    <state width="1397" height="296" key="GridCell.Tab.0.center" timestamp="1607374612748">
+    <state width="1397" height="339" key="GridCell.Tab.0.center" timestamp="1608756672829">
       <screen x="0" y="0" width="1440" height="920" />
     </state>
-    <state width="1397" height="296" key="GridCell.Tab.0.center/0.0.1440.920@0.0.1440.920" timestamp="1607374612748" />
+    <state width="1397" height="339" key="GridCell.Tab.0.center/0.0.1440.920/118.-1080.1920.1040@0.0.1440.920" timestamp="1608756672829" />
+    <state width="1877" height="216" key="GridCell.Tab.0.center/0.0.1440.920/118.-1080.1920.1040@118.-1080.1920.1040" timestamp="1608479935799" />
+    <state width="1877" height="368" key="GridCell.Tab.0.center/0.0.1440.920/2160.0.1920.1040@2160.0.1920.1040" timestamp="1608295125085" />
+    <state width="1411" height="216" key="GridCell.Tab.0.center/0.0.1440.920@0.0.1440.920" timestamp="1608481343501" />
     <state width="1493" height="231" key="GridCell.Tab.0.center/0.0.1536.824@0.0.1536.824" timestamp="1601928639264" />
-    <state width="1397" height="296" key="GridCell.Tab.0.left" timestamp="1607374612748">
+    <state width="1397" height="339" key="GridCell.Tab.0.left" timestamp="1608756672829">
       <screen x="0" y="0" width="1440" height="920" />
     </state>
-    <state width="1397" height="296" key="GridCell.Tab.0.left/0.0.1440.920@0.0.1440.920" timestamp="1607374612748" />
+    <state width="1397" height="339" key="GridCell.Tab.0.left/0.0.1440.920/118.-1080.1920.1040@0.0.1440.920" timestamp="1608756672829" />
+    <state width="1877" height="216" key="GridCell.Tab.0.left/0.0.1440.920/118.-1080.1920.1040@118.-1080.1920.1040" timestamp="1608479935799" />
+    <state width="1877" height="368" key="GridCell.Tab.0.left/0.0.1440.920/2160.0.1920.1040@2160.0.1920.1040" timestamp="1608295125085" />
+    <state width="1411" height="216" key="GridCell.Tab.0.left/0.0.1440.920@0.0.1440.920" timestamp="1608481343501" />
     <state width="1493" height="231" key="GridCell.Tab.0.left/0.0.1536.824@0.0.1536.824" timestamp="1601928639264" />
-    <state width="1397" height="296" key="GridCell.Tab.0.right" timestamp="1607374612748">
+    <state width="1397" height="339" key="GridCell.Tab.0.right" timestamp="1608756672829">
       <screen x="0" y="0" width="1440" height="920" />
     </state>
-    <state width="1397" height="296" key="GridCell.Tab.0.right/0.0.1440.920@0.0.1440.920" timestamp="1607374612748" />
+    <state width="1397" height="339" key="GridCell.Tab.0.right/0.0.1440.920/118.-1080.1920.1040@0.0.1440.920" timestamp="1608756672829" />
+    <state width="1877" height="216" key="GridCell.Tab.0.right/0.0.1440.920/118.-1080.1920.1040@118.-1080.1920.1040" timestamp="1608479935799" />
+    <state width="1877" height="368" key="GridCell.Tab.0.right/0.0.1440.920/2160.0.1920.1040@2160.0.1920.1040" timestamp="1608295125085" />
+    <state width="1411" height="216" key="GridCell.Tab.0.right/0.0.1440.920@0.0.1440.920" timestamp="1608481343501" />
     <state width="1493" height="231" key="GridCell.Tab.0.right/0.0.1536.824@0.0.1536.824" timestamp="1601928639264" />
-    <state width="1397" height="219" key="GridCell.Tab.1.bottom" timestamp="1607025825345">
+    <state width="1397" height="339" key="GridCell.Tab.1.bottom" timestamp="1608756672829">
       <screen x="0" y="0" width="1440" height="920" />
     </state>
-    <state width="1397" height="219" key="GridCell.Tab.1.bottom/0.0.1440.920@0.0.1440.920" timestamp="1607025825345" />
+    <state width="1397" height="339" key="GridCell.Tab.1.bottom/0.0.1440.920/118.-1080.1920.1040@0.0.1440.920" timestamp="1608756672829" />
+    <state width="1877" height="393" key="GridCell.Tab.1.bottom/0.0.1440.920/2160.0.1920.1040@2160.0.1920.1040" timestamp="1608289892682" />
+    <state width="1397" height="339" key="GridCell.Tab.1.bottom/0.0.1440.920@0.0.1440.920" timestamp="1608472094624" />
     <state width="1493" height="231" key="GridCell.Tab.1.bottom/0.0.1536.824@0.0.1536.824" timestamp="1601928639264" />
-    <state width="1397" height="219" key="GridCell.Tab.1.center" timestamp="1607025825345">
+    <state width="1397" height="339" key="GridCell.Tab.1.center" timestamp="1608756672829">
       <screen x="0" y="0" width="1440" height="920" />
     </state>
-    <state width="1397" height="219" key="GridCell.Tab.1.center/0.0.1440.920@0.0.1440.920" timestamp="1607025825345" />
+    <state width="1397" height="339" key="GridCell.Tab.1.center/0.0.1440.920/118.-1080.1920.1040@0.0.1440.920" timestamp="1608756672829" />
+    <state width="1877" height="393" key="GridCell.Tab.1.center/0.0.1440.920/2160.0.1920.1040@2160.0.1920.1040" timestamp="1608289892682" />
+    <state width="1397" height="339" key="GridCell.Tab.1.center/0.0.1440.920@0.0.1440.920" timestamp="1608472094624" />
     <state width="1493" height="231" key="GridCell.Tab.1.center/0.0.1536.824@0.0.1536.824" timestamp="1601928639264" />
-    <state width="1397" height="219" key="GridCell.Tab.1.left" timestamp="1607025825345">
+    <state width="1397" height="339" key="GridCell.Tab.1.left" timestamp="1608756672829">
       <screen x="0" y="0" width="1440" height="920" />
     </state>
-    <state width="1397" height="219" key="GridCell.Tab.1.left/0.0.1440.920@0.0.1440.920" timestamp="1607025825345" />
+    <state width="1397" height="339" key="GridCell.Tab.1.left/0.0.1440.920/118.-1080.1920.1040@0.0.1440.920" timestamp="1608756672829" />
+    <state width="1877" height="393" key="GridCell.Tab.1.left/0.0.1440.920/2160.0.1920.1040@2160.0.1920.1040" timestamp="1608289892682" />
+    <state width="1397" height="339" key="GridCell.Tab.1.left/0.0.1440.920@0.0.1440.920" timestamp="1608472094624" />
     <state width="1493" height="231" key="GridCell.Tab.1.left/0.0.1536.824@0.0.1536.824" timestamp="1601928639264" />
-    <state width="1397" height="219" key="GridCell.Tab.1.right" timestamp="1607025825345">
+    <state width="1397" height="339" key="GridCell.Tab.1.right" timestamp="1608756672829">
       <screen x="0" y="0" width="1440" height="920" />
     </state>
-    <state width="1397" height="219" key="GridCell.Tab.1.right/0.0.1440.920@0.0.1440.920" timestamp="1607025825345" />
+    <state width="1397" height="339" key="GridCell.Tab.1.right/0.0.1440.920/118.-1080.1920.1040@0.0.1440.920" timestamp="1608756672829" />
+    <state width="1877" height="393" key="GridCell.Tab.1.right/0.0.1440.920/2160.0.1920.1040@2160.0.1920.1040" timestamp="1608289892682" />
+    <state width="1397" height="339" key="GridCell.Tab.1.right/0.0.1440.920@0.0.1440.920" timestamp="1608472094624" />
     <state width="1493" height="231" key="GridCell.Tab.1.right/0.0.1536.824@0.0.1536.824" timestamp="1601928639264" />
+    <state x="519" y="-858" key="IDE.errors.dialog" timestamp="1608315424065">
+      <screen x="118" y="-1080" width="1920" height="1040" />
+    </state>
+    <state x="519" y="-858" key="IDE.errors.dialog/0.0.1440.920/118.-1080.1920.1040@118.-1080.1920.1040" timestamp="1608315424065" />
+    <state x="301" y="196" key="IDE.errors.dialog/0.0.1440.920@0.0.1440.920" timestamp="1608244390480" />
     <state x="521" y="137" key="RollbackChangesDialog" timestamp="1604614549104">
       <screen x="0" y="0" width="1440" height="920" />
     </state>
@@ -429,10 +435,6 @@
       <screen x="0" y="0" width="1536" height="824" />
     </state>
     <state width="775" height="419" key="XDebugger.FullValuePopup/0.0.1536.824@0.0.1536.824" timestamp="1601825862946" />
-    <state x="578" y="329" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2" timestamp="1598905752950">
-      <screen x="0" y="0" width="1536" height="824" />
-    </state>
-    <state x="578" y="329" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2/0.0.1536.824@0.0.1536.824" timestamp="1598905752950" />
     <state x="526" y="115" key="com.intellij.testIntegration.createTest.CreateTestDialog" timestamp="1600699649616">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
@@ -449,14 +451,16 @@
       <screen x="0" y="0" width="1440" height="920" />
     </state>
     <state x="516" y="208" key="refactoring.ChangeSignatureDialog/0.0.1440.920@0.0.1440.920" timestamp="1606771081127" />
-    <state x="462" y="212" key="run.anything.popup" timestamp="1604668997510">
-      <screen x="0" y="0" width="1440" height="920" />
+    <state x="2776" y="240" key="run.anything.popup" timestamp="1608293346650">
+      <screen x="2160" y="0" width="1920" height="1040" />
     </state>
+    <state x="2776" y="240" key="run.anything.popup/0.0.1440.920/2160.0.1920.1040@2160.0.1920.1040" timestamp="1608293346650" />
     <state x="462" y="212" key="run.anything.popup/0.0.1440.920@0.0.1440.920" timestamp="1604668997510" />
     <state x="493" y="190" key="run.anything.popup/0.0.1536.824@0.0.1536.824" timestamp="1601916243533" />
-    <state x="467" y="199" width="672" height="601" key="search.everywhere.popup" timestamp="1607033417975">
-      <screen x="0" y="0" width="1440" height="920" />
+    <state x="2783" y="225" width="896" height="680" key="search.everywhere.popup" timestamp="1608285800550">
+      <screen x="2160" y="0" width="1920" height="1040" />
     </state>
+    <state x="2783" y="225" width="896" height="680" key="search.everywhere.popup/0.0.1440.920/2160.0.1920.1040@2160.0.1920.1040" timestamp="1608285800550" />
     <state x="467" y="199" width="672" height="601" key="search.everywhere.popup/0.0.1440.920@0.0.1440.920" timestamp="1607033417975" />
     <state x="498" y="178" width="672" height="538" key="search.everywhere.popup/0.0.1536.824@0.0.1536.824" timestamp="1600793285150" />
   </component>
@@ -467,6 +471,11 @@
           <properties class="java.lang.NullPointerException" package="java.lang" />
           <option name="timeStamp" value="36" />
         </breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/org/dav95s/openNTRIP/Tools/RTCM/MSG1006.java</url>
+          <line>39</line>
+          <option name="timeStamp" value="39" />
+        </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
     <watches-manager>

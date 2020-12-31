@@ -1,7 +1,5 @@
 package org.dav95s.openNTRIP.Databases.Models;
 
-import lombok.Getter;
-import lombok.Setter;
 import org.dav95s.openNTRIP.Databases.DataSource;
 import org.dav95s.openNTRIP.Tools.Config;
 
@@ -11,17 +9,12 @@ import java.util.HashSet;
 import java.util.Set;
 
 public class UserModel {
-    @Getter @Setter
     private int id;
-    @Getter @Setter
     private String username;
-    @Getter
     private String password;
-    @Getter @Setter
     private String email;
-    @Getter @Setter
     private Boolean active;
-    @Getter final private Set<UserGroupModel> listGroups = new HashSet<>();
+    final private Set<UserGroupModel> listGroups = new HashSet<>();
 
     public void setPassword(String password) {
         this.password = password;
@@ -168,5 +161,45 @@ public class UserModel {
             statement.setInt(2, group_id);
             statement.executeUpdate();
         }
+    }
+
+    public int getId() {
+        return this.id;
+    }
+
+    public String getUsername() {
+        return this.username;
+    }
+
+    public String getPassword() {
+        return this.password;
+    }
+
+    public String getEmail() {
+        return this.email;
+    }
+
+    public Boolean getActive() {
+        return this.active;
+    }
+
+    public Set<UserGroupModel> getListGroups() {
+        return this.listGroups;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public void setActive(Boolean active) {
+        this.active = active;
     }
 }

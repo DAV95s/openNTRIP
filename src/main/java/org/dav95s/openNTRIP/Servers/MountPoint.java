@@ -14,7 +14,7 @@ import java.util.Arrays;
 public class MountPoint {
     final static private Logger logger = LogManager.getLogger(MountPoint.class.getName());
 
-    final private MountPointModel model;
+    final protected MountPointModel model;
 
     public MountPoint(MountPointModel model) {
         this.model = model;
@@ -24,8 +24,9 @@ public class MountPoint {
         return model.getName();
     }
 
+
     public void clientAuthorization(User user) throws IOException, SQLException {
-        if (user.isAuthenticated()){
+        if (user.isAuthenticated()) {
             user.subscribe(model.getReferenceStation(user));
         }
 
@@ -60,4 +61,7 @@ public class MountPoint {
     public String toString() {
         return model.toString();
     }
+
 }
+
+

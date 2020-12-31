@@ -1,6 +1,6 @@
 package org.dav95s.openNTRIP.Clients.Passwords;
 
-import lombok.NonNull;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -17,7 +17,7 @@ public class None implements PasswordHandler {
     }
 
     @Override
-    public String hash(@NonNull String rawPassword) throws IllegalArgumentException {
+    public String hash(String rawPassword) throws IllegalArgumentException {
         if (rawPassword == null)
             throw new IllegalArgumentException("Can't hash of null!");
 

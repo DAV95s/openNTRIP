@@ -1,6 +1,5 @@
 package org.dav95s.openNTRIP.Clients.Passwords;
 
-import lombok.NonNull;
 
 import java.security.SecureRandom;
 import java.util.logging.Level;
@@ -38,8 +37,10 @@ public class BCrypt implements PasswordHandler {
 
     //todo need write
     @Override
-    public String hash(@NonNull String rawPassword) {
-
+    public String hash(String rawPassword) {
+        if (rawPassword == null) {
+            throw new IllegalArgumentException("Input null string!");
+        }
         if (rawPassword == "")
             throw new IllegalArgumentException("Can't hash of empty string!");
 

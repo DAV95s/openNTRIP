@@ -1,4 +1,6 @@
 
+import fr.devnied.bitlib.BitUtils;
+import fr.devnied.bitlib.BytesUtils;
 import org.dav95s.openNTRIP.Tools.Decoders.RTCM_3X;
 import org.junit.Test;
 
@@ -7,8 +9,15 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.ByteBuffer;
+import java.util.Arrays;
 
 public class Test1019 {
+
+    @Test
+    public void s1() {
+
+    }
+
     @Test
     public void start() {
         String path = "src/test/resources/1019.rtcm3";

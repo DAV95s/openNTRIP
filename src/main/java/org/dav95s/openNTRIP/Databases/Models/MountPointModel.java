@@ -1,75 +1,59 @@
 package org.dav95s.openNTRIP.Databases.Models;
 
-import lombok.Getter;
-import lombok.Setter;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.dav95s.openNTRIP.Clients.Authentication.IAuthenticator;
 import org.dav95s.openNTRIP.Clients.Authentication.Basic;
 import org.dav95s.openNTRIP.Clients.Authentication.Digest;
+import org.dav95s.openNTRIP.Clients.Authentication.IAuthenticator;
 import org.dav95s.openNTRIP.Clients.Authentication.None;
 import org.dav95s.openNTRIP.Clients.User;
 import org.dav95s.openNTRIP.Databases.DataSource;
 import org.dav95s.openNTRIP.ServerBootstrap;
-import org.dav95s.openNTRIP.Servers.MountPoint;
 import org.dav95s.openNTRIP.Servers.ReferenceStation;
 import org.dav95s.openNTRIP.Tools.NMEA;
 import org.json.simple.JSONObject;
 
 import java.sql.*;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.TreeMap;
 
 public class MountPointModel {
     final static private Logger logger = LogManager.getLogger(MountPointModel.class.getName());
 
-    @Getter @Setter
     private int id;
-    @Getter @Setter
     private String name;
-    @Getter @Setter
     private String identifier;
-    @Getter @Setter
     private String format;
-    @Getter @Setter
     private String format_details;
-    @Getter @Setter
     private int carrier;
-    @Getter @Setter
     private String nav_system;
-    @Getter @Setter
     private String network;
-    @Getter @Setter
     private String country;
-    @Getter @Setter
     private double lat;
-    @Getter @Setter
     private double lon;
-    @Getter @Setter
     private boolean nmea;
-    @Getter @Setter
     private boolean solution;
-    @Getter @Setter
     private String generator;
-    @Getter @Setter
     private String compression;
-    @Getter
     private IAuthenticator authenticator;
-    @Getter @Setter
     private boolean fee;
-    @Getter @Setter
     private int bitrate;
-    @Getter @Setter
     private String misc;
-    @Getter @Setter
     private int caster_id;
-    @Getter @Setter
     private boolean available;
-    @Getter @Setter
     private int plugin_id;
 
-    @Getter
+    private ArrayList<User> users = new ArrayList<>();
     private ArrayList<ReferenceStation> stationsPool;
 
+    public void addUser(User user) {
+        users.add(user);
+    }
+
+    public void removeUser(User user) {
+        users.remove(user);
+    }
 
     public MountPointModel() {
 
@@ -286,5 +270,181 @@ public class MountPointModel {
                 stationsPool = pool;
             }
         }
+    }
+
+    public int getId() {
+        return this.id;
+    }
+
+    public String getName() {
+        return this.name;
+    }
+
+    public String getIdentifier() {
+        return this.identifier;
+    }
+
+    public String getFormat() {
+        return this.format;
+    }
+
+    public String getFormat_details() {
+        return this.format_details;
+    }
+
+    public int getCarrier() {
+        return this.carrier;
+    }
+
+    public String getNav_system() {
+        return this.nav_system;
+    }
+
+    public String getNetwork() {
+        return this.network;
+    }
+
+    public String getCountry() {
+        return this.country;
+    }
+
+    public double getLat() {
+        return this.lat;
+    }
+
+    public double getLon() {
+        return this.lon;
+    }
+
+    public boolean isNmea() {
+        return this.nmea;
+    }
+
+    public boolean isSolution() {
+        return this.solution;
+    }
+
+    public String getGenerator() {
+        return this.generator;
+    }
+
+    public String getCompression() {
+        return this.compression;
+    }
+
+    public IAuthenticator getAuthenticator() {
+        return this.authenticator;
+    }
+
+    public boolean isFee() {
+        return this.fee;
+    }
+
+    public int getBitrate() {
+        return this.bitrate;
+    }
+
+    public String getMisc() {
+        return this.misc;
+    }
+
+    public int getCaster_id() {
+        return this.caster_id;
+    }
+
+    public boolean isAvailable() {
+        return this.available;
+    }
+
+    public int getPlugin_id() {
+        return this.plugin_id;
+    }
+
+    public ArrayList<ReferenceStation> getStationsPool() {
+        return this.stationsPool;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setIdentifier(String identifier) {
+        this.identifier = identifier;
+    }
+
+    public void setFormat(String format) {
+        this.format = format;
+    }
+
+    public void setFormat_details(String format_details) {
+        this.format_details = format_details;
+    }
+
+    public void setCarrier(int carrier) {
+        this.carrier = carrier;
+    }
+
+    public void setNav_system(String nav_system) {
+        this.nav_system = nav_system;
+    }
+
+    public void setNetwork(String network) {
+        this.network = network;
+    }
+
+    public void setCountry(String country) {
+        this.country = country;
+    }
+
+    public void setLat(double lat) {
+        this.lat = lat;
+    }
+
+    public void setLon(double lon) {
+        this.lon = lon;
+    }
+
+    public void setNmea(boolean nmea) {
+        this.nmea = nmea;
+    }
+
+    public void setSolution(boolean solution) {
+        this.solution = solution;
+    }
+
+    public void setGenerator(String generator) {
+        this.generator = generator;
+    }
+
+    public void setCompression(String compression) {
+        this.compression = compression;
+    }
+
+    public void setFee(boolean fee) {
+        this.fee = fee;
+    }
+
+    public void setBitrate(int bitrate) {
+        this.bitrate = bitrate;
+    }
+
+    public void setMisc(String misc) {
+        this.misc = misc;
+    }
+
+    public void setCaster_id(int caster_id) {
+        this.caster_id = caster_id;
+    }
+
+    public void setAvailable(boolean available) {
+        this.available = available;
+    }
+
+    public void setPlugin_id(int plugin_id) {
+        this.plugin_id = plugin_id;
     }
 }

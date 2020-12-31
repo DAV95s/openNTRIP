@@ -1,7 +1,6 @@
 package org.dav95s.openNTRIP.Servers;
 
 import com.github.pbbl.heap.ByteBufferPool;
-import lombok.SneakyThrows;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.dav95s.openNTRIP.Clients.User;
@@ -214,14 +213,18 @@ public class ReferenceStation implements INetworkHandler {
     }
 
     private final TimerTask updateModel = new TimerTask() {
-        @SneakyThrows
+
         @Override
         public void run() {
             try {
                 model.read();
             } catch (SQLException e) {
                 cancel();
-                remove();
+                try {
+                    remove();
+                } catch (IOException ioException) {
+                    ioException.printStackTrace();
+                }
                 logger.error(e);
             }
         }

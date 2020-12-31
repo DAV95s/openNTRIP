@@ -1,46 +1,24 @@
 package org.dav95s.openNTRIP.Databases.Models;
 
-import lombok.Getter;
-import lombok.Setter;
 import org.dav95s.openNTRIP.Databases.DataSource;
 import org.dav95s.openNTRIP.Tools.NMEA;
 
 import java.sql.*;
 
 public class ReferenceStationModel {
-    @Getter @Setter
     private int id;
-    @Getter @Setter
     private String name;
-    @Getter @Setter
     private String identifier;
-    @Getter @Setter
     private String format;
-    @Getter @Setter
     private String format_details;
-    @Getter @Setter
     private int carrier;
-    @Getter @Setter
     private String nav_system;
-    @Getter @Setter
     private String country;
-    //    @Getter @Setter
-//    private double lat;
-//    @Getter @Setter
-//    private double lon;
-//    @Getter @Setter
-//    private double alt;
-    @Getter @Setter
     private int bitrate;
-    @Getter @Setter
     private String misc;
-    @Getter @Setter
     private boolean online;
-    @Getter @Setter
     private String password;
-    @Getter @Setter
     private int hz;
-    @Getter @Setter
     private NMEA.GPSPosition position = new NMEA().getPosition();
 
     public ReferenceStationModel() {
@@ -192,5 +170,117 @@ public class ReferenceStationModel {
                 ", online=" + online +
                 ", position=" + position +
                 '}';
+    }
+
+    public int getId() {
+        return this.id;
+    }
+
+    public String getName() {
+        return this.name;
+    }
+
+    public String getIdentifier() {
+        return this.identifier;
+    }
+
+    public String getFormat() {
+        return this.format;
+    }
+
+    public String getFormat_details() {
+        return this.format_details;
+    }
+
+    public int getCarrier() {
+        return this.carrier;
+    }
+
+    public String getNav_system() {
+        return this.nav_system;
+    }
+
+    public String getCountry() {
+        return this.country;
+    }
+
+    public int getBitrate() {
+        return this.bitrate;
+    }
+
+    public String getMisc() {
+        return this.misc;
+    }
+
+    public boolean isOnline() {
+        return this.online;
+    }
+
+    public String getPassword() {
+        return this.password;
+    }
+
+    public int getHz() {
+        return this.hz;
+    }
+
+    public NMEA.GPSPosition getPosition() {
+        return this.position;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setIdentifier(String identifier) {
+        this.identifier = identifier;
+    }
+
+    public void setFormat(String format) {
+        this.format = format;
+    }
+
+    public void setFormat_details(String format_details) {
+        this.format_details = format_details;
+    }
+
+    public void setCarrier(int carrier) {
+        this.carrier = carrier;
+    }
+
+    public void setNav_system(String nav_system) {
+        this.nav_system = nav_system;
+    }
+
+    public void setCountry(String country) {
+        this.country = country;
+    }
+
+    public void setBitrate(int bitrate) {
+        this.bitrate = bitrate;
+    }
+
+    public void setMisc(String misc) {
+        this.misc = misc;
+    }
+
+    public void setOnline(boolean online) {
+        this.online = online;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public void setHz(int hz) {
+        this.hz = hz;
+    }
+
+    public void setPosition(NMEA.GPSPosition position) {
+        this.position = position;
     }
 }

@@ -102,6 +102,7 @@ public class User implements INetworkHandler {
     public void run() {
         if (dataQueue.peek() == null)
             return;
+
         ByteBuffer buffer = dataQueue.poll();
         String line = StandardCharsets.UTF_8.decode(buffer).toString();
         bufferPool.give(buffer);

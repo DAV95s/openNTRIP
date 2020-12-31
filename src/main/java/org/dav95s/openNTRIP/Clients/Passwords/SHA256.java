@@ -1,6 +1,6 @@
 package org.dav95s.openNTRIP.Clients.Passwords;
 
-import lombok.NonNull;
+
 
 import java.security.MessageDigest;
 import java.util.logging.Level;
@@ -27,7 +27,7 @@ public class SHA256 implements PasswordHandler {
     }
 
     @Override
-    public String hash(@NonNull String rawPassword) {
+    public String hash(String rawPassword) {
         if (rawPassword == "")
             throw new IllegalArgumentException("Can't hash of empty string!");
 

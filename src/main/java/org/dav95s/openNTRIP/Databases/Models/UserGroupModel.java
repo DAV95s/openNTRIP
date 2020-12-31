@@ -1,7 +1,5 @@
 package org.dav95s.openNTRIP.Databases.Models;
 
-import lombok.Getter;
-import lombok.Setter;
 import org.dav95s.openNTRIP.Databases.DataSource;
 
 import java.sql.Connection;
@@ -13,11 +11,8 @@ import java.util.Set;
 
 public class UserGroupModel {
 
-    @Getter @Setter
     private int group_id;
-    @Getter @Setter
     private String name;
-    @Getter @Setter
     private String description;
 
     public Set<UserGroupModel> readAllGroups() throws SQLException {
@@ -39,5 +34,29 @@ public class UserGroupModel {
                 return groups;
             }
         }
+    }
+
+    public int getGroup_id() {
+        return this.group_id;
+    }
+
+    public String getName() {
+        return this.name;
+    }
+
+    public String getDescription() {
+        return this.description;
+    }
+
+    public void setGroup_id(int group_id) {
+        this.group_id = group_id;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 }

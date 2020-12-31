@@ -1,11 +1,10 @@
 package org.dav95s.openNTRIP.Tools;
 
-import lombok.SneakyThrows;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.dav95s.openNTRIP.Databases.Models.ReferenceStationModel;
 import org.dav95s.openNTRIP.Servers.ReferenceStation;
-import org.dav95s.openNTRIP.Tools.RTCM.MSG1005;
+import org.dav95s.openNTRIP.Tools.RTCM.MSG1006;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
@@ -15,6 +14,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.sql.SQLException;
 import java.util.Locale;
 import java.util.TimerTask;
 
@@ -33,7 +33,6 @@ public class AnalyzeTasks {
     }
 
     public TimerTask rtcmVersion = new TimerTask() {
-        @SneakyThrows
         @Override
         public void run() {
             if (messagePool.bytePool.size() == 0) {
@@ -68,14 +67,18 @@ public class AnalyzeTasks {
                 model.setFormat("RTCM 3.0");
             }
 
-            model.update();
+            try {
+                model.update();
+            } catch (SQLException throwables) {
+                throwables.printStackTrace();
+            }
 
             logger.debug(referenceStation.getName() + ": update RTCM Version");
         }
     };
 
     public TimerTask navSystems = new TimerTask() {
-        @SneakyThrows
+
         @Override
         public void run() {
             String navSystems = "";
@@ -113,13 +116,16 @@ public class AnalyzeTasks {
             } else {
                 model.setNav_system("");
             }
-            model.update();
+            try {
+                model.update();
+            } catch (SQLException throwables) {
+                throwables.printStackTrace();
+            }
             logger.debug(referenceStation.getName() + ": update Nav Systems -> " + model.getNav_system());
         }
     };
 
     public TimerTask carrier = new TimerTask() {
-        @SneakyThrows
         @Override
         public void run() {
             int carrier = 0;
@@ -141,25 +147,29 @@ public class AnalyzeTasks {
             }
 
             model.setCarrier(carrier);
-            model.update();
+            try {
+                model.update();
+            } catch (SQLException throwables) {
+                throwables.printStackTrace();
+            }
             logger.debug(referenceStation.getName() + ": update Carrier");
         }
     };
 
     public TimerTask position = new TimerTask() {
-        @SneakyThrows
+
         @Override
         public void run() {
             double[] lla;
 
             if (messagePool.bytePool.containsKey(1005)) {
 
-                MSG1005 msg = new MSG1005(messagePool.bytePool.get(1005));
+                MSG1006 msg = new MSG1006(messagePool.bytePool.get(1005));
                 lla = ecef2lla(msg.getECEFX(), msg.getECEFY(), msg.getECEFZ());
 
             } else if (messagePool.bytePool.containsKey(1006)) {
 
-                MSG1005 msg = new MSG1005(messagePool.bytePool.get(1006));
+                MSG1006 msg = new MSG1006(messagePool.bytePool.get(1006));
                 lla = ecef2lla(msg.getECEFX(), msg.getECEFY(), msg.getECEFZ());
 
             } else {
@@ -168,19 +178,27 @@ public class AnalyzeTasks {
 
             model.getPosition().lat = (float) lla[0];
             model.getPosition().lon = (float) lla[1];
-            model.update();
+            try {
+                model.update();
+            } catch (SQLException throwables) {
+                throwables.printStackTrace();
+            }
             logger.debug(referenceStation.getName() + ": update position " + position.toString());
         }
     };
 
     public TimerTask positionMetaInfo = new TimerTask() {
-        @SneakyThrows
+
         @Override
         public void run() {
             if (model.getPosition().lat == 0.0d || model.getPosition().lon == 0.0d) {
                 model.setIdentifier("");
                 model.setCountry("");
-                model.update();
+                try {
+                    model.update();
+                } catch (SQLException throwables) {
+                    throwables.printStackTrace();
+                }
                 return;
             }
 
@@ -209,16 +227,22 @@ public class AnalyzeTasks {
 
             } catch (ParseException ex) {
                 ex.printStackTrace();
+            } catch (SQLException throwables) {
+                throwables.printStackTrace();
             }
         }
     };
 
     public TimerTask FormatDetails = new TimerTask() {
-        @SneakyThrows
+
         @Override
         public void run() {
-            model.setFormat_details(messagePool.toString());
-            model.update();
+            try {
+                model.setFormat_details(messagePool.toString());
+                model.update();
+            } catch (SQLException throwables) {
+                throwables.printStackTrace();
+            }
         }
     };
 
