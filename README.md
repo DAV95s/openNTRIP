@@ -19,9 +19,5 @@ Password: password
 You can use RtkLib for retranslating gnns data to openNTRIP.
 
 ## Roadmap
-1. Test user nmea processing.
-2. Save rtcm stream and convert to RINEX format.
-3. To implement console commands.
-4. Add support RTCM 1021-1027 message.
-5. Add support FKP.
-6. Take over the world.
+1. Add support RTCM 1021-1027 message.
+2. Add support FKP.
