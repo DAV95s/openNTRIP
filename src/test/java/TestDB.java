@@ -23,6 +23,8 @@ public class TestDB {
         model.setPort(44444);
         Assert.assertTrue(model.read());
         Assert.assertEquals(2101, model.getPort());
+        Assert.assertEquals(1, model.getGroup_id());
+        Assert.assertFalse(model.isStatus());
 
         model.setPort(123);
         Assert.assertTrue(model.update());

@@ -1,5 +1,7 @@
 package org.dav95s.openNTRIP.Tools;
 
+import java.util.Arrays;
+
 public class BitUtil {
 
     private static final int[] LOW = new int[]{0, 1, 3, 7, 15, 31, 63, 127, 255};
@@ -86,6 +88,43 @@ public class BitUtil {
             if ((data & 1) == 1)
                 result++;
         return result;
+    }
+
+    public static byte[] getBytes(byte[] data, int startOffset, final int lengthIn) {
+        System.out.println((byte) (-6 >>> 5));
+        System.out.println(Arrays.toString(data));
+        int pointer = startOffset / 8;
+        int shift = startOffset % 8;
+        System.out.println(pointer);
+        System.out.println(shift);
+        byte[] response = new byte[lengthIn];
+        for (int i = 0; i < lengthIn; i++) {
+//            System.out.println("left " + (byte) (data[pointer + i] << shift));
+//            System.out.println("right " + (byte) (data[pointer + i + 1] >> (8 - shift) & 0xf));
+            response[i] = (byte) (data[pointer + i] << shift);
+            response[i] |= (byte) ((data[pointer + i + 1] >> (8 - shift)) & 0xf);
+        }
+
+        return response;
+    }
+
+    public static String toBinaryString(byte n) {
+        StringBuilder sb = new StringBuilder("00000000");
+        for (int bit = 0; bit < 8; bit++) {
+            if (((n >> bit) & 1) > 0) {
+                sb.setCharAt(7 - bit, '1');
+            }
+        }
+        return sb.toString();
+    }
+
+    public static String toBinaryString(byte[] array) {
+        StringBuilder sb = new StringBuilder();
+        for (byte b : array) {
+            sb.append(toBinaryString(b));
+            sb.append(" ");
+        }
+        return sb.toString();
     }
 
     private static final int[] crc24 = new int[]{

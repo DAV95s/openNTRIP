@@ -24,14 +24,14 @@ import java.util.concurrent.CopyOnWriteArrayList;
  * After successful connect, setSocket() method is called.
  */
 public class ReferenceStation implements INetworkHandler {
-    private static final int BYTE_BUFFER_SIZE = 32768;
+    static final private int BYTE_BUFFER_SIZE = 32768;
     static final private Logger logger = LogManager.getLogger(ReferenceStation.class.getName());
     static final private Timer timer = new Timer();
     static final private ByteBufferPool bufferPool = new ByteBufferPool();
     final private CopyOnWriteArrayList<User> subscribers = new CopyOnWriteArrayList<>();
     final private Queue<ByteBuffer> dataQueue = new ArrayDeque<>();
+    final private ReferenceStationModel model;
 
-    private final ReferenceStationModel model;
     private Socket socket;
     private Analyzer analyzer;
     private IDecoder decoder = new RTCM_3X();
@@ -46,7 +46,7 @@ public class ReferenceStation implements INetworkHandler {
     public void close() {
         try {
             this.analyzer.close();
-            this.streamSaver.close();
+//            this.streamSaver.close();
             this.socket.close();
             this.model.setOnline(false);
             this.model.update();
@@ -83,15 +83,17 @@ public class ReferenceStation implements INetworkHandler {
 
         try {
             MessagePack messagePack = decoder.separate(buffer);
+            this.model.fixPosition(messagePack);
             this.sendMessagesToClients(messagePack);
             this.analyzer.analyze(messagePack);
-            this.streamSaver.save(messagePack);
 
             if (logger.isDebugEnabled()) {
                 JSONObject object = new JSONObject();
-                object.put("from", ReferenceStation.class.getName());
                 object.put("read", buffer.limit());
                 object.put("messages", messagePack.toString());
+                object.put("queue", this.dataQueue.size());
+                object.put("bufferPool", bufferPool.toString());
+                object.put("fixPosition", model.isFixPosition());
                 logger.debug(object);
             }
 
@@ -99,7 +101,6 @@ public class ReferenceStation implements INetworkHandler {
             logger.info(model.getName() + " wrong decoder: " + decoder.getType());
             changeDecoder();
         }
-
         bufferPool.give(buffer);
     }
 
@@ -140,16 +141,20 @@ public class ReferenceStation implements INetworkHandler {
 
     private boolean setSocket(Socket socket) {
         if (this.socket == null || !this.socket.isRegistered()) {
-            this.decoder = new RTCM_3X();
-            this.analyzer = new Analyzer(this);
-            this.streamSaver = new StreamSaver(this);
-            this.socket = socket;
-            this.model.setOnline(true);
+            socketInit(socket);
             logger.info(socket.toString() + model.getName() + " logged in.");
             return true;
         } else {
             return false;
         }
+    }
+
+    private void socketInit(Socket socket) {
+        this.decoder = new RTCM_3X();
+        this.analyzer = new Analyzer(this);
+        this.streamSaver = new StreamSaver(this);
+        this.socket = socket;
+        this.model.setOnline(true);
     }
 
     /**
@@ -176,7 +181,6 @@ public class ReferenceStation implements INetworkHandler {
 
         if (logger.isDebugEnabled()) {
             JSONObject object = new JSONObject();
-            object.put("from", "RefStation - " + this.getName());
             object.put("add client", user);
             object.put("contains", Arrays.toString(subscribers.toArray()));
             logger.debug(object);
@@ -188,7 +192,6 @@ public class ReferenceStation implements INetworkHandler {
 
         if (logger.isDebugEnabled()) {
             JSONObject object = new JSONObject();
-            object.put("from", "RefStation - " + this.getName());
             object.put("remove client", user);
             object.put("contains", Arrays.toString(subscribers.toArray()));
             logger.debug(object);
@@ -218,6 +221,7 @@ public class ReferenceStation implements INetworkHandler {
         public void run() {
             try {
                 model.read();
+                model.readFixPosition();
             } catch (SQLException e) {
                 cancel();
                 try {

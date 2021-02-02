@@ -7,9 +7,7 @@ import java.io.*;
 import java.nio.ByteBuffer;
 
 public class Test1004 {
-    String path = "src/test/resources/RTCM_30";
-
-    File file = new File(path);
+    String path = "src/test/resources/RTCM_32";
 
     @Test
     public void start() {
@@ -23,7 +21,7 @@ public class Test1004 {
             RTCM_3X decoder = new RTCM_3X();
 
             MessagePack messages = decoder.separate(byteBuffer);
-            byte[] bytes = messages.getMessageByNmb(1005).getBytes();
+            byte[] bytes = messages.getMessageByNmb(1006).getBytes();
 
 
             MSG1006 msg = new MSG1006(bytes);
@@ -34,7 +32,7 @@ public class Test1004 {
             }
             System.out.println(raw);
 
-            byte[] bytes2 = msg.Write();
+            byte[] bytes2 = msg.write();
             String raw2 = "";
             for (byte i : bytes2) {
                 raw2 += msg.toBinaryString(i) + " ";

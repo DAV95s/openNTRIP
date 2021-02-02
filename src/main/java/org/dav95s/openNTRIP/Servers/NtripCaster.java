@@ -77,7 +77,7 @@ public class NtripCaster {
         MountPoint mountPoint = this.getMountpoint(user.getHttpHeader("GET"));
         logger.debug(user.toString() + " requested mountpoint " + user.getHttpHeader("GET"));
 
-        //requested mountpoint not exists. Send sourcetable.
+        //The requested point does not exist. Send sourcetable.
         if (mountPoint == null) {
             user.write(ByteBuffer.wrap(sourceTable()));
             user.close();
@@ -96,5 +96,9 @@ public class NtripCaster {
                 return mp;
         }
         return null;
+    }
+
+    public int getId() {
+        return model.getId();
     }
 }

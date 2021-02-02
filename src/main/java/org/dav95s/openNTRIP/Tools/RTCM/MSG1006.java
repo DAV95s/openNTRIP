@@ -2,6 +2,8 @@ package org.dav95s.openNTRIP.Tools.RTCM;
 
 import org.dav95s.openNTRIP.Tools.BitUtil;
 
+import java.math.BigDecimal;
+
 public class MSG1006 extends RTCM {
 
     private int messageNumber;
@@ -43,7 +45,7 @@ public class MSG1006 extends RTCM {
         }
     }
 
-    public byte[] Write() {
+    public byte[] write() {
         byte[] buffer;
 
         if (messageNumber == 1006) {
@@ -54,7 +56,10 @@ public class MSG1006 extends RTCM {
 
         buffer[0] = -45;
         buffer[1] = 0;
-        buffer[2] = 19;
+        if (messageNumber == 1005)
+            buffer[2] = 19;
+        if (messageNumber == 1006)
+            buffer[2] = 21;
         buffer[3] = (byte) (messageNumber >> 4);
         buffer[4] = (byte) (messageNumber << 4);
         buffer[4] |= (byte) (stationID >> 8);
@@ -86,7 +91,7 @@ public class MSG1006 extends RTCM {
         if (messageNumber == 1006) {
             buffer[22] = (byte) (antennaHeight >> 8);
             buffer[23] = (byte) (antennaHeight);
-            byte[] crc = BitUtil.crc24q(buffer, 22, 0);
+            byte[] crc = BitUtil.crc24q(buffer, 24, 0);
             buffer[24] = crc[0];
             buffer[25] = crc[1];
             buffer[26] = crc[2];
@@ -101,7 +106,7 @@ public class MSG1006 extends RTCM {
 
     @Override
     public String toString() {
-        return "MSG1005{" +
+        return "MSG1006{" +
                 "messageNumber=" + messageNumber +
                 ", stationID=" + stationID +
                 ", ITRFyear=" + ITRF +
@@ -115,6 +120,7 @@ public class MSG1006 extends RTCM {
                 ", ECEFY=" + ECEFY +
                 ", quarterCycle=" + quarterCycle +
                 ", ECEFZ=" + ECEFZ +
+                ", AntennaHeigth=" + antennaHeight +
                 '}';
     }
 
@@ -172,5 +178,29 @@ public class MSG1006 extends RTCM {
 
     public double getAntennaHeight() {
         return antennaHeight;
+    }
+
+    public void setMessageNumber(int messageNumber) {
+        this.messageNumber = messageNumber;
+    }
+
+    public void setStationID(int stationID) {
+        this.stationID = stationID;
+    }
+
+    public void setECEFX(BigDecimal ECEFX) {
+        this.ECEFX = ECEFX.multiply(BigDecimal.valueOf(10000)).longValue();
+    }
+
+    public void setECEFY(BigDecimal ECEFY) {
+        this.ECEFY = ECEFY.multiply(BigDecimal.valueOf(10000)).longValue();
+    }
+
+    public void setECEFZ(BigDecimal ECEFZ) {
+        this.ECEFZ = ECEFZ.multiply(BigDecimal.valueOf(10000)).longValue();
+    }
+
+    public void setAntennaHeight(BigDecimal antennaHeight) {
+        this.antennaHeight = antennaHeight.multiply(BigDecimal.valueOf(10000)).intValue();
     }
 }

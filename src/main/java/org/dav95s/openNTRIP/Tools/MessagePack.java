@@ -26,6 +26,10 @@ public class MessagePack {
         messagePack.removeIf(msg -> msg.nmb == nmb);
     }
 
+    public void removeMessage(Message msg) {
+        messagePack.remove(msg);
+    }
+
     public ByteBuffer getByteBuffer() {
         int capacity = 0;
         for (Message msg : messagePack) {

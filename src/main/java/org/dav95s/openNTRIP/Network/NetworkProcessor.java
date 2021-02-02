@@ -86,7 +86,7 @@ public class NetworkProcessor implements Runnable {
                             handler.readChannel();
                             worker.addWork(handler);
                         } catch (IOException e) {
-                            logger.error("Event Error", e);
+                            logger.error(e);
                             handler.close();
                             selectionKey.cancel();
                         }

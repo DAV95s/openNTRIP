@@ -1,6 +1,5 @@
 
-import fr.devnied.bitlib.BitUtils;
-import fr.devnied.bitlib.BytesUtils;
+
 import org.dav95s.openNTRIP.Tools.Decoders.RTCM_3X;
 import org.junit.Test;
 

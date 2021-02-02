@@ -1,8 +1,12 @@
 package org.dav95s.openNTRIP.Databases.Models;
 
 import org.dav95s.openNTRIP.Databases.DataSource;
+import org.dav95s.openNTRIP.Tools.Message;
+import org.dav95s.openNTRIP.Tools.MessagePack;
 import org.dav95s.openNTRIP.Tools.NMEA;
+import org.dav95s.openNTRIP.Tools.RTCM.MSG1006;
 
+import java.math.BigDecimal;
 import java.sql.*;
 
 public class ReferenceStationModel {
@@ -20,9 +24,9 @@ public class ReferenceStationModel {
     private String password;
     private int hz;
     private NMEA.GPSPosition position = new NMEA().getPosition();
+    private FixPosition fixPosition;
 
     public ReferenceStationModel() {
-
     }
 
     public ReferenceStationModel(int id) throws SQLException {
@@ -60,6 +64,12 @@ public class ReferenceStationModel {
             return id;
         } catch (SQLException e) {
             throw new SQLException("Can't create new reference station", e);
+        }
+    }
+
+    public void fixPosition(MessagePack messagePack) {
+        if (fixPosition != null) {
+            fixPosition.handle(messagePack);
         }
     }
 
@@ -172,6 +182,7 @@ public class ReferenceStationModel {
                 '}';
     }
 
+
     public int getId() {
         return this.id;
     }
@@ -282,5 +293,92 @@ public class ReferenceStationModel {
 
     public void setPosition(NMEA.GPSPosition position) {
         this.position = position;
+    }
+
+    public boolean isFixPosition() {
+        return this.fixPosition != null;
+    }
+
+    public boolean readFixPosition() throws SQLException {
+        String sql = "SELECT * FROM `reference_stations_fix_position` WHERE `station_id` = ?";
+
+        try (Connection con = DataSource.getConnection();
+             PreparedStatement statement = con.prepareStatement(sql)) {
+
+            statement.setInt(1, id);
+
+            try (ResultSet rs = statement.executeQuery()) {
+                if (rs.next()) {
+                    if (fixPosition == null) {
+                        this.fixPosition = new FixPosition();
+                    }
+                    this.fixPosition.setECEFX(rs.getBigDecimal("ECEF_X"));
+                    this.fixPosition.setECEFY(rs.getBigDecimal("ECEF_Y"));
+                    this.fixPosition.setECEFZ(rs.getBigDecimal("ECEF_Z"));
+                    this.fixPosition.setAntennaHeight(rs.getBigDecimal("antenna_height"));
+                    return true;
+                } else {
+                    return false;
+                }
+            }
+        } catch (SQLException e) {
+            throw new SQLException("Can't read from DB", e);
+        }
+    }
+}
+
+class FixPosition {
+    BigDecimal ECEFX;
+    BigDecimal ECEFY;
+    BigDecimal ECEFZ;
+    BigDecimal antennaHeight;
+    int stationID;
+
+    public MessagePack handle(MessagePack pack) {
+
+        Message msg = pack.getMessageByNmb(1005);
+
+        if (msg != null) {
+            MSG1006 msg_new = new MSG1006(msg.getBytes());
+            msg_new.setECEFX(ECEFX);
+            msg_new.setECEFY(ECEFY);
+            msg_new.setECEFZ(ECEFZ);
+            pack.removeMessage(msg);
+            pack.addMessage(1005, msg_new.write());
+        }
+
+        msg = pack.getMessageByNmb(1006);
+
+        if (msg != null) {
+            MSG1006 msg_new = new MSG1006(msg.getBytes());
+            msg_new.setECEFX(ECEFX);
+            msg_new.setECEFY(ECEFY);
+            msg_new.setECEFZ(ECEFZ);
+            msg_new.setAntennaHeight(antennaHeight);
+            pack.removeMessage(msg);
+            pack.addMessage(1006, msg_new.write());
+        }
+
+        return pack;
+    }
+
+    public void setECEFX(BigDecimal ECEFX) {
+        this.ECEFX = ECEFX;
+    }
+
+    public void setECEFY(BigDecimal ECEFY) {
+        this.ECEFY = ECEFY;
+    }
+
+    public void setECEFZ(BigDecimal ECEFZ) {
+        this.ECEFZ = ECEFZ;
+    }
+
+    public void setAntennaHeight(BigDecimal antennaHeight) {
+        this.antennaHeight = antennaHeight;
+    }
+
+    public void setStationID(int stationID) {
+        this.stationID = stationID;
     }
 }

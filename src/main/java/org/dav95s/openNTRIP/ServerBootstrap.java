@@ -13,58 +13,69 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.Set;
-import java.util.Timer;
+import java.util.*;
 
 public class ServerBootstrap {
     final static private Logger logger = LogManager.getLogger(ServerBootstrap.class.getName());
 
     private static ServerBootstrap instance;
 
-    private Timer timer = new Timer();
+    private static Timer timer = new Timer();
 
     private ServerBootstrap() {
 
     }
 
     public static void start() throws IOException, SQLException {
-        //Casters init
-        ArrayList<Integer>  listId = readAllReferenceStation();
-        for (Integer id : listId) {
-            referenceStations.add(new ReferenceStation(new ReferenceStationModel(id)));
-        }
-
-        listId = readIdALlCasters();
-        for (Integer id : listId) {
-            casters.add(new NtripCaster(new NtripCasterModel(id)));
-        }
+        timer.schedule(referenceStationCreator,0,5000 );
+        timer.schedule(casterCreator,0,7500 );
     }
 
     private static ArrayList<NtripCaster> casters = new ArrayList<>();
 
-    private static ArrayList<Integer> readIdALlCasters() {
-        String sql = "SELECT `id` FROM casters";
-        ArrayList<Integer> listId = new ArrayList<>();
-
-        try (Connection con = DataSource.getConnection();
-             PreparedStatement statement = con.prepareStatement(sql)) {
-
-            try (ResultSet rs = statement.executeQuery()) {
-                while (rs.next()) {
-                    listId.add(rs.getInt("id"));
+    static TimerTask referenceStationCreator = new TimerTask() {
+        @Override
+        public void run() {
+            ArrayList<Integer> idList = readAllReferenceStation();
+            for (Integer id : idList) {
+                if (getReferenceStationById(id) == null) {
+                    try {
+                        referenceStations.add(new ReferenceStation(new ReferenceStationModel(id)));
+                    } catch (SQLException e) {
+                        logger.error(e);
+                    }
                 }
             }
-
-        } catch (SQLException e) {
-            logger.fatal("Can't read data from database!", e);
         }
-        return listId;
-    }
+    };
+
+    static TimerTask casterCreator = new TimerTask() {
+        @Override
+        public void run() {
+            ArrayList<Integer> idList = readIdALlCasters();
+            for (Integer id : idList) {
+                if (getCasterById(id) == null) {
+                    try {
+                        casters.add(new NtripCaster(new NtripCasterModel(id)));
+                    } catch (IOException | SQLException e) {
+                        logger.error(e);
+                    }
+                }
+            }
+        }
+    };
 
     public static void removeCaster(NtripCaster caster) {
         casters.remove(caster);
+    }
+
+    public static NtripCaster getCasterById(int id) {
+        for (NtripCaster caster : casters) {
+            if (caster.getId() == id) {
+                return caster;
+            }
+        }
+        return null;
     }
 
 
@@ -84,6 +95,26 @@ public class ServerBootstrap {
                 return station;
         }
         throw new IllegalArgumentException();
+    }
+
+    private static ArrayList<Integer> readIdALlCasters() {
+        String sql = "SELECT `id` FROM casters";
+        ArrayList<Integer> listId = new ArrayList<>();
+
+        try (Connection con = DataSource.getConnection();
+             PreparedStatement statement = con.prepareStatement(sql)) {
+
+            try (ResultSet rs = statement.executeQuery()) {
+                while (rs.next()) {
+                    listId.add(rs.getInt("id"));
+                }
+            }
+
+        } catch (SQLException e) {
+            logger.fatal("Can't read data from database!", e);
+        }
+
+        return listId;
     }
 
     private static ArrayList<Integer> readAllReferenceStation() {
