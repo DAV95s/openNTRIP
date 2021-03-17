@@ -5,7 +5,7 @@ import org.apache.logging.log4j.Logger;
 import org.dav95s.openNTRIP.Clients.User;
 import org.dav95s.openNTRIP.Databases.Models.MountPointModel;
 import org.dav95s.openNTRIP.Databases.Models.NtripCasterModel;
-import org.dav95s.openNTRIP.Network.NetworkProcessor;
+import org.dav95s.openNTRIP.Network.NetworkCore;
 import org.dav95s.openNTRIP.ServerBootstrap;
 
 import java.io.IOException;
@@ -14,7 +14,6 @@ import java.nio.ByteBuffer;
 import java.nio.channels.ServerSocketChannel;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -27,11 +26,12 @@ public class NtripCaster {
 
     public NtripCaster(NtripCasterModel model) throws IOException, SQLException {
         this.model = model;
+
         this.serverChannel = ServerSocketChannel.open();
         this.serverChannel.bind(new InetSocketAddress(model.getPort()));
         this.serverChannel.configureBlocking(false);
 
-        NetworkProcessor.getInstance().registerServerChannel(serverChannel, this);
+        NetworkCore.getInstance().registerServerChannel(serverChannel, this);
 
         ArrayList<Integer> mountpointsId = this.model.readMountpointsId();
         for (int id : mountpointsId) {
@@ -43,7 +43,7 @@ public class NtripCaster {
 
     public void close() {
         try {
-            ServerBootstrap.removeCaster(this);
+            ServerBootstrap.getInstance().removeCaster(this);
             serverChannel.close();
         } catch (IOException e) {
             logger.warn(e);
@@ -83,7 +83,6 @@ public class NtripCaster {
             user.close();
             return;
         }
-
         user.setMountPoint(mountPoint);
         mountPoint.clientAuthorization(user);
 
@@ -100,5 +99,13 @@ public class NtripCaster {
 
     public int getId() {
         return model.getId();
+    }
+
+    public void refresh() throws SQLException {
+        this.model.read();
+        for (MountPoint mp : mountPoints) {
+            mp.model.read();
+            mp.model.readAccessibleReferenceStations();
+        }
     }
 }

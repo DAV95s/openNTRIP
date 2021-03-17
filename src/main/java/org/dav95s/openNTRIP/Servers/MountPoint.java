@@ -24,15 +24,10 @@ public class MountPoint {
         return model.getName();
     }
 
-
     public void clientAuthorization(User user) throws IOException, SQLException {
-        if (user.isAuthenticated()) {
-            user.subscribe(model.getReferenceStation(user));
-        }
 
         if (logger.isDebugEnabled()) {
             JSONObject object = new JSONObject();
-            object.put("from", MountPoint.class.getName());
             object.put("input", user.toString());
             object.put("isAvailable", model.isAvailable());
             object.put("authenticator", model.getAuthenticator());
@@ -55,6 +50,10 @@ public class MountPoint {
 
         user.sendOkMessage();
         user.subscribe(model.getReferenceStation(user));
+    }
+
+    public ReferenceStation getReferenceStation(User user) {
+        return model.getReferenceStation(user);
     }
 
     @Override

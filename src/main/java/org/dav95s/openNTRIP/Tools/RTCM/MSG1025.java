@@ -1,7 +1,7 @@
 package org.dav95s.openNTRIP.Tools.RTCM;
 
 import com.google.common.primitives.Bytes;
-import org.dav95s.openNTRIP.Tools.BitUtils;
+import org.dav95s.openNTRIP.Tools.RTCMStream.BitUtils;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;

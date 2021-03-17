@@ -1,6 +1,6 @@
 package org.dav95s.openNTRIP.Tools.RTCM;
 
-import org.dav95s.openNTRIP.Tools.BitUtil;
+import org.dav95s.openNTRIP.Tools.RTCMStream.BitUtil;
 
 import java.math.BigDecimal;
 
@@ -45,7 +45,7 @@ public class MSG1006 extends RTCM {
         }
     }
 
-    public byte[] write() {
+    public byte[] getBytes() {
         byte[] buffer;
 
         if (messageNumber == 1006) {

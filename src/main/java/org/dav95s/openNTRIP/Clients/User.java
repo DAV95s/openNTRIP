@@ -16,14 +16,13 @@ import org.apache.logging.log4j.Logger;
 import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.charset.StandardCharsets;
-import java.sql.SQLException;
 import java.util.ArrayDeque;
 import java.util.Queue;
 
 public class User implements INetworkHandler {
     final static private Logger logger = LogManager.getLogger(User.class.getName());
 
-    final private long TIME_POSITION_UPDATE = 30_000;
+    final private long DELAY_POSITION_UPDATE = 30_000;
 
     final private NtripCaster caster;
     final private Socket socket;
@@ -33,8 +32,8 @@ public class User implements INetworkHandler {
     private ReferenceStation referenceStation;
     private UserModel model;
     private NMEA.GPSPosition position;
-    private boolean isAuthenticated = false;
-    private long updateTimeMark;
+
+    final private long connectTimeMark;
     private MountPoint mountPoint;
 
     public User(Socket socket, HttpParser httpRequest, NtripCaster caster) {
@@ -42,16 +41,18 @@ public class User implements INetworkHandler {
         this.socket = socket;
         this.httpRequest = httpRequest;
         this.caster = caster;
+        this.connectTimeMark = System.currentTimeMillis();
     }
 
     public void subscribe(ReferenceStation referenceStation) {
         if (referenceStation == null)
             return;
 
+        if (this.referenceStation != null)
+            this.referenceStation.removeClient(this);
+
         this.referenceStation = referenceStation;
         this.referenceStation.addClient(this);
-        this.isAuthenticated = true;
-        this.updateTimeMark = System.currentTimeMillis();
     }
 
     public void sendBadMessageAndClose() {
@@ -107,18 +108,11 @@ public class User implements INetworkHandler {
         String line = StandardCharsets.UTF_8.decode(buffer).toString();
         bufferPool.give(buffer);
 
-        if (System.currentTimeMillis() - this.updateTimeMark < TIME_POSITION_UPDATE)
-            return;
-
         logger.debug(socket.toString() + " accept nmea from client -> " + line);
         this.setPosition(line);
 
-        try {
-            mountPoint.clientAuthorization(this);
-        } catch (IOException | SQLException e) {
-            logger.error(socket.toString() + "authorization error", e);
-            this.close();
-        }
+        ReferenceStation rs = mountPoint.getReferenceStation(this);
+        this.subscribe(rs);
     }
 
     public void setPosition(String nmea_str) {
@@ -148,9 +142,5 @@ public class User implements INetworkHandler {
 
     public void setMountPoint(MountPoint mountPoint) {
         this.mountPoint = mountPoint;
-    }
-
-    public boolean isAuthenticated() {
-        return isAuthenticated;
     }
 }

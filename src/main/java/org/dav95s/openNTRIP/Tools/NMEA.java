@@ -98,7 +98,6 @@ public class NMEA {
         }
 
         public boolean isSet() {
-            logger.debug("NMEA isSet response lat = " + lat + " lon = " + lon + " " + (lat != 0.0f && lon != 0.0f));
             return lat != 0.0f && lon != 0.0f;
         }
     }

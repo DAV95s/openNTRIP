@@ -11,6 +11,8 @@ import org.dav95s.openNTRIP.Tools.*;
 import org.dav95s.openNTRIP.Tools.Decoders.IDecoder;
 import org.dav95s.openNTRIP.Tools.Decoders.RAW;
 import org.dav95s.openNTRIP.Tools.Decoders.RTCM_3X;
+import org.dav95s.openNTRIP.Tools.RTCMStream.Analyzer;
+import org.dav95s.openNTRIP.Tools.RTCMStream.MessagePack;
 import org.json.simple.JSONObject;
 
 import java.io.IOException;
@@ -26,8 +28,8 @@ import java.util.concurrent.CopyOnWriteArrayList;
 public class ReferenceStation implements INetworkHandler {
     static final private int BYTE_BUFFER_SIZE = 32768;
     static final private Logger logger = LogManager.getLogger(ReferenceStation.class.getName());
-    static final private Timer timer = new Timer();
     static final private ByteBufferPool bufferPool = new ByteBufferPool();
+
     final private CopyOnWriteArrayList<User> subscribers = new CopyOnWriteArrayList<>();
     final private Queue<ByteBuffer> dataQueue = new ArrayDeque<>();
     final private ReferenceStationModel model;
@@ -35,18 +37,16 @@ public class ReferenceStation implements INetworkHandler {
     private Socket socket;
     private Analyzer analyzer;
     private IDecoder decoder = new RTCM_3X();
-    private StreamSaver streamSaver;
 
     public ReferenceStation(ReferenceStationModel model) {
         this.model = model;
-        timer.schedule(updateModel, 10_000, 10_000);
     }
 
+    //connect lost
     @Override
     public void close() {
         try {
             this.analyzer.close();
-//            this.streamSaver.close();
             this.socket.close();
             this.model.setOnline(false);
             this.model.update();
@@ -58,7 +58,6 @@ public class ReferenceStation implements INetworkHandler {
     //The reference station has removed from database.
     protected void remove() throws IOException {
         this.model.setOnline(false);
-        this.updateModel.cancel();
         this.socket.close();
         this.close();
     }
@@ -83,7 +82,7 @@ public class ReferenceStation implements INetworkHandler {
 
         try {
             MessagePack messagePack = decoder.separate(buffer);
-            this.model.fixPosition(messagePack);
+            this.model.replaceCoordinates(messagePack);
             this.sendMessagesToClients(messagePack);
             this.analyzer.analyze(messagePack);
 
@@ -91,8 +90,7 @@ public class ReferenceStation implements INetworkHandler {
                 JSONObject object = new JSONObject();
                 object.put("read", buffer.limit());
                 object.put("messages", messagePack.toString());
-                object.put("queue", this.dataQueue.size());
-                object.put("bufferPool", bufferPool.toString());
+                object.put("queue_size", this.dataQueue.size());
                 object.put("fixPosition", model.isFixPosition());
                 logger.debug(object);
             }
@@ -124,7 +122,7 @@ public class ReferenceStation implements INetworkHandler {
         }
     }
 
-    public void refStationAuth(Socket socket, HttpParser httpParser) throws IOException {
+    public void referenceStationAuthentication(Socket socket, HttpParser httpParser) throws IOException {
 
         //mb password wrong
         if (!this.model.getPassword().equals(httpParser.getParam("PASSWORD"))) {
@@ -152,7 +150,6 @@ public class ReferenceStation implements INetworkHandler {
     private void socketInit(Socket socket) {
         this.decoder = new RTCM_3X();
         this.analyzer = new Analyzer(this);
-        this.streamSaver = new StreamSaver(this);
         this.socket = socket;
         this.model.setOnline(true);
     }
@@ -166,6 +163,10 @@ public class ReferenceStation implements INetworkHandler {
      * @throws IllegalArgumentException
      */
     public float distance(NMEA.GPSPosition position) {
+        if (!this.model.getPosition().isSet()) {
+            throw new IllegalStateException("Reference station does not have coordinates " + this.toString());
+        }
+
         double earthRadius = 6371000; //meters
         double dLat = Math.toRadians(position.lat - model.getPosition().lat);
         double dLng = Math.toRadians(position.lon - model.getPosition().lon);
@@ -210,28 +211,17 @@ public class ReferenceStation implements INetworkHandler {
         return model.getId();
     }
 
+    public boolean isOnline() {
+        return this.model.getOnlineStatus();
+    }
+
     @Override
     public String toString() {
         return this.model.toString();
     }
 
-    private final TimerTask updateModel = new TimerTask() {
-
-        @Override
-        public void run() {
-            try {
-                model.read();
-                model.readFixPosition();
-            } catch (SQLException e) {
-                cancel();
-                try {
-                    remove();
-                } catch (IOException ioException) {
-                    ioException.printStackTrace();
-                }
-                logger.error(e);
-            }
-        }
-    };
-
+    public void refresh() throws SQLException {
+        model.read();
+        model.readReplaceCoordinates();
+    }
 }

@@ -1,8 +1,8 @@
 package org.dav95s.openNTRIP.Databases.Models;
 
 import org.dav95s.openNTRIP.Databases.DataSource;
-import org.dav95s.openNTRIP.Tools.Message;
-import org.dav95s.openNTRIP.Tools.MessagePack;
+import org.dav95s.openNTRIP.Tools.RTCMStream.Message;
+import org.dav95s.openNTRIP.Tools.RTCMStream.MessagePack;
 import org.dav95s.openNTRIP.Tools.NMEA;
 import org.dav95s.openNTRIP.Tools.RTCM.MSG1006;
 
@@ -24,7 +24,7 @@ public class ReferenceStationModel {
     private String password;
     private int hz;
     private NMEA.GPSPosition position = new NMEA().getPosition();
-    private FixPosition fixPosition;
+    private ReplaceCoordinates replaceCoordinates;
 
     public ReferenceStationModel() {
     }
@@ -64,12 +64,6 @@ public class ReferenceStationModel {
             return id;
         } catch (SQLException e) {
             throw new SQLException("Can't create new reference station", e);
-        }
-    }
-
-    public void fixPosition(MessagePack messagePack) {
-        if (fixPosition != null) {
-            fixPosition.handle(messagePack);
         }
     }
 
@@ -155,7 +149,7 @@ public class ReferenceStationModel {
         }
     }
 
-    public boolean isOnline(boolean status) {
+    public boolean getOnlineStatus(boolean status) {
         String sql = "UPDATE `reference_stations` SET `is_online` = ? WHERE id = ?";
 
         try (Connection con = DataSource.getConnection();
@@ -169,6 +163,12 @@ public class ReferenceStationModel {
         } catch (SQLException e) {
             e.printStackTrace();
             return false;
+        }
+    }
+
+    public void replaceCoordinates(MessagePack messagePack) {
+        if (replaceCoordinates != null) {
+            replaceCoordinates.handle(messagePack);
         }
     }
 
@@ -223,7 +223,7 @@ public class ReferenceStationModel {
         return this.misc;
     }
 
-    public boolean isOnline() {
+    public boolean getOnlineStatus() {
         return this.online;
     }
 
@@ -296,10 +296,10 @@ public class ReferenceStationModel {
     }
 
     public boolean isFixPosition() {
-        return this.fixPosition != null;
+        return this.replaceCoordinates != null;
     }
 
-    public boolean readFixPosition() throws SQLException {
+    public boolean readReplaceCoordinates() throws SQLException {
         String sql = "SELECT * FROM `reference_stations_fix_position` WHERE `station_id` = ?";
 
         try (Connection con = DataSource.getConnection();
@@ -309,15 +309,16 @@ public class ReferenceStationModel {
 
             try (ResultSet rs = statement.executeQuery()) {
                 if (rs.next()) {
-                    if (fixPosition == null) {
-                        this.fixPosition = new FixPosition();
+                    if (replaceCoordinates == null) {
+                        replaceCoordinates = new ReplaceCoordinates();
                     }
-                    this.fixPosition.setECEFX(rs.getBigDecimal("ECEF_X"));
-                    this.fixPosition.setECEFY(rs.getBigDecimal("ECEF_Y"));
-                    this.fixPosition.setECEFZ(rs.getBigDecimal("ECEF_Z"));
-                    this.fixPosition.setAntennaHeight(rs.getBigDecimal("antenna_height"));
+                    this.replaceCoordinates.setECEFX(rs.getBigDecimal("ECEF_X"));
+                    this.replaceCoordinates.setECEFY(rs.getBigDecimal("ECEF_Y"));
+                    this.replaceCoordinates.setECEFZ(rs.getBigDecimal("ECEF_Z"));
+                    this.replaceCoordinates.setAntennaHeight(rs.getBigDecimal("antenna_height"));
                     return true;
                 } else {
+                    this.replaceCoordinates = null;
                     return false;
                 }
             }
@@ -327,7 +328,7 @@ public class ReferenceStationModel {
     }
 }
 
-class FixPosition {
+class ReplaceCoordinates {
     BigDecimal ECEFX;
     BigDecimal ECEFY;
     BigDecimal ECEFZ;
@@ -344,7 +345,7 @@ class FixPosition {
             msg_new.setECEFY(ECEFY);
             msg_new.setECEFZ(ECEFZ);
             pack.removeMessage(msg);
-            pack.addMessage(1005, msg_new.write());
+            pack.addMessage(1005, msg_new.getBytes());
         }
 
         msg = pack.getMessageByNmb(1006);
@@ -356,7 +357,7 @@ class FixPosition {
             msg_new.setECEFZ(ECEFZ);
             msg_new.setAntennaHeight(antennaHeight);
             pack.removeMessage(msg);
-            pack.addMessage(1006, msg_new.write());
+            pack.addMessage(1006, msg_new.getBytes());
         }
 
         return pack;

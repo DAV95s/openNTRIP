@@ -1,10 +1,13 @@
 package org.dav95s.openNTRIP.Tools.RTCM;
 
 import com.google.common.primitives.Bytes;
-import org.dav95s.openNTRIP.Tools.BitUtils;
+import org.dav95s.openNTRIP.Tools.RTCMStream.BitUtils;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+
+import static com.google.common.base.Preconditions.checkArgument;
+import static com.google.common.base.Preconditions.checkNotNull;
 
 public class MSG1021 extends RTCM {
 
@@ -18,7 +21,7 @@ public class MSG1021 extends RTCM {
     private int PlateNumber;
     private int ComputationIndicator;
     private int HeightIndicator;
-    private int B_valid; //ΦV, //Latitude of Origin, Area of Validity
+    private int B_valid; //ΦV, Latitude of Origin, Area of Validity
     private int L_valid; //Longitude of Origin, Area of Validity
     private int dB_valid; //∆φV – N/S Extension, Area of Validity
     private int dL_valid; //∆λV – E/W Extension, Area of Validity
@@ -39,19 +42,6 @@ public class MSG1021 extends RTCM {
     private final BigDecimal a_base = BigDecimal.valueOf(6370000);
     private final BigDecimal b_base = BigDecimal.valueOf(6350000);
 
-    public enum msg {
-        MSG1021(1021), MSG1022(1022);
-        int msgNum;
-
-        public int getValue() {
-            return msgNum;
-        }
-
-        msg(int msgNum) {
-            this.msgNum = msgNum;
-        }
-    }
-
     public enum ComputationIndicator {
         sevenParameterApproximation,
         sevenParameterStrict,
@@ -59,24 +49,23 @@ public class MSG1021 extends RTCM {
         MolodenskiBadekas,
     }
 
-
     public enum Plates {
-        AFRC(1), //Africa
-        ANTA(2), //Antarctica
-        ARAB(3), //Arabia
-        AUST(4), //Australia
-        CARB(5), //Caribbea
-        COCO(6), //Cocos
-        EURA(7), //Eurasia
-        INDI(8), //India
-        NOAM(9), //N. America
-        NAZC(10), //Nazca
-        PCFC(11), //Pacific
-        SOAM(12), //S. America
-        JUFU(13), //Juan de Fuca
-        PHIL(14), //Philippine
-        RIVR(15), //Rivera
-        SCOT(16); //Scotia
+        Africa(1),
+        Antarctica(2),
+        Arabia(3),
+        Australia(4),
+        Caribbean(5),
+        Cocos(6),
+        Eurasia(7),
+        India(8),
+        NorthAmerica(9),
+        Nazca(10),
+        Pacific(11),
+        SouthAmerica(12),
+        JuandeFuca(13),
+        Philippine(14),
+        Rivera(15),
+        Scotia(16);
 
         private int id;
 
@@ -199,6 +188,7 @@ public class MSG1021 extends RTCM {
     }
 
     public void setMessageNumber(int messageNumber) {
+        checkArgument(messageNumber == 1021 || messageNumber == 1022);
         this.messageNumber = messageNumber;
     }
 
@@ -207,6 +197,7 @@ public class MSG1021 extends RTCM {
     }
 
     public void setSourceName(String sourceName) {
+        checkArgument(sourceName.length() < 32);
         SourceName = sourceName;
     }
 
@@ -216,6 +207,7 @@ public class MSG1021 extends RTCM {
     }
 
     public void setTargetName(String targetName) {
+        checkArgument(targetName.length() < 32);
         TargetName = targetName;
     }
 
@@ -224,6 +216,7 @@ public class MSG1021 extends RTCM {
     }
 
     public void setSystemIdentificationNumber(int systemIdentificationNumber) {
+        checkArgument(systemIdentificationNumber < 256);
         SystemIdentificationNumber = systemIdentificationNumber;
     }
 
@@ -231,7 +224,17 @@ public class MSG1021 extends RTCM {
         return UtilizedTransformationMessageIndicator;
     }
 
+    /**
+     * @param utilizedTransformationMessageIndicator 0 - Message not utilized
+     *                                               1 - Message utilized
+     *                                               Bit(1) - 1023
+     *                                               Bit(2) - 1024
+     *                                               Bit(3) - 1025
+     *                                               Bit(4) - 1026
+     *                                               Bit(5) - 1027
+     */
     public void setUtilizedTransformationMessageIndicator(int utilizedTransformationMessageIndicator) {
+        checkArgument(utilizedTransformationMessageIndicator < 1024);
         UtilizedTransformationMessageIndicator = utilizedTransformationMessageIndicator;
     }
 
@@ -239,7 +242,27 @@ public class MSG1021 extends RTCM {
         return PlateNumber;
     }
 
+    /**
+     * @param plateNumber 0: unknown plate
+     *                    1: AFRC - Africa
+     *                    2: ANTA - Antarctica
+     *                    3: ARAB - Arabia
+     *                    4: AUST - Australia
+     *                    5: CARB - Caribbea
+     *                    6: COCO - Cocos
+     *                    7: EURA - Eurasia
+     *                    8: INDI - India
+     *                    9: NOAM - N. America
+     *                    10: NAZC - Nazca
+     *                    11: PCFC - Pacific
+     *                    12: SOAM - S. America
+     *                    13: JUFU - Juan de Fuca
+     *                    14: PHIL - Philippine
+     *                    15: RIVR - Rivera
+     *                    16: SCOT - Scotia
+     */
     public void setPlateNumber(int plateNumber) {
+        checkArgument(plateNumber < 32);
         PlateNumber = plateNumber;
     }
 
@@ -247,7 +270,14 @@ public class MSG1021 extends RTCM {
         return ComputationIndicator;
     }
 
+    /**
+     * @param computationIndicator 0 - standard seven parameter, approximation
+     *                             1 - standard seven parameter, strict formula
+     *                             2 - Molodenski, abridged
+     *                             3 - Molodenski-Badekas
+     */
     public void setComputationIndicator(int computationIndicator) {
+        checkArgument(computationIndicator < 16);
         ComputationIndicator = computationIndicator;
     }
 
@@ -255,7 +285,13 @@ public class MSG1021 extends RTCM {
         return HeightIndicator;
     }
 
+    /**
+     * @param heightIndicator 0 - Geometric heights result
+     *                        1 - Physical heights result
+     *                        2 - Physical heights result
+     */
     public void setHeightIndicator(int heightIndicator) {
+        checkArgument(heightIndicator < 4);
         HeightIndicator = heightIndicator;
     }
 
@@ -263,7 +299,11 @@ public class MSG1021 extends RTCM {
         return B_valid;
     }
 
+    /**
+     * @param b_valid Latitude of Origin (sec)
+     */
     public void setB_valid(int b_valid) {
+        checkArgument(-324000 <= b_valid && b_valid <= 324000);
         B_valid = b_valid;
     }
 
@@ -271,7 +311,11 @@ public class MSG1021 extends RTCM {
         return L_valid;
     }
 
+    /**
+     * @param l_valid Longitude of Origin (sec);
+     */
     public void setL_valid(int l_valid) {
+        checkArgument(-648000 <= l_valid && l_valid <= 648000);
         L_valid = l_valid;
     }
 
@@ -279,7 +323,12 @@ public class MSG1021 extends RTCM {
         return dB_valid;
     }
 
+    /**
+     * @param dB_valid Area Extension to North and to South
+     *                 0 - undefined
+     */
     public void setdB_valid(int dB_valid) {
+        checkArgument(0 <= dB_valid && dB_valid <= 32766);
         this.dB_valid = dB_valid;
     }
 
@@ -287,7 +336,12 @@ public class MSG1021 extends RTCM {
         return dL_valid;
     }
 
+    /**
+     * @param dL_valid Area Extension to East and to West
+     *                 0 - undefined
+     */
     public void setdL_valid(int dL_valid) {
+        checkArgument(0 <= dB_valid && dB_valid <= 32766);
         this.dL_valid = dL_valid;
     }
 
@@ -295,7 +349,14 @@ public class MSG1021 extends RTCM {
         return dX;
     }
 
+    /**
+     * @param dX Translation in X
+     *           ± 4194.303 m
+     */
     public void setdX(BigDecimal dX) {
+        checkNotNull(dX);
+        checkArgument(dX.compareTo(new BigDecimal("4194.303")) <= 0);
+        checkArgument(dX.compareTo(new BigDecimal("-4194.303")) >= 0);
         this.dX = dX;
     }
 
@@ -303,7 +364,14 @@ public class MSG1021 extends RTCM {
         return dY;
     }
 
+    /**
+     * @param dY Translation in Y
+     *           ± 4194.303 m
+     */
     public void setdY(BigDecimal dY) {
+        checkNotNull(dY);
+        checkArgument(dY.compareTo(new BigDecimal("4194.303")) <= 0);
+        checkArgument(dY.compareTo(new BigDecimal("-4194.303")) >= 0);
         this.dY = dY;
     }
 
@@ -311,7 +379,14 @@ public class MSG1021 extends RTCM {
         return dZ;
     }
 
+    /**
+     * @param dZ Translation in Z
+     *           ± 4194.303 m
+     */
     public void setdZ(BigDecimal dZ) {
+        checkNotNull(dZ);
+        checkArgument(dZ.compareTo(new BigDecimal("4194.303")) <= 0);
+        checkArgument(dZ.compareTo(new BigDecimal("-4194.303")) >= 0);
         this.dZ = dZ;
     }
 
@@ -319,15 +394,30 @@ public class MSG1021 extends RTCM {
         return Rx;
     }
 
+    /**
+     * @param rx Rotation around the X-axis in arc seconds
+     *           ± 42949.67294"
+     */
     public void setRx(BigDecimal rx) {
+        checkNotNull(rx);
+        checkArgument(rx.compareTo(new BigDecimal("42949.67294")) <= 0);
+        checkArgument(rx.compareTo(new BigDecimal("-42949.67294")) >= 0);
         Rx = rx;
     }
+
 
     public BigDecimal getRy() {
         return Ry;
     }
 
+    /**
+     * @param ry Rotation around the Y-axis in arc seconds
+     *           ± 42949.67294"
+     */
     public void setRy(BigDecimal ry) {
+        checkNotNull(ry);
+        checkArgument(ry.compareTo(new BigDecimal("42949.67294")) <= 0);
+        checkArgument(ry.compareTo(new BigDecimal("-42949.67294")) >= 0);
         Ry = ry;
     }
 
@@ -335,7 +425,14 @@ public class MSG1021 extends RTCM {
         return Rz;
     }
 
+    /**
+     * @param rz Rotation around the Z-axis in arc seconds
+     *           ± 42949.67294"
+     */
     public void setRz(BigDecimal rz) {
+        checkNotNull(rz);
+        checkArgument(rz.compareTo(new BigDecimal("42949.67294")) <= 0);
+        checkArgument(rz.compareTo(new BigDecimal("-42949.67294")) >= 0);
         Rz = rz;
     }
 
@@ -343,7 +440,14 @@ public class MSG1021 extends RTCM {
         return dS;
     }
 
+    /**
+     * @param dS scale correction
+     *           ± 167.77215 PPM
+     */
     public void setdS(BigDecimal dS) {
+        checkNotNull(dS);
+        checkArgument(dS.compareTo(new BigDecimal("42949.67294")) <= 0);
+        checkArgument(dS.compareTo(new BigDecimal("-42949.67294")) >= 0);
         this.dS = dS;
     }
 
@@ -351,7 +455,14 @@ public class MSG1021 extends RTCM {
         return add_as;
     }
 
+    /**
+     * @param add_as Semi-major axis of source system ellipsoid
+     *               0 – 16777.215m
+     */
     public void setAdd_as(BigDecimal add_as) {
+        checkNotNull(add_as);
+        checkArgument(add_as.signum() >= 0);
+        checkArgument(add_as.compareTo(new BigDecimal("16777.215")) >= 0);
         this.add_as = add_as;
     }
 
@@ -359,7 +470,14 @@ public class MSG1021 extends RTCM {
         return add_bs;
     }
 
+    /**
+     * @param add_bs Semi-minor axis of source system ellipsoid
+     *               0 – 33554.431m
+     */
     public void setAdd_bs(BigDecimal add_bs) {
+        checkNotNull(add_bs);
+        checkArgument(add_bs.signum() >= 0);
+        checkArgument(add_bs.compareTo(new BigDecimal("33554.431")) >= 0);
         this.add_bs = add_bs;
     }
 
@@ -367,7 +485,14 @@ public class MSG1021 extends RTCM {
         return add_at;
     }
 
+    /**
+     * @param add_at Semi-major axis of target system ellipsoid
+     *               0 – 16777.215m
+     */
     public void setAdd_at(BigDecimal add_at) {
+        checkNotNull(add_at);
+        checkArgument(add_at.signum() >= 0);
+        checkArgument(add_at.compareTo(new BigDecimal("16777.215")) >= 0);
         this.add_at = add_at;
     }
 
@@ -375,7 +500,14 @@ public class MSG1021 extends RTCM {
         return add_bt;
     }
 
+    /**
+     * @param add_bt Semi-minor axis of target system ellipsoid
+     *               0 – 33554.431m
+     */
     public void setAdd_bt(BigDecimal add_bt) {
+        checkNotNull(add_bt);
+        checkArgument(add_bt.signum() >= 0);
+        checkArgument(add_bt.compareTo(new BigDecimal("33554.431")) >= 0);
         this.add_bt = add_bt;
     }
 
@@ -383,6 +515,16 @@ public class MSG1021 extends RTCM {
         return HrInd;
     }
 
+    /**
+     * @param hrInd 0 - Unknown quality
+     *              1 - Quality better 21 Millimeters
+     *              2 - Quality 21 to 50 Millimeters
+     *              3 - Quality 51 to 200 Millimeters
+     *              4 - Quality 201 to 500 Millimeters
+     *              5 - Quality 501 to 2000 Millimeters
+     *              6 - Quality 2001 to 5000 Millimeters
+     *              7 - Quality worse than 5001 Millimeters
+     */
     public void setHrInd(int hrInd) {
         HrInd = hrInd;
     }
@@ -391,15 +533,17 @@ public class MSG1021 extends RTCM {
         return VrInd;
     }
 
+    /**
+     * @param vrInd 0 - Unknown quality
+     *              1 - Quality better 21 Millimeters
+     *              2 - Quality 21 to 50 Millimeters
+     *              3 - Quality 51 to 200 Millimeters
+     *              4 - Quality 201 to 500 Millimeters
+     *              5 - Quality 501 to 2000 Millimeters
+     *              6 - Quality 2001 to 5000 Millimeters
+     *              7 - Quality worse than 5001 Millimeters
+     */
     public void setVrInd(int vrInd) {
         VrInd = vrInd;
-    }
-
-    public BigDecimal getA_base() {
-        return a_base;
-    }
-
-    public BigDecimal getB_base() {
-        return b_base;
     }
 }

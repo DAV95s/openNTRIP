@@ -12,22 +12,22 @@ import java.nio.channels.ServerSocketChannel;
 import java.nio.channels.SocketChannel;
 import java.util.Iterator;
 
-public class NetworkProcessor implements Runnable {
-    final static private Logger logger = LogManager.getLogger(NetworkProcessor.class.getName());
+public class NetworkCore implements Runnable {
+    final static private Logger logger = LogManager.getLogger(NetworkCore.class.getName());
 
     private Selector selector;
     private Thread thread;
 
-    private static NetworkProcessor instance;
+    private static NetworkCore instance;
     private final Worker worker = Worker.getInstance();
 
-    public static NetworkProcessor getInstance() {
+    public static NetworkCore getInstance() {
         if (instance == null)
-            instance = new NetworkProcessor();
+            instance = new NetworkCore();
         return instance;
     }
 
-    private NetworkProcessor() {
+    private NetworkCore() {
         try {
             this.selector = Selector.open();
             this.thread = new Thread(this);
@@ -37,13 +37,6 @@ public class NetworkProcessor implements Runnable {
         }
     }
 
-    /**
-     * When new caster has created, this method registered his server channel in the selector.
-     *
-     * @param channel
-     * @param caster
-     * @throws IOException
-     */
     public void registerServerChannel(ServerSocketChannel channel, NtripCaster caster) throws IOException {
         channel.register(this.selector, SelectionKey.OP_ACCEPT, caster);
         selector.wakeup();

@@ -1,16 +1,12 @@
-import org.dav95s.openNTRIP.Clients.User;
-import org.dav95s.openNTRIP.Databases.Models.MountPointModel;
-import org.dav95s.openNTRIP.Databases.Models.ReferenceStationModel;
-import org.dav95s.openNTRIP.Databases.Models.UserModel;
+package org.dav95s.openNTRIP.Databases.Models;
+
+import junit.framework.TestCase;
 import org.dav95s.openNTRIP.Servers.ReferenceStation;
 import org.junit.Test;
 
 import java.io.IOException;
-import java.util.ArrayList;
 
-public class TestReferenceStation {
-
-
+public class ReferenceStationModelTest extends TestCase {
     @Test
     public void getStationFromPool() throws IOException {
         ReferenceStationModel WarszawaStationModel = new ReferenceStationModel();

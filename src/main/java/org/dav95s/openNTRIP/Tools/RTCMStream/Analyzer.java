@@ -1,4 +1,4 @@
-package org.dav95s.openNTRIP.Tools;
+package org.dav95s.openNTRIP.Tools.RTCMStream;
 
 import org.dav95s.openNTRIP.Servers.ReferenceStation;
 import org.apache.logging.log4j.LogManager;

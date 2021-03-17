@@ -1,4 +1,4 @@
-package org.dav95s.openNTRIP.Tools;
+package org.dav95s.openNTRIP.Tools.RTCMStream;
 
 import java.nio.ByteBuffer;
 import java.util.ArrayList;

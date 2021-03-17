@@ -54,10 +54,8 @@ public class ConnectHandler implements INetworkHandler {
 
         if (logger.isDebugEnabled()) {
             JSONObject object = new JSONObject();
-            object.put("from", "ConnectHandler");
             object.put("socket", socket.toString());
             object.put("read", count);
-            object.put("", count);
             logger.debug(object);
         }
     }
@@ -88,12 +86,16 @@ public class ConnectHandler implements INetworkHandler {
                 //GET CONNECT
                 User user = new User(this.socket, httpParser, this.caster);
                 this.caster.clientAuthorization(user);
+
                 this.socket.attach(user);
             } else if (httpParser.getParam("SOURCE") != null) {
                 //SOURCE CONNECT
-                ReferenceStation referenceStation = ServerBootstrap.getReferenceStationByName(httpParser.getParam("SOURCE"));
-                referenceStation.refStationAuth(socket, httpParser);
+                ServerBootstrap root = ServerBootstrap.getInstance();
+                ReferenceStation referenceStation = root.getReferenceStationByName(httpParser.getParam("SOURCE"));
+                referenceStation.referenceStationAuthentication(socket, httpParser);
                 this.socket.attach(referenceStation);
+            } else {
+                this.close();
             }
 
         } catch (Exception e) {

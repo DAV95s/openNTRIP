@@ -12,6 +12,8 @@ import org.dav95s.openNTRIP.ServerBootstrap;
 import org.dav95s.openNTRIP.Servers.ReferenceStation;
 import org.dav95s.openNTRIP.Tools.NMEA;
 import org.json.simple.JSONObject;
+import org.locationtech.proj4j.CRSFactory;
+import org.locationtech.proj4j.parser.Proj4Parser;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -38,22 +40,12 @@ public class MountPointModel {
     private String compression;
     private IAuthenticator authenticator;
     private boolean fee;
-    private int bitrate;
+    private int bitRate;
     private String misc;
     private int caster_id;
     private boolean available;
     private int plugin_id;
-
-    private ArrayList<User> users = new ArrayList<>();
     private ArrayList<ReferenceStation> stationsPool;
-
-    public void addUser(User user) {
-        users.add(user);
-    }
-
-    public void removeUser(User user) {
-        users.remove(user);
-    }
 
     public MountPointModel() {
 
@@ -90,35 +82,35 @@ public class MountPointModel {
         return stationsPool.get(0);
     }
 
+
     private ReferenceStation getNearestStation(User user) {
-        TreeMap<Float, ReferenceStation> sortedRange = new TreeMap<>();
         NMEA.GPSPosition clientPosition = user.getPosition();
 
-        for (ReferenceStation station : stationsPool) {
-            if (station.getModel().isOnline() || station.getModel().getPosition().isSet()) {
-                sortedRange.put(station.distance(clientPosition), station);
+        //concurrent fix
+        ArrayList<ReferenceStation> refStationPool = stationsPool;
+
+        if (refStationPool.size() == 0)
+            throw new IllegalStateException(this.toString() + " does not have accessible Reference stations!");
+
+        ReferenceStation response = refStationPool.get(0);
+        float minDistance = response.distance(clientPosition);
+
+        for (ReferenceStation station : refStationPool) {
+            float distance = station.distance(clientPosition);
+            if (distance < minDistance) {
+                response = station;
+                minDistance = distance;
             }
         }
 
-        if (logger.isDebugEnabled()) {
-            JSONObject object = new JSONObject();
-            object.put("from", "getNearestStation");
-            object.put("user", user.toString());
-            object.put("userPosition", user.getPosition().toString());
-            object.put("mountpoint", name);
-            object.put("pull", Arrays.toString(stationsPool.toArray()));
-            object.put("ranges", Arrays.toString(sortedRange.keySet().toArray()));
-            logger.debug(object);
-        }
-
-        return sortedRange.firstEntry().getValue();
+        return response;
     }
 
     @Override
     public String toString() {
         return "STR" + ';' + getName() + ';' + getIdentifier() + ';' + getFormat() + ';' + getFormat_details() + ';' + getCarrier() + ';' + getNav_system() + ';' + getNetwork() + ';' + getCountry()
                 + ';' + String.format("%.2f", getLat()) + ';' + String.format("%.2f", getLon()) + ';' + (isNmea() ? 1 : 0) + ';' + (isSolution() ? 1 : 0) + ';' + getGenerator() + ';' + getCompression()
-                + ';' + getAuthenticator().toString() + ';' + (isFee() ? 'Y' : 'N') + ';' + getBitrate() + ';' + getMisc() + "\r\n";
+                + ';' + getAuthenticator().toString() + ';' + (isFee() ? 'Y' : 'N') + ';' + getBitRate() + ';' + getMisc() + "\r\n";
     }
 
     public int create() throws SQLException {
@@ -143,7 +135,7 @@ public class MountPointModel {
             statement.setString(14, compression);
             statement.setString(15, authenticator.toString());
             statement.setBoolean(16, fee);
-            statement.setInt(17, bitrate);
+            statement.setInt(17, bitRate);
             statement.setString(18, misc);
             statement.setInt(19, caster_id);
             statement.setBoolean(20, available);
@@ -189,7 +181,7 @@ public class MountPointModel {
                     compression = rs.getString("compression");
                     setAuthenticator(rs.getString("authenticator"));
                     fee = rs.getBoolean("fee");
-                    bitrate = rs.getInt("bitrate");
+                    bitRate = rs.getInt("bitrate");
                     misc = rs.getString("misc");
                     caster_id = rs.getInt("caster_id");
                     available = rs.getBoolean("available");
@@ -225,7 +217,7 @@ public class MountPointModel {
             statement.setString(14, compression);
             statement.setString(15, getAuthenticator().toString());
             statement.setBoolean(16, fee);
-            statement.setInt(17, bitrate);
+            statement.setInt(17, bitRate);
             statement.setString(18, misc);
             statement.setInt(19, caster_id);
             statement.setBoolean(20, available);
@@ -265,7 +257,7 @@ public class MountPointModel {
 
             try (ResultSet rs = statement.executeQuery()) {
                 while (rs.next()) {
-                    pool.add(ServerBootstrap.getReferenceStationById(rs.getInt("station_id")));
+                    pool.add(ServerBootstrap.getInstance().getReferenceStationById(rs.getInt("station_id")));
                 }
                 stationsPool = pool;
             }
@@ -340,8 +332,8 @@ public class MountPointModel {
         return this.fee;
     }
 
-    public int getBitrate() {
-        return this.bitrate;
+    public int getBitRate() {
+        return this.bitRate;
     }
 
     public String getMisc() {
@@ -428,8 +420,8 @@ public class MountPointModel {
         this.fee = fee;
     }
 
-    public void setBitrate(int bitrate) {
-        this.bitrate = bitrate;
+    public void setBitRate(int bitRate) {
+        this.bitRate = bitRate;
     }
 
     public void setMisc(String misc) {
@@ -447,4 +439,8 @@ public class MountPointModel {
     public void setPlugin_id(int plugin_id) {
         this.plugin_id = plugin_id;
     }
+}
+
+class CRS {
+
 }

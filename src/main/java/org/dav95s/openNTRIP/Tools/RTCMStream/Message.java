@@ -1,4 +1,4 @@
-package org.dav95s.openNTRIP.Tools;
+package org.dav95s.openNTRIP.Tools.RTCMStream;
 
 public class Message {
     int nmb;

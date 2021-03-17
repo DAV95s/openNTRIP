@@ -28,8 +28,8 @@ public class SHA256 implements PasswordHandler {
 
     @Override
     public String hash(String rawPassword) {
-        if (rawPassword == "")
-            throw new IllegalArgumentException("Can't hash of empty string!");
+        if (rawPassword == null)
+            throw new IllegalArgumentException("Can't hash of null object!");
 
         return sha256(rawPassword);
     }
@@ -37,8 +37,8 @@ public class SHA256 implements PasswordHandler {
     private static String sha256(String base) {
         try {
             MessageDigest digest = MessageDigest.getInstance("SHA-256");
-            byte[] hash = digest.digest(base.getBytes("UTF-8"));
-            StringBuffer hexString = new StringBuffer();
+            byte[] hash = digest.digest(base.getBytes());
+            StringBuilder hexString = new StringBuilder();
 
             for (byte b : hash) {
                 String hex = Integer.toHexString(0xff & b);

@@ -1,4 +1,4 @@
-package org.dav95s.openNTRIP.Tools;
+package org.dav95s.openNTRIP.Tools.RTCMStream;
 
 import com.google.common.base.Splitter;
 import com.google.common.collect.Iterables;

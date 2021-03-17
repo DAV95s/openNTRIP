@@ -7,29 +7,30 @@ import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.channels.SelectionKey;
 import java.nio.channels.SocketChannel;
+import java.util.concurrent.atomic.AtomicLong;
 
 public class Socket {
     final static private Logger logger = LogManager.getLogger(Socket.class.getName());
 
-    private static long prevSocketId;
+    final private static AtomicLong socketIdCounter = new AtomicLong();
 
     final private static byte[] OK_MESSAGE = "ICY 200 OK\r\n".getBytes();
     final private static byte[] BAD_MESSAGE = "ERROR - Bad Password\r\n".getBytes();
 
     final private long socketId;
-    final private SelectionKey key;
+    final private SelectionKey selectionKey;
     final private SocketChannel socketChannel;
 
     public boolean endOfStreamReached = false;
 
-    public Socket(SelectionKey key) throws IOException {
-        prevSocketId++;
-        this.key = key;
-        this.socketId = prevSocketId;
-        this.socketChannel = (SocketChannel) key.channel();
+    public Socket(SelectionKey selectionKey) throws IOException {
+        this.selectionKey = selectionKey;
+        this.socketId = socketIdCounter.incrementAndGet();
+        this.socketChannel = (SocketChannel) selectionKey.channel();
 
         logger.info("New connection: " + this.toString() + socketChannel.getRemoteAddress());
     }
+
 
     public void sendOkMessage() throws IOException {
         this.write(ByteBuffer.wrap(OK_MESSAGE));
@@ -80,12 +81,12 @@ public class Socket {
     }
 
     public void close() throws IOException {
-        this.key.cancel();
+        this.selectionKey.cancel();
         this.socketChannel.close();
     }
 
     public void attach(INetworkHandler handler) {
-        this.key.attach(handler);
+        this.selectionKey.attach(handler);
     }
 
     public boolean isRegistered() {
