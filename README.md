@@ -1,5 +1,5 @@
 # openNTRIP
-openNTRIP is multi-caster server for transverse RTCM data to internet.
+openNTRIP is multi-caster server for streaming RTCM data to internet.
 
 ## Installation
 1. Install mysql
