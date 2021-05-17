@@ -8,12 +8,12 @@ import java.nio.BufferUnderflowException;
 import java.nio.ByteBuffer;
 
 
-public class RTCM_3X implements IDecoder {
-    private static Logger logger = LogManager.getLogger(RTCM_3X.class.getName());
+public class DecoderRTCM3 implements IDecoder {
+    private static final Logger logger = LogManager.getLogger(DecoderRTCM3.class.getName());
 
     private final byte RTCM_PREAMBLE = -45;
 
-    private ByteBuffer previousResidue;
+    private ByteBuffer residue;
 
     DecoderType decoderType = DecoderType.RTCM3;
 
@@ -31,9 +31,9 @@ public class RTCM_3X implements IDecoder {
 
         int preamble, shift, nmb;
 
-        if (previousResidue != null) {
-            buffer = concatByteBuffer(previousResidue, buffer);
-            previousResidue = null;
+        if (residue != null) {
+            buffer = concatByteBuffer(residue, buffer);
+            residue = null;
         }
 
         if (buffer.get(0) != RTCM_PREAMBLE) {
@@ -70,9 +70,9 @@ public class RTCM_3X implements IDecoder {
 
             } catch (BufferUnderflowException e) {
                 buffer.position(preamble);
-                previousResidue = ByteBuffer.allocate(buffer.remaining());
-                previousResidue.put(buffer);
-                previousResidue.flip();
+                residue = ByteBuffer.allocate(buffer.remaining());
+                residue.put(buffer);
+                residue.flip();
             }
         }
 
@@ -80,20 +80,8 @@ public class RTCM_3X implements IDecoder {
     }
 
     private boolean checkExistsMessageNumber(int nmb) {
-        // 1001-1039
-        if (1001 <= nmb && nmb <= 1039)
-            return true;
-
-        //1057-1068
-        if (1057 <= nmb && nmb <= 1068)
-            return true;
-
-        //1071-1230
-        if (1071 <= nmb && nmb <= 1230)
-            return true;
-
-        //4001-4095
-        return 4001 <= nmb && nmb <= 4095;
+        return (1001 <= nmb && nmb <= 1039) || (1057 <= nmb && nmb <= 1068)
+                || (1071 <= nmb && nmb <= 1230) || (4001 <= nmb && nmb <= 4095);
     }
 
     private int errorCount = 0;
@@ -102,7 +90,7 @@ public class RTCM_3X implements IDecoder {
         logger.error("Error counter " + errorCount);
         errorCount++;
         if (errorCount > 10)
-            throw new IllegalArgumentException("NO RTCM3.X DATA!");
+            throw new IllegalArgumentException("NO RTCM3 DATA!");
     }
 
     public ByteBuffer concatByteBuffer(ByteBuffer residue, ByteBuffer buffer) {

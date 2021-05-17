@@ -10,10 +10,10 @@ import java.util.Iterator;
 
 public class BitUtils {
     String buffer;
-    int shiftPointer = 0;
+    int pointer = 0;
 
-    public void setShiftPointer(int i) {
-        shiftPointer = i;
+    public void pointerShift(int i) {
+        pointer = i;
     }
 
     public BitUtils(byte[] arr) {
@@ -44,31 +44,31 @@ public class BitUtils {
 
 
     public int getSignedInt(int length) {
-        int pointer = shiftPointer;
-        shiftPointer += length;
+        int pointer = this.pointer;
+        this.pointer += length;
 
-        return toSignedInt(buffer.substring(pointer, shiftPointer));
+        return toSignedInt(buffer.substring(pointer, this.pointer));
     }
 
     public long getSignedLong(int length) {
 
-        int pointer = shiftPointer;
-        shiftPointer += length;
-        return toSignedLong(buffer.substring(pointer, shiftPointer));
+        int pointer = this.pointer;
+        this.pointer += length;
+        return toSignedLong(buffer.substring(pointer, this.pointer));
     }
 
     public long getUnsignedLong(int length) {
-        int pointer = shiftPointer;
-        shiftPointer += length;
+        int pointer = this.pointer;
+        this.pointer += length;
 
-        return UnsignedLong.valueOf(buffer.substring(pointer, shiftPointer), 2).intValue();
+        return UnsignedLong.valueOf(buffer.substring(pointer, this.pointer), 2).intValue();
     }
 
     public int getUnsignedInt(int length) {
-        int pointer = shiftPointer;
-        shiftPointer += length;
+        int pointer = this.pointer;
+        this.pointer += length;
 
-        return UnsignedInteger.valueOf(buffer.substring(pointer, shiftPointer), 2).intValue();
+        return UnsignedInteger.valueOf(buffer.substring(pointer, this.pointer), 2).intValue();
     }
 
     public void setInt(int data, int length) {
@@ -103,9 +103,9 @@ public class BitUtils {
     }
 
     public String getString(int length) {
-        int pointer = shiftPointer;
-        shiftPointer += length;
-        byte[] bString = getByteByString(buffer.substring(pointer, shiftPointer));
+        int pointer = this.pointer;
+        this.pointer += length;
+        byte[] bString = getByteByString(buffer.substring(pointer, this.pointer));
         return new String(bString, StandardCharsets.ISO_8859_1);
     }
 
@@ -154,7 +154,7 @@ public class BitUtils {
         return ret;
     }
 
-    public byte[] makeByteArr() {
+    public byte[] makeByteArray() {
         Iterable iterable = Splitter.fixedLength(8).split(buffer);
         byte[] ret = new byte[Iterables.size(iterable)];
         Iterator iterator = iterable.iterator();

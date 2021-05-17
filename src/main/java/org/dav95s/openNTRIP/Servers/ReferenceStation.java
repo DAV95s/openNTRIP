@@ -10,7 +10,7 @@ import org.dav95s.openNTRIP.Network.Socket;
 import org.dav95s.openNTRIP.Tools.*;
 import org.dav95s.openNTRIP.Tools.Decoders.IDecoder;
 import org.dav95s.openNTRIP.Tools.Decoders.RAW;
-import org.dav95s.openNTRIP.Tools.Decoders.RTCM_3X;
+import org.dav95s.openNTRIP.Tools.Decoders.DecoderRTCM3;
 import org.dav95s.openNTRIP.Tools.RTCMStream.Analyzer;
 import org.dav95s.openNTRIP.Tools.RTCMStream.MessagePack;
 import org.json.simple.JSONObject;
@@ -36,7 +36,7 @@ public class ReferenceStation implements INetworkHandler {
 
     private Socket socket;
     private Analyzer analyzer;
-    private IDecoder decoder = new RTCM_3X();
+    private IDecoder decoder = new DecoderRTCM3();
 
     public ReferenceStation(ReferenceStationModel model) {
         this.model = model;
@@ -103,7 +103,7 @@ public class ReferenceStation implements INetworkHandler {
     }
 
     private void changeDecoder() {
-        if (this.decoder instanceof RTCM_3X) {
+        if (this.decoder instanceof DecoderRTCM3) {
             this.decoder = new RAW();
             logger.info(model.getName() + " try new decoder: " + decoder.getType());
         }
@@ -148,7 +148,7 @@ public class ReferenceStation implements INetworkHandler {
     }
 
     private void socketInit(Socket socket) {
-        this.decoder = new RTCM_3X();
+        this.decoder = new DecoderRTCM3();
         this.analyzer = new Analyzer(this);
         this.socket = socket;
         this.model.setOnline(true);

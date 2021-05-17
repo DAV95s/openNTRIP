@@ -30,7 +30,7 @@ public class MSG1023 {
 
     public MSG1023(byte[] msg) {
         BitUtils bitUtils = new BitUtils(msg);
-        bitUtils.setShiftPointer(24);
+        bitUtils.pointerShift(24);
         messageNumber = bitUtils.getUnsignedInt(12);
         SystemIdentificationNumber = bitUtils.getUnsignedInt(8);
         HorizontalShiftIndicator = bitUtils.getUnsignedInt(1);
@@ -73,7 +73,6 @@ public class MSG1023 {
         bitUtils.setInt((MdA.divide(BigDecimal.valueOf(0.001d), RoundingMode.HALF_EVEN).intValue()), 8);
         bitUtils.setInt( (MdH.divide(BigDecimal.valueOf(0.01d), RoundingMode.HALF_EVEN).intValue()), 15);
 
-
         for (Grid grid : gridMap) {
             bitUtils.setInt(grid.dFi.divide(gridResolution, RoundingMode.HALF_EVEN).intValue(), 9);
             bitUtils.setInt(grid.dAi.divide(gridResolution, RoundingMode.HALF_EVEN).intValue(), 9);
@@ -85,7 +84,7 @@ public class MSG1023 {
         bitUtils.setInt(HorizontalGridQualityIndicator, 3);
         bitUtils.setInt(VerticalGridQualityIndicator, 3);
         bitUtils.setInt(ModifiedJulianDayNumber, 16);
-        byte[] bytes = bitUtils.makeByteArr();
+        byte[] bytes = bitUtils.makeByteArray();
         return Bytes.concat(bytes, bitUtils.crc24q(bytes, bytes.length, 0));
     }
 

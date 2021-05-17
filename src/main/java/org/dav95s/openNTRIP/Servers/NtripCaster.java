@@ -14,15 +14,14 @@ import java.nio.ByteBuffer;
 import java.nio.channels.ServerSocketChannel;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.HashMap;
 
 public class NtripCaster {
     final static private Logger logger = LogManager.getLogger(NtripCaster.class.getName());
 
     final private ServerSocketChannel serverChannel;
     final private NtripCasterModel model;
-    final private Set<MountPoint> mountPoints = new HashSet<>();
+    final private HashMap<String, MountPoint> mountPoints = new HashMap<>();
 
     public NtripCaster(NtripCasterModel model) throws IOException, SQLException {
         this.model = model;
@@ -35,7 +34,8 @@ public class NtripCaster {
 
         ArrayList<Integer> mountpointsId = this.model.readMountpointsId();
         for (int id : mountpointsId) {
-            mountPoints.add(new MountPoint(new MountPointModel(id)));
+            MountPointModel mountPointModel = new MountPointModel(id);
+            mountPoints.put(mountPointModel.getName(), new MountPoint(mountPointModel));
         }
 
         logger.info("NtripCaster :" + model.getPort() + " has been initiated!");
@@ -56,7 +56,7 @@ public class NtripCaster {
                 "Connection: close\r\n";
 
         StringBuilder body = new StringBuilder();
-        for (MountPoint mountPoint : this.mountPoints) {
+        for (MountPoint mountPoint : this.mountPoints.values()) {
             body.append(mountPoint.toString());
         }
 
@@ -90,11 +90,7 @@ public class NtripCaster {
     }
 
     private MountPoint getMountpoint(String name) throws IllegalArgumentException {
-        for (MountPoint mp : this.mountPoints) {
-            if (mp.getName().equals(name))
-                return mp;
-        }
-        return null;
+        return this.mountPoints.get(name);
     }
 
     public int getId() {
@@ -103,7 +99,8 @@ public class NtripCaster {
 
     public void refresh() throws SQLException {
         this.model.read();
-        for (MountPoint mp : mountPoints) {
+        model.readMountpointsId();
+        for (MountPoint mp : mountPoints.values()) {
             mp.model.read();
             mp.model.readAccessibleReferenceStations();
         }

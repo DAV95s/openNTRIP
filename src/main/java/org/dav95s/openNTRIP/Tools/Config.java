@@ -24,12 +24,12 @@ public class Config {
         }
     }
 
-    private File configFile = new File("src/main/resources/app.properties");
-    private Properties properties = new Properties();
+    private final Properties properties = new Properties();
     private PasswordHandler passwordHandler;
 
     //todo rewrite this bullshit
     private Config() {
+        File configFile = new File("src/main/resources/app.properties");
         if (configFile.exists()) {
             logger.info("'app.properties' config file loading..");
             try {

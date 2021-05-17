@@ -14,7 +14,7 @@ public class RTCM_3XTest extends TestCase {
     @Test
     public void rtcm3x_separator() throws IOException {
         String path = "src/test/resources/RTCM_30";
-        RTCM_3X rtcm3X = new RTCM_3X();
+        DecoderRTCM3 rtcm3X = new DecoderRTCM3();
 
         ByteBuffer buffer = ByteBuffer.allocate(100_000);
 
@@ -70,7 +70,7 @@ public class RTCM_3XTest extends TestCase {
 
     @Test
     public void testConcat() {
-        RTCM_3X rtcm3X = new RTCM_3X();
+        DecoderRTCM3 rtcm3X = new DecoderRTCM3();
         ByteBuffer b1 = ByteBuffer.allocate(3);
         b1.put((byte) 1);
         b1.put((byte) 2);

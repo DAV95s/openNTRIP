@@ -1,4 +1,4 @@
-import org.dav95s.openNTRIP.Tools.Decoders.RTCM_3X;
+import org.dav95s.openNTRIP.Tools.Decoders.DecoderRTCM3;
 import org.dav95s.openNTRIP.Tools.RTCMStream.MessagePack;
 import org.dav95s.openNTRIP.Tools.RTCM.MSG1006;
 import org.junit.Test;
@@ -18,7 +18,7 @@ public class Test1004 {
             InputStream input = new FileInputStream(file);
             ByteBuffer byteBuffer = ByteBuffer.wrap(input.readAllBytes());
             input.close();
-            RTCM_3X decoder = new RTCM_3X();
+            DecoderRTCM3 decoder = new DecoderRTCM3();
 
             MessagePack messages = decoder.separate(byteBuffer);
             byte[] bytes = messages.getMessageByNmb(1006).getBytes();

@@ -79,7 +79,7 @@ public class NMEA {
         }
     }
 
-    public class GPSPosition {
+    public static class GPSPosition {
         public float time = 0.0f;
         public float lat = 0.0f;
         public float lon = 0.0f;

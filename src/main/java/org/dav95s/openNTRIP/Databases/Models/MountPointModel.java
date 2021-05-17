@@ -11,14 +11,9 @@ import org.dav95s.openNTRIP.Databases.DataSource;
 import org.dav95s.openNTRIP.ServerBootstrap;
 import org.dav95s.openNTRIP.Servers.ReferenceStation;
 import org.dav95s.openNTRIP.Tools.NMEA;
-import org.json.simple.JSONObject;
-import org.locationtech.proj4j.CRSFactory;
-import org.locationtech.proj4j.parser.Proj4Parser;
 
 import java.sql.*;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.TreeMap;
 
 public class MountPointModel {
     final static private Logger logger = LogManager.getLogger(MountPointModel.class.getName());
@@ -439,8 +434,4 @@ public class MountPointModel {
     public void setPlugin_id(int plugin_id) {
         this.plugin_id = plugin_id;
     }
-}
-
-class CRS {
-
 }
