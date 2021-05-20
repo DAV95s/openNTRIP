@@ -6,9 +6,10 @@ import org.dav95s.openNTRIP.ServerBootstrap;
 import org.dav95s.openNTRIP.Servers.NtripCaster;
 import org.dav95s.openNTRIP.Servers.ReferenceStation;
 import org.dav95s.openNTRIP.Tools.HttpParser;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-import org.json.simple.JSONObject;
+
+import org.json.JSONObject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.nio.ByteBuffer;
@@ -17,7 +18,7 @@ import java.util.ArrayDeque;
 import java.util.Queue;
 
 public class ConnectHandler implements INetworkHandler {
-    final static private Logger logger = LogManager.getLogger(ConnectHandler.class.getName());
+    final static private Logger logger = LoggerFactory.getLogger(ConnectHandler.class.getName());
 
     private final Socket socket;
     private final NtripCaster caster;
@@ -56,7 +57,7 @@ public class ConnectHandler implements INetworkHandler {
             JSONObject object = new JSONObject();
             object.put("socket", socket.toString());
             object.put("read", count);
-            logger.debug(object);
+            logger.debug(object.toString());
         }
     }
 
@@ -77,7 +78,7 @@ public class ConnectHandler implements INetworkHandler {
                 object.put("from", "ConnectHandler");
                 object.put("socket", socket.toString());
                 object.put("request", request);
-                logger.debug(object);
+                logger.debug(object.toString());
             }
 
             HttpParser httpParser = new HttpParser(request);
@@ -99,7 +100,8 @@ public class ConnectHandler implements INetworkHandler {
             }
 
         } catch (Exception e) {
-            logger.error(e);
+            logger.error(e.getMessage());
+
             this.socket.sendBadMessageAndClose();
         }
     }

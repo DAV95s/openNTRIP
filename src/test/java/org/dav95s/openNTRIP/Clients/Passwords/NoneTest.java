@@ -1,12 +1,12 @@
 package org.dav95s.openNTRIP.Clients.Passwords;
 
-import junit.framework.TestCase;
+import org.junit.Test;
 
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
-public class NoneTest extends TestCase {
 
+public class NoneTest {
+    @Test
     public void testCompare() {
         None none = new None();
 
@@ -19,11 +19,12 @@ public class NoneTest extends TestCase {
         assertFalse(none.compare("123131", null));
     }
 
+    @Test
     public void testHash() {
         None none = new None();
-        //hash o_O
+
         assertEquals("123123123", none.hash("123123123"));
         assertEquals("", none.hash(""));
-        assertFalse("123".equals(none.hash("123123123")));
+        assertNotEquals("123", none.hash("123123123"));
     }
 }

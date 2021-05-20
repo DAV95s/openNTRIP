@@ -10,8 +10,9 @@ import org.dav95s.openNTRIP.Servers.NtripCaster;
 import org.dav95s.openNTRIP.Servers.ReferenceStation;
 import org.dav95s.openNTRIP.Tools.HttpParser;
 import org.dav95s.openNTRIP.Tools.NMEA;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 
 import java.io.IOException;
 import java.nio.ByteBuffer;
@@ -20,7 +21,7 @@ import java.util.ArrayDeque;
 import java.util.Queue;
 
 public class User implements INetworkHandler {
-    final static private Logger logger = LogManager.getLogger(User.class.getName());
+    final static private Logger logger = LoggerFactory.getLogger(User.class.getName());
 
     final private long DELAY_POSITION_UPDATE = 30_000;
 
@@ -71,7 +72,7 @@ public class User implements INetworkHandler {
 
             this.socket.close();
         } catch (IOException e) {
-            logger.error(e);
+            logger.error(e.getMessage());
         }
     }
 
@@ -90,7 +91,7 @@ public class User implements INetworkHandler {
 
         int count = this.socket.read(buffer);
 
-        logger.debug(() -> this.toString() + "read bytes: " + count);
+        logger.debug(this.toString() + "read bytes: " + count);
 
         if (count == 0)
             return;

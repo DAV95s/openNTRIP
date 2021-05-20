@@ -1,14 +1,14 @@
 package org.dav95s.openNTRIP.Databases.Models;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.dav95s.openNTRIP.Databases.DataSource;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.sql.*;
 import java.util.ArrayList;
 
 public class NtripCasterModel {
-    final static private Logger logger = LogManager.getLogger(NtripCasterModel.class.getName());
+    final static private Logger logger = LoggerFactory.getLogger(NtripCasterModel.class.getName());
 
     public NtripCasterModel(int id) throws SQLException {
         this.id = id;

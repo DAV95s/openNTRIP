@@ -1,7 +1,8 @@
 package org.dav95s.openNTRIP.Network;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.nio.ByteBuffer;
@@ -10,7 +11,7 @@ import java.nio.channels.SocketChannel;
 import java.util.concurrent.atomic.AtomicLong;
 
 public class Socket {
-    final static private Logger logger = LogManager.getLogger(Socket.class.getName());
+    final static private Logger logger = LoggerFactory.getLogger(Socket.class.getName());
 
     final private static AtomicLong socketIdCounter = new AtomicLong();
 

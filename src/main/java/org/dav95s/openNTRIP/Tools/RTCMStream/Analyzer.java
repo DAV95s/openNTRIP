@@ -1,12 +1,12 @@
 package org.dav95s.openNTRIP.Tools.RTCMStream;
 
 import org.dav95s.openNTRIP.Servers.ReferenceStation;
-import org.apache.logging.log4j.LogManager;
+
 
 import java.util.*;
 
 public class Analyzer {
-    final static private org.apache.logging.log4j.Logger logger = LogManager.getLogger(Analyzer.class.getName());
+
     final static private Timer timer = new Timer();
 
     private final ReferenceStation referenceStation;

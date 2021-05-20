@@ -1,12 +1,12 @@
 package org.dav95s.openNTRIP.Servers;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.dav95s.openNTRIP.Clients.User;
 import org.dav95s.openNTRIP.Databases.Models.MountPointModel;
 import org.dav95s.openNTRIP.Databases.Models.NtripCasterModel;
 import org.dav95s.openNTRIP.Network.NetworkCore;
 import org.dav95s.openNTRIP.ServerBootstrap;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;
@@ -17,7 +17,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 public class NtripCaster {
-    final static private Logger logger = LogManager.getLogger(NtripCaster.class.getName());
+    final static private Logger logger = LoggerFactory.getLogger(NtripCaster.class.getName());
 
     final private ServerSocketChannel serverChannel;
     final private NtripCasterModel model;
@@ -46,7 +46,7 @@ public class NtripCaster {
             ServerBootstrap.getInstance().removeCaster(this);
             serverChannel.close();
         } catch (IOException e) {
-            logger.warn(e);
+            logger.warn(e.getMessage());
         }
     }
 

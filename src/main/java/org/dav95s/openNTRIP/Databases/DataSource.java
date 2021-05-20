@@ -8,11 +8,10 @@ import java.sql.SQLException;
 
 public class DataSource {
 
-    private static HikariConfig configHikari = new HikariConfig();
-    private static HikariDataSource ds;
+    private static final HikariConfig configHikari = new HikariConfig();
+    private static final HikariDataSource ds;
 
     static {
-
         String configFile = "src/main/resources/db.properties";
         HikariConfig cfg = new HikariConfig(configFile);
 

@@ -1,7 +1,7 @@
 package org.dav95s.openNTRIP.Network;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.ExecutorService;
@@ -9,7 +9,7 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
 public class Worker implements Runnable {
-    final static private Logger logger = LogManager.getLogger(Worker.class.getName());
+    final static private Logger logger = LoggerFactory.getLogger(Worker.class.getName());
     private static final int WORK_QUEUE = 1000;
     private static final int BLOCKING_TIMEOUT_MLS = 60000;
 
@@ -46,7 +46,7 @@ public class Worker implements Runnable {
 
                 executor.submit(work);
             } catch (InterruptedException e) {
-                logger.error(e);
+                logger.error(e.getMessage());
             }
         }
     }

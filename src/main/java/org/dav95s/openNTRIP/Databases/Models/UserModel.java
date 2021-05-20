@@ -20,7 +20,6 @@ public class UserModel {
         this.password = password;
     }
 
-    //todo password hash!!!!
     public int create() throws SQLException {
         String sql = "INSERT INTO `users`(`username`, `password`, `email`, `created_on`) VALUES (?,?,?,?)";
 

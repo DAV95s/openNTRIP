@@ -9,6 +9,7 @@ import org.junit.Test;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Random;
 
 public class TestDB {
     @Test
@@ -87,6 +88,9 @@ public class TestDB {
         //create
         model.setUsername("qwerty123");
         model.setPassword("123123");
+        if (model.read())
+            model.delete();
+
         model.create();
 
         //read
@@ -95,26 +99,35 @@ public class TestDB {
         Assert.assertEquals("123123", model.getPassword());
 
         //update
-        model.setPassword("123123123");
+        model.setPassword("123123123d");
         Assert.assertTrue(model.update());
+        model.setPassword("321");
         Assert.assertTrue(model.read());
-        Assert.assertEquals("123123123", model.getPassword());
+        Assert.assertEquals("123123123d", model.getPassword());
 
         //delete
         Assert.assertTrue(model.delete());
         Assert.assertFalse(model.read());
     }
 
-    @Test
-    public void conf() {
-        PasswordHandler ph = Config.getInstance().getPasswordHandler();
-        String ee = ph.hash("21312312");
-    }
 
     @Test
     public void mp() throws SQLException {
-        NtripCasterModel model = new NtripCasterModel();
-        model.setId(1);
-        ArrayList<Integer> i = model.readMountpointsId();
+        Random random = new Random();
+
+        while (true){
+            System.out.println(normalize(random.nextFloat() / random.nextFloat(), 4));
+            try {
+                Thread.sleep(500);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    public double normalize(double d, int scale) {
+        int res = (int) Math.pow(10, scale);
+        double d2 = d * res;
+        return (double) Math.round(d2) / res;
     }
 }

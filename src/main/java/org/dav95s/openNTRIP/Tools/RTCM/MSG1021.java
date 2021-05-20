@@ -5,7 +5,6 @@ import org.dav95s.openNTRIP.Tools.RTCMStream.BitUtils;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-import java.util.BitSet;
 
 import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkNotNull;
@@ -78,7 +77,7 @@ public class MSG1021 extends RTCM {
 
     public MSG1021(byte[] msg) {
         BitUtils bitUtils = new BitUtils(msg);
-        bitUtils.pointerShift(24);
+        bitUtils.setPointer(24);
 
         messageNumber = bitUtils.getUnsignedInt(12);
         SourceNameCounter = bitUtils.getUnsignedInt(5);
@@ -140,7 +139,7 @@ public class MSG1021 extends RTCM {
         bitUtils.setInt(Bt.subtract(b_base).divide(BigDecimal.valueOf(0.001), RoundingMode.HALF_EVEN).intValue(), 25);
         bitUtils.setInt(HorizontalQuality, 3);
         bitUtils.setInt(VerticalQuality, 3);
-        byte[] bytes = bitUtils.makeByteArray();
+        byte[] bytes = bitUtils.getByteArray();
         return Bytes.concat(bytes, bitUtils.crc24q(bytes, bytes.length, 0));
     }
 

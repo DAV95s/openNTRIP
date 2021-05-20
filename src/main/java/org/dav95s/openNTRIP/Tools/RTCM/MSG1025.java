@@ -1,6 +1,5 @@
 package org.dav95s.openNTRIP.Tools.RTCM;
 
-import com.google.common.base.Preconditions;
 import com.google.common.primitives.Bytes;
 import org.dav95s.openNTRIP.Tools.RTCMStream.BitUtils;
 
@@ -28,7 +27,7 @@ public class MSG1025 {
 
     public MSG1025(byte[] msg) {
         BitUtils bitUtils = new BitUtils(msg);
-        bitUtils.pointerShift(24);
+        bitUtils.setPointer(24);
         messageNumber = bitUtils.getUnsignedInt(12);
         SystemIdentificationNumber = bitUtils.getUnsignedInt(8);
         ProjectionType = bitUtils.getUnsignedInt(6);
@@ -51,7 +50,7 @@ public class MSG1025 {
         bitUtils.setLong(S.subtract(BigDecimal.valueOf(993000)).divide(BigDecimal.valueOf(0.00001d), RoundingMode.HALF_EVEN).longValue(), 30);
         bitUtils.setLong(FalseEasting.divide(BigDecimal.valueOf(0.001d), RoundingMode.HALF_EVEN).longValue(), 36);
         bitUtils.setLong(FalseNorthing.divide(BigDecimal.valueOf(0.001d), RoundingMode.HALF_EVEN).longValue(), 35);
-        byte[] bytes = bitUtils.makeByteArray();
+        byte[] bytes = bitUtils.getByteArray();
         return Bytes.concat(bytes, bitUtils.crc24q(bytes, bytes.length, 0));
     }
 
@@ -63,7 +62,7 @@ public class MSG1025 {
                 ", ProjectionType=" + ProjectionType +
                 ", LaNO=" + LaNO +
                 ", LoNO=" + LoNO +
-                ", addSNO=" + S +
+                ", S=" + S +
                 ", FalseEasting=" + FalseEasting +
                 ", FalseNorthing=" + FalseNorthing +
                 '}';

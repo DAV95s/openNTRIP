@@ -1,9 +1,10 @@
 package org.dav95s.openNTRIP.Network;
 
-import org.apache.logging.log4j.Level;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+
 import org.dav95s.openNTRIP.Servers.NtripCaster;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.slf4j.event.Level;
 
 import java.io.IOException;
 import java.nio.channels.SelectionKey;
@@ -13,7 +14,7 @@ import java.nio.channels.SocketChannel;
 import java.util.Iterator;
 
 public class NetworkCore implements Runnable {
-    final static private Logger logger = LogManager.getLogger(NetworkCore.class.getName());
+    final static private Logger logger = LoggerFactory.getLogger(NetworkCore.class.getName());
 
     private Selector selector;
     private Thread thread;
@@ -33,7 +34,7 @@ public class NetworkCore implements Runnable {
             this.thread = new Thread(this);
             this.thread.start();
         } catch (IOException e) {
-            logger.log(Level.ERROR, e);
+            logger.error(e.getMessage());
         }
     }
 
@@ -55,7 +56,7 @@ public class NetworkCore implements Runnable {
                 if (count < 1)
                     continue;
 
-                logger.debug(() -> "New event, selector have " + count + " connections");
+                logger.debug("New event, selector have " + count + " connections");
 
                 Iterator<SelectionKey> iterator = selector.selectedKeys().iterator();
 
@@ -79,7 +80,7 @@ public class NetworkCore implements Runnable {
                             handler.readChannel();
                             worker.addWork(handler);
                         } catch (IOException e) {
-                            logger.error(e);
+                            logger.error(e.getMessage());
                             handler.close();
                             selectionKey.cancel();
                         }
@@ -87,7 +88,7 @@ public class NetworkCore implements Runnable {
                     iterator.remove();
                 }
             } catch (IOException ex) {
-                logger.log(Level.ERROR, ex);
+                logger.error(ex.getMessage());
             }
         }
     }

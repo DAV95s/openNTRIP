@@ -1,12 +1,13 @@
 package org.dav95s.openNTRIP.Clients.Passwords;
 
-import junit.framework.TestCase;
+import org.junit.Test;
 
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
-public class BCryptTest extends TestCase {
+public class BCryptTest {
 
+    @Test
     public void testCompare() {
         BCrypt bCrypt = new BCrypt();
 
@@ -16,6 +17,8 @@ public class BCryptTest extends TestCase {
         assertTrue(bCrypt.compare("$2b$10$uayG5HrmJSRK7.gDW9QX7.e9RYM0lwlUbzieDbVCcVrKJ14XFHwx6", "ttt4444ccz"));
         assertTrue(bCrypt.compare("$2a$04$AQgn0ch7ZWrrfP8Opq/k8.xazPZcqyvbz/8xf52W69utG9onGhi16", "yyytttqqee4444"));
 
+        assertFalse(bCrypt.compare("    ", " "));
+        assertFalse(bCrypt.compare("",""));
         assertFalse(bCrypt.compare("2cf24dba5fb0a30e26e83b2ac5b9e29e1b161e5c1fa7425e73043362938b9824", "hallo"));
         assertFalse(bCrypt.compare("", "!2@@#31"));
         assertFalse(bCrypt.compare(null, "11313"));
@@ -24,6 +27,7 @@ public class BCryptTest extends TestCase {
 
     }
 
+    @Test
     public void testHash() {
         BCrypt bCrypt = new BCrypt();
 
@@ -32,4 +36,5 @@ public class BCryptTest extends TestCase {
         assertTrue(bCrypt.compare(hash, example));
         assertFalse(bCrypt.compare(hash, "123123123123"));
     }
+
 }

@@ -2,12 +2,11 @@ package org.dav95s.openNTRIP.Databases.Models;
 
 import junit.framework.TestCase;
 import org.dav95s.openNTRIP.Servers.ReferenceStation;
-import org.junit.Test;
 
 import java.io.IOException;
 
 public class ReferenceStationModelTest extends TestCase {
-    @Test
+
     public void getStationFromPool() throws IOException {
         ReferenceStationModel WarszawaStationModel = new ReferenceStationModel();
         WarszawaStationModel.getPosition().lat = (float) 52.238056;

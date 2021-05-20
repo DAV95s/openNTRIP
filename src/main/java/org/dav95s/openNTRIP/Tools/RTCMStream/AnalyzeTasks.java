@@ -1,13 +1,12 @@
 package org.dav95s.openNTRIP.Tools.RTCMStream;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+
 import org.dav95s.openNTRIP.Databases.Models.ReferenceStationModel;
 import org.dav95s.openNTRIP.Servers.ReferenceStation;
 import org.dav95s.openNTRIP.Tools.RTCM.MSG1006;
-import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
-import org.json.simple.parser.ParseException;
+import org.json.JSONObject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -19,7 +18,7 @@ import java.util.Locale;
 import java.util.TimerTask;
 
 public class AnalyzeTasks {
-    final static private Logger logger = LogManager.getLogger(AnalyzeTasks.class.getName());
+    final static private Logger logger = LoggerFactory.getLogger(AnalyzeTasks.class.getName());
     ReferenceStation referenceStation;
     ReferenceStationModel model;
     MessagePool messagePool;
@@ -206,27 +205,24 @@ public class AnalyzeTasks {
 
             String[] identifier = {"suburb", "village", "city", "county", "state"};
 
-            JSONParser parser = new JSONParser();
 
             try {
-                JSONObject json = (JSONObject) parser.parse(rawJson);
+                JSONObject json = new JSONObject(rawJson);
                 json = (JSONObject) json.get("address");
 
                 for (String match : identifier) {
-                    if (json.containsKey(match)) {
+                    if (json.has(match)) {
                         model.setIdentifier((String) json.get(match));
                         break;
                     }
                 }
 
-                if (json.containsKey("country_code")) {
+                if (json.getString("country_code") != null) {
                     String iso = iso2CountryCodeToIso3CountryCode((String) json.get("country_code"));
                     model.setCountry(iso);
                     model.update();
                 }
 
-            } catch (ParseException ex) {
-                ex.printStackTrace();
             } catch (SQLException throwables) {
                 throwables.printStackTrace();
             }

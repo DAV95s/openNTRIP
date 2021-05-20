@@ -1,6 +1,5 @@
 package org.dav95s.openNTRIP.Tools.Decoders;
 
-import junit.framework.TestCase;
 import org.dav95s.openNTRIP.Tools.RTCMStream.MessagePack;
 import org.junit.Assert;
 import org.junit.Test;
@@ -10,7 +9,7 @@ import java.io.RandomAccessFile;
 import java.nio.ByteBuffer;
 import java.nio.channels.FileChannel;
 
-public class RTCM_3XTest extends TestCase {
+public class RTCM_3XTest {
     @Test
     public void rtcm3x_separator() throws IOException {
         String path = "src/test/resources/RTCM_30";

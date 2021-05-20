@@ -1,6 +1,5 @@
 package org.dav95s.openNTRIP.Databases.Models;
 
-import org.json.simple.parser.ParseException;
 import org.junit.Test;
 
 import java.sql.SQLException;

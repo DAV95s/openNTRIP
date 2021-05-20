@@ -1,9 +1,10 @@
 package org.dav95s.openNTRIP.Tools.RTCMStream;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+
 import org.dav95s.openNTRIP.Servers.ReferenceStation;
 import org.dav95s.openNTRIP.Tools.Config;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.io.RandomAccessFile;
@@ -11,7 +12,7 @@ import java.nio.ByteBuffer;
 import java.util.Date;
 
 public class StreamSaver {
-    final static private Logger logger = LogManager.getLogger(StreamSaver.class.getName());
+    final static private Logger logger = LoggerFactory.getLogger(StreamSaver.class.getName());
 
     Date date = new Date();
     Integer currentHours;

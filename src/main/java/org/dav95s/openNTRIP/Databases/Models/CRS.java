@@ -7,7 +7,6 @@ import org.dav95s.openNTRIP.Tools.RTCM.MSG1023;
 import org.dav95s.openNTRIP.Tools.RTCM.MSG1025;
 import org.json.JSONObject;
 
-import java.math.BigDecimal;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;

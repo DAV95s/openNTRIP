@@ -1,18 +1,19 @@
 package org.dav95s.openNTRIP.Servers;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+
 import org.dav95s.openNTRIP.Clients.Authentication.IAuthenticator;
 import org.dav95s.openNTRIP.Clients.User;
 import org.dav95s.openNTRIP.Databases.Models.MountPointModel;
-import org.json.simple.JSONObject;
+import org.json.JSONObject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.Arrays;
 
 public class MountPoint {
-    final static private Logger logger = LogManager.getLogger(MountPoint.class.getName());
+    final static private Logger logger = LoggerFactory.getLogger(MountPoint.class.getName());
 
     final protected MountPointModel model;
 
@@ -32,7 +33,7 @@ public class MountPoint {
             object.put("isAvailable", model.isAvailable());
             object.put("authenticator", model.getAuthenticator());
             object.put("pool", Arrays.toString(model.getStationsPool().toArray()));
-            logger.debug(object);
+            logger.debug(object.toString());
         }
 
         //available

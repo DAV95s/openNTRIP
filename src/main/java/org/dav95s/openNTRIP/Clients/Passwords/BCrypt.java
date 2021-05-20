@@ -1,52 +1,35 @@
 package org.dav95s.openNTRIP.Clients.Passwords;
 
-
-import java.security.SecureRandom;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-
-import static at.favre.lib.crypto.bcrypt.BCrypt.*;
+import static at.favre.lib.crypto.bcrypt.BCrypt.verifyer;
 
 public class BCrypt implements PasswordHandler {
-    public static final Logger log = Logger.getLogger(SHA256.class.getName());
 
     @Override
-    public boolean compare(String fromDB, String fromUser) {
-        if (fromDB == null) {
-            log.log(Level.WARNING, "Password fromDB is NULL");
+    public boolean compare(String DBPassword, String UserPassword) {
+        if (DBPassword == null || UserPassword == null) {
+            return false;
+        }
+        DBPassword = DBPassword.trim();
+        UserPassword = UserPassword.trim();
+        if (DBPassword.isEmpty() || UserPassword.isEmpty()) {
             return false;
         }
 
-        if (fromUser == null) {
-            log.log(Level.WARNING, "User password is NULL");
-            return false;
-        }
-
-        if (fromDB == "") {
-            log.log(Level.WARNING, "Password fromDB is empty");
-            return false;
-        }
-
-        Result rr = verifyer().verify(fromUser.getBytes(), fromDB.getBytes());
-
-        if (rr.verified)
-            return true;
-
-        return false;
+        return verifyer().verify(UserPassword.getBytes(), DBPassword.getBytes()).verified;
     }
 
-    //todo need write
-    @Override
-    public String hash(String rawPassword) {
+    public String hash(String rawPassword, int BCryptRounds) {
         if (rawPassword == null) {
-            throw new IllegalArgumentException("Input null string!");
+            throw new NullPointerException("Input string is null");
         }
-        if (rawPassword == "")
-            throw new IllegalArgumentException("Can't hash of empty string!");
 
-        byte[] rawResult = at.favre.lib.crypto.bcrypt.BCrypt.withDefaults().hash(12, rawPassword.getBytes());
+        byte[] rawResult = at.favre.lib.crypto.bcrypt.BCrypt.withDefaults().hash(BCryptRounds, rawPassword.getBytes());
         return new String(rawResult);
     }
 
+    @Override
+    public String hash(String rawPassword) {
+        return hash(rawPassword, 12);
+    }
 
 }

@@ -1,12 +1,13 @@
 package org.dav95s.openNTRIP;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+
 import org.dav95s.openNTRIP.Databases.DataSource;
 import org.dav95s.openNTRIP.Databases.Models.NtripCasterModel;
 import org.dav95s.openNTRIP.Databases.Models.ReferenceStationModel;
 import org.dav95s.openNTRIP.Servers.NtripCaster;
 import org.dav95s.openNTRIP.Servers.ReferenceStation;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.sql.Connection;
@@ -16,7 +17,7 @@ import java.sql.SQLException;
 import java.util.*;
 
 public class ServerBootstrap {
-    private final Logger logger = LogManager.getLogger(ServerBootstrap.class.getName());
+    private final Logger logger = LoggerFactory.getLogger(ServerBootstrap.class.getName());
     private final Timer timer = new Timer();
 
     private static ServerBootstrap instance;
@@ -57,7 +58,7 @@ public class ServerBootstrap {
         try {
             rs.refresh();
         } catch (SQLException e) {
-            logger.error(e);
+            logger.error(e.getMessage());
             referenceStations.remove(rs);
         }
     }
@@ -67,7 +68,7 @@ public class ServerBootstrap {
             ReferenceStation newStation = new ReferenceStation(new ReferenceStationModel(id));
             referenceStations.add(newStation);
         } catch (SQLException e) {
-            logger.error(e);
+            logger.error(e.getMessage());
         }
     }
 
@@ -85,7 +86,7 @@ public class ServerBootstrap {
             }
 
         } catch (SQLException e) {
-            logger.fatal("Can't read data from database!", e);
+            logger.error("Database connection error", e);
         }
         return listId;
     }
@@ -114,20 +115,20 @@ public class ServerBootstrap {
             ArrayList<Integer> idList = readIdALlCasters();
             for (Integer id : idList) {
                 NtripCaster caster = getCasterById(id);
-                if ( caster == null) {
+                if (caster == null) {
                     addNewCater(id);
-                }else {
+                } else {
                     refreshCaster(caster);
                 }
             }
         }
     };
 
-    private void refreshCaster(NtripCaster caster)  {
+    private void refreshCaster(NtripCaster caster) {
         try {
             caster.refresh();
         } catch (SQLException e) {
-            logger.error(e);
+            logger.error(e.getMessage());
         }
     }
 
@@ -135,7 +136,7 @@ public class ServerBootstrap {
         try {
             casters.add(new NtripCaster(new NtripCasterModel(id)));
         } catch (IOException | SQLException e) {
-            logger.error(e);
+            logger.error(e.getMessage());
         }
     }
 
@@ -167,7 +168,7 @@ public class ServerBootstrap {
             }
 
         } catch (SQLException e) {
-            logger.fatal("Can't read data from database!", e);
+            logger.error("Can't read data from database!", e);
         }
 
         return listId;

@@ -61,12 +61,9 @@ public class MSG1021Test {
             DecoderRTCM3 decoder = new DecoderRTCM3();
             MessagePack pack = decoder.separate(buffer);
             Message msg = pack.getMessageByNmb(1021);
-            long mark1 = System.currentTimeMillis();
             MSG1021 msg1021 = new MSG1021(msg.getBytes());
-            System.out.println(System.currentTimeMillis() - mark1);
-            mark1 = System.currentTimeMillis();
             byte[] bytes = msg1021.write();
-            System.out.println(System.currentTimeMillis() - mark1);
+
             System.out.println(msg1021);
             System.out.println(new MSG1021(bytes));
             System.out.println(new BitUtils(msg.getBytes()).toString(' '));

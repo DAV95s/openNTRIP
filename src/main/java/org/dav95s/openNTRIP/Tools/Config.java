@@ -1,9 +1,10 @@
 package org.dav95s.openNTRIP.Tools;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+
 import org.dav95s.openNTRIP.Clients.Passwords.HashAlgorithms;
 import org.dav95s.openNTRIP.Clients.Passwords.PasswordHandler;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.io.FileReader;
@@ -11,7 +12,7 @@ import java.io.IOException;
 import java.util.Properties;
 
 public class Config {
-    final static private Logger logger = LogManager.getLogger(Config.class.getName());
+    final static private Logger logger = LoggerFactory.getLogger(Config.class.getName());
     private static Config instance;
 
     public static Config getInstance() {

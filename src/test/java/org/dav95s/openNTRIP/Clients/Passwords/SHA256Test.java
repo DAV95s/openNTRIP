@@ -1,10 +1,12 @@
 package org.dav95s.openNTRIP.Clients.Passwords;
 
-import junit.framework.TestCase;
 import org.junit.Test;
 
-public class SHA256Test extends TestCase {
+import static org.junit.Assert.*;
 
+public class SHA256Test {
+
+    @Test
     public void testCompare() {
 
         SHA256 sha256 = new SHA256();
@@ -14,13 +16,13 @@ public class SHA256Test extends TestCase {
 
         assertFalse(sha256.compare("2cf24dba5fb0a30e26e83b2ac5b9e29e1b161e5c1fa7425e73043362938b9824", "hallo"));
         assertFalse(sha256.compare("", "!2@@#31"));
+        assertFalse(sha256.compare(" ", "!2@@#31"));
         assertFalse(sha256.compare(null, "11313"));
         assertFalse(sha256.compare(null, null));
         assertFalse(sha256.compare("2cf24dba5fb0a30e26e83b2ac5b9e29e1b161e5c1fa7425e73043362938b9824", null));
-
-
     }
 
+    @Test
     public void testHash() {
         SHA256 sha256 = new SHA256();
         assertEquals("2cf24dba5fb0a30e26e83b2ac5b9e29e1b161e5c1fa7425e73043362938b9824", sha256.hash("hello"));

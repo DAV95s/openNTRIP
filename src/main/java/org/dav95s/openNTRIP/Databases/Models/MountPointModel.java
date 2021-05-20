@@ -1,7 +1,5 @@
 package org.dav95s.openNTRIP.Databases.Models;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.dav95s.openNTRIP.Clients.Authentication.Basic;
 import org.dav95s.openNTRIP.Clients.Authentication.Digest;
 import org.dav95s.openNTRIP.Clients.Authentication.IAuthenticator;
@@ -16,8 +14,6 @@ import java.sql.*;
 import java.util.ArrayList;
 
 public class MountPointModel {
-    final static private Logger logger = LogManager.getLogger(MountPointModel.class.getName());
-
     private int id;
     private String name;
     private String identifier;
@@ -33,7 +29,7 @@ public class MountPointModel {
     private boolean solution;
     private String generator;
     private String compression;
-    private IAuthenticator authenticator;
+    private IAuthenticator authenticator = new None();
     private boolean fee;
     private int bitRate;
     private String misc;
@@ -142,7 +138,7 @@ public class MountPointModel {
                 id = rs.getInt(1);
                 return id;
             } else {
-                throw new SQLException("The database did not return the id.");
+                throw new SQLException("Database does not return the id.");
             }
 
         } catch (SQLException e) {

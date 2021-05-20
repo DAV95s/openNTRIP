@@ -1,24 +1,27 @@
 package org.dav95s.openNTRIP.Servers;
 
 import com.github.pbbl.heap.ByteBufferPool;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.dav95s.openNTRIP.Clients.User;
 import org.dav95s.openNTRIP.Databases.Models.ReferenceStationModel;
 import org.dav95s.openNTRIP.Network.INetworkHandler;
 import org.dav95s.openNTRIP.Network.Socket;
-import org.dav95s.openNTRIP.Tools.*;
+import org.dav95s.openNTRIP.Tools.Decoders.DecoderRTCM3;
 import org.dav95s.openNTRIP.Tools.Decoders.IDecoder;
 import org.dav95s.openNTRIP.Tools.Decoders.RAW;
-import org.dav95s.openNTRIP.Tools.Decoders.DecoderRTCM3;
+import org.dav95s.openNTRIP.Tools.HttpParser;
+import org.dav95s.openNTRIP.Tools.NMEA;
 import org.dav95s.openNTRIP.Tools.RTCMStream.Analyzer;
 import org.dav95s.openNTRIP.Tools.RTCMStream.MessagePack;
-import org.json.simple.JSONObject;
+import org.json.JSONObject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.sql.SQLException;
-import java.util.*;
+import java.util.ArrayDeque;
+import java.util.Arrays;
+import java.util.Queue;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 /**
@@ -26,8 +29,8 @@ import java.util.concurrent.CopyOnWriteArrayList;
  * After successful connect, setSocket() method is called.
  */
 public class ReferenceStation implements INetworkHandler {
+    static final private Logger logger = LoggerFactory.getLogger(ReferenceStation.class.getName());
     static final private int BYTE_BUFFER_SIZE = 32768;
-    static final private Logger logger = LogManager.getLogger(ReferenceStation.class.getName());
     static final private ByteBufferPool bufferPool = new ByteBufferPool();
 
     final private CopyOnWriteArrayList<User> subscribers = new CopyOnWriteArrayList<>();
@@ -51,7 +54,7 @@ public class ReferenceStation implements INetworkHandler {
             this.model.setOnline(false);
             this.model.update();
         } catch (IOException | SQLException e) {
-            logger.error(e);
+            logger.error(e.getMessage());
         }
     }
 
@@ -88,11 +91,12 @@ public class ReferenceStation implements INetworkHandler {
 
             if (logger.isDebugEnabled()) {
                 JSONObject object = new JSONObject();
+                object.put("name", model.getName());
                 object.put("read", buffer.limit());
                 object.put("messages", messagePack.toString());
                 object.put("queue_size", this.dataQueue.size());
                 object.put("fixPosition", model.isFixPosition());
-                logger.debug(object);
+                logger.debug(object.toString());
             }
 
         } catch (IllegalArgumentException e) {
@@ -184,7 +188,7 @@ public class ReferenceStation implements INetworkHandler {
             JSONObject object = new JSONObject();
             object.put("add client", user);
             object.put("contains", Arrays.toString(subscribers.toArray()));
-            logger.debug(object);
+            logger.debug(object.toString());
         }
     }
 
@@ -195,7 +199,7 @@ public class ReferenceStation implements INetworkHandler {
             JSONObject object = new JSONObject();
             object.put("remove client", user);
             object.put("contains", Arrays.toString(subscribers.toArray()));
-            logger.debug(object);
+            logger.debug(object.toString());
         }
     }
 

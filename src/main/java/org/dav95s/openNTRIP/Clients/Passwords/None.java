@@ -1,11 +1,9 @@
 package org.dav95s.openNTRIP.Clients.Passwords;
 
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 
 public class None implements PasswordHandler {
-    final static private Logger logger = LogManager.getLogger(None.class.getName());
+
 
     @Override
     public boolean compare(String fromDB, String fromUser) {

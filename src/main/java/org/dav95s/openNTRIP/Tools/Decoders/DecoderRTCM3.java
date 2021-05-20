@@ -1,15 +1,14 @@
 package org.dav95s.openNTRIP.Tools.Decoders;
 
 import org.dav95s.openNTRIP.Tools.RTCMStream.MessagePack;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.nio.BufferUnderflowException;
 import java.nio.ByteBuffer;
 
-
 public class DecoderRTCM3 implements IDecoder {
-    private static final Logger logger = LogManager.getLogger(DecoderRTCM3.class.getName());
+    private static final Logger logger = LoggerFactory.getLogger(DecoderRTCM3.class.getName());
 
     private final byte RTCM_PREAMBLE = -45;
 

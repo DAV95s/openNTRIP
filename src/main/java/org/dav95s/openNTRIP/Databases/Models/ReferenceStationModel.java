@@ -312,10 +312,10 @@ public class ReferenceStationModel {
                     if (replaceCoordinates == null) {
                         replaceCoordinates = new ReplaceCoordinates();
                     }
-                    this.replaceCoordinates.setECEFX(rs.getBigDecimal("ECEF_X"));
-                    this.replaceCoordinates.setECEFY(rs.getBigDecimal("ECEF_Y"));
-                    this.replaceCoordinates.setECEFZ(rs.getBigDecimal("ECEF_Z"));
-                    this.replaceCoordinates.setAntennaHeight(rs.getBigDecimal("antenna_height"));
+                    this.replaceCoordinates.setECEFX(rs.getDouble("ECEF_X"));
+                    this.replaceCoordinates.setECEFY(rs.getDouble("ECEF_Y"));
+                    this.replaceCoordinates.setECEFZ(rs.getDouble("ECEF_Z"));
+                    this.replaceCoordinates.setAntennaHeight(rs.getDouble("antenna_height"));
                     return true;
                 } else {
                     this.replaceCoordinates = null;
@@ -329,10 +329,10 @@ public class ReferenceStationModel {
 }
 
 class ReplaceCoordinates {
-    BigDecimal ECEFX;
-    BigDecimal ECEFY;
-    BigDecimal ECEFZ;
-    BigDecimal antennaHeight;
+    double ECEFX;
+    double ECEFY;
+    double ECEFZ;
+    double antennaHeight;
     int stationID;
 
     public MessagePack handle(MessagePack pack) {
@@ -363,19 +363,19 @@ class ReplaceCoordinates {
         return pack;
     }
 
-    public void setECEFX(BigDecimal ECEFX) {
+    public void setECEFX(double ECEFX) {
         this.ECEFX = ECEFX;
     }
 
-    public void setECEFY(BigDecimal ECEFY) {
+    public void setECEFY(double ECEFY) {
         this.ECEFY = ECEFY;
     }
 
-    public void setECEFZ(BigDecimal ECEFZ) {
+    public void setECEFZ(double ECEFZ) {
         this.ECEFZ = ECEFZ;
     }
 
-    public void setAntennaHeight(BigDecimal antennaHeight) {
+    public void setAntennaHeight(double antennaHeight) {
         this.antennaHeight = antennaHeight;
     }
 

@@ -1,23 +1,13 @@
 package org.dav95s.openNTRIP.Clients.Passwords;
 
-
-
 import java.security.MessageDigest;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 public class SHA256 implements PasswordHandler {
-    public static final Logger log = Logger.getLogger(SHA256.class.getName());
+
 
     @Override
     public boolean compare(String fromDB, String fromUser) {
-        if (fromDB == null) {
-            log.log(Level.WARNING, "Password fromDB is NULL");
-            return false;
-        }
-
-        if (fromUser == null) {
-            log.log(Level.WARNING, "User password is NULL");
+        if (fromDB == null || fromUser == null) {
             return false;
         }
 
@@ -29,12 +19,12 @@ public class SHA256 implements PasswordHandler {
     @Override
     public String hash(String rawPassword) {
         if (rawPassword == null)
-            throw new IllegalArgumentException("Can't hash of null object!");
+            throw new IllegalArgumentException("Input string is null");
 
         return sha256(rawPassword);
     }
 
-    private static String sha256(String base) {
+    private String sha256(String base) {
         try {
             MessageDigest digest = MessageDigest.getInstance("SHA-256");
             byte[] hash = digest.digest(base.getBytes());
