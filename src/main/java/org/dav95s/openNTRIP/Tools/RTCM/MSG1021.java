@@ -3,11 +3,7 @@ package org.dav95s.openNTRIP.Tools.RTCM;
 import com.google.common.primitives.Bytes;
 import org.dav95s.openNTRIP.Tools.RTCMStream.BitUtils;
 
-import java.math.BigDecimal;
-import java.math.RoundingMode;
-
 import static com.google.common.base.Preconditions.checkArgument;
-import static com.google.common.base.Preconditions.checkNotNull;
 
 public class MSG1021 extends RTCM {
 
@@ -21,26 +17,23 @@ public class MSG1021 extends RTCM {
     protected int PlateNumber;
     protected int ComputationIndicator;
     protected int HeightIndicator;
-    protected int B_valid; //ΦV, Latitude of Origin, Area of Validity
-    protected int L_valid; //Longitude of Origin, Area of Validity
-    protected int dB_valid; //∆φV – N/S Extension, Area of Validity
-    protected int dL_valid; //∆λV – E/W Extension, Area of Validity
-    protected BigDecimal dX; //dX – Translation in X-direction
-    protected BigDecimal dY; //dY – Translation in Y-direction
-    protected BigDecimal dZ; //dZ – Translation in Z-direction
-    protected BigDecimal Rx; //R1 – Rotation Around the X-axis
-    protected BigDecimal Ry; //R2 – Rotation Around the Y-axis
-    protected BigDecimal Rz; //R3 – Rotation Around the Z-axis
-    protected BigDecimal dS; //dS – Scale Correction
-    protected BigDecimal As; //add aS – Semi-major Axis of Source System Ellipsoid
-    protected BigDecimal Bs; //add bS – Semi-minor Axis of Source System Ellipsoid
-    protected BigDecimal At; //add aT – Semi-major Axis of Target System Ellipsoid
-    protected BigDecimal Bt; //add bT – Semi-minor Axis of Target System Ellipsoid
+    protected double LatValid; //ΦV, Latitude of Origin, Area of Validity
+    protected double LonValid; //Longitude of Origin, Area of Validity
+    protected double dLatValid; //∆φV – N/S Extension, Area of Validity
+    protected double dLonValid; //∆λV – E/W Extension, Area of Validity
+    protected double dX; //dX – Translation in X-direction
+    protected double dY; //dY – Translation in Y-direction
+    protected double dZ; //dZ – Translation in Z-direction
+    protected double Rx; //R1 – Rotation Around the X-axis
+    protected double Ry; //R2 – Rotation Around the Y-axis
+    protected double Rz; //R3 – Rotation Around the Z-axis
+    protected double dS; //dS – Scale Correction
+    protected double As; //add aS – Semi-major Axis of Source System Ellipsoid
+    protected double Bs; //add bS – Semi-minor Axis of Source System Ellipsoid
+    protected double At; //add aT – Semi-major Axis of Target System Ellipsoid
+    protected double Bt; //add bT – Semi-minor Axis of Target System Ellipsoid
     protected int HorizontalQuality; //Horizontal Helmert/Molodenski Quality Indicator
     protected int VerticalQuality; //Vertical Helmert/Molodenski Quality Indicator
-
-    protected final BigDecimal a_base = BigDecimal.valueOf(6370000);
-    protected final BigDecimal b_base = BigDecimal.valueOf(6350000);
 
     public enum Plates {
         Africa(1),
@@ -81,31 +74,31 @@ public class MSG1021 extends RTCM {
 
         messageNumber = bitUtils.getUnsignedInt(12);
         SourceNameCounter = bitUtils.getUnsignedInt(5);
-        SourceName = bitUtils.getString(SourceNameCounter * 8);
+        setSourceName(bitUtils.getString(SourceNameCounter * 8));
         TargetNameCounter = bitUtils.getUnsignedInt(5);
-        TargetName = bitUtils.getString(TargetNameCounter * 8);
-        SystemIdentificationNumber = bitUtils.getUnsignedInt(8);
-        UtilizedTransformationMessageIndicator = bitUtils.getUnsignedInt(10);
-        PlateNumber = bitUtils.getUnsignedInt(5);
-        ComputationIndicator = bitUtils.getUnsignedInt(4);
-        HeightIndicator = bitUtils.getUnsignedInt(2);
-        B_valid = bitUtils.getSignedInt(19) * 2;
-        L_valid = bitUtils.getSignedInt(20) * 2;
-        dB_valid = bitUtils.getUnsignedInt(14) * 2;
-        dL_valid = bitUtils.getUnsignedInt(14) * 2;
-        dX = new BigDecimal(bitUtils.getSignedInt(23)).multiply(BigDecimal.valueOf(0.0001));
-        dY = new BigDecimal(bitUtils.getSignedInt(23)).multiply(BigDecimal.valueOf(0.0001));
-        dZ = new BigDecimal(bitUtils.getSignedInt(23)).multiply(BigDecimal.valueOf(0.0001));
-        Rx = new BigDecimal(bitUtils.getSignedLong(32)).multiply(BigDecimal.valueOf(0.00002));
-        Ry = new BigDecimal(bitUtils.getSignedLong(32)).multiply(BigDecimal.valueOf(0.00002));
-        Rz = new BigDecimal(bitUtils.getSignedLong(32)).multiply(BigDecimal.valueOf(0.00002));
-        dS = new BigDecimal(bitUtils.getSignedLong(25)).multiply(BigDecimal.valueOf(0.00001));
-        As = new BigDecimal(bitUtils.getUnsignedLong(24)).multiply(BigDecimal.valueOf(0.001)).add(a_base);
-        Bs = new BigDecimal(bitUtils.getUnsignedLong(25)).multiply(BigDecimal.valueOf(0.001)).add(b_base);
-        At = new BigDecimal(bitUtils.getUnsignedLong(24)).multiply(BigDecimal.valueOf(0.001)).add(a_base);
-        Bt = new BigDecimal(bitUtils.getUnsignedLong(25)).multiply(BigDecimal.valueOf(0.001)).add(b_base);
-        HorizontalQuality = bitUtils.getUnsignedInt(3);
-        VerticalQuality = bitUtils.getUnsignedInt(3);
+        setTargetName(bitUtils.getString(TargetNameCounter * 8));
+        setSystemIdentificationNumber(bitUtils.getUnsignedInt(8));
+        setUtilizedTransformationMessageIndicator(bitUtils.getUnsignedInt(10));
+        setPlateNumber(bitUtils.getUnsignedInt(5));
+        setComputationIndicator(bitUtils.getUnsignedInt(4));
+        setHeightIndicator(bitUtils.getUnsignedInt(2));
+        setLatValid(bitUtils.getSignedInt(19) * 2 / 3600d);
+        setLonValid(bitUtils.getSignedInt(20) * 2 / 3600d);
+        setdLatValid(bitUtils.getUnsignedInt(14) * 2 / 3600d);
+        setdLonValid(bitUtils.getUnsignedInt(14) * 2 / 3600d);
+        setdX(bitUtils.getSignedInt(23) * 0.0001);
+        setdY(bitUtils.getSignedInt(23) * 0.0001);
+        setdZ(bitUtils.getSignedInt(23) * 0.0001);
+        setRx(bitUtils.getSignedInt(32)* 0.00002);
+        setRy(bitUtils.getSignedInt(32) * 0.00002);
+        setRz(bitUtils.getSignedInt(32) * 0.00002);
+        setdS(bitUtils.getSignedInt(25) * 0.00001);
+        setAs(bitUtils.getUnsignedLong(24) * 0.001 + 6370000);
+        setBs(bitUtils.getUnsignedLong(25) * 0.001 + 6350000);
+        setAt(bitUtils.getUnsignedLong(24) * 0.001 + 6370000);
+        setBt(bitUtils.getUnsignedLong(25) * 0.001 + 6350000);
+        setHorizontalQuality(bitUtils.getUnsignedInt(3));
+        setVerticalQuality(bitUtils.getUnsignedInt(3));
     }
 
     public byte[] write() {
@@ -122,21 +115,21 @@ public class MSG1021 extends RTCM {
         bitUtils.setInt(PlateNumber, 5);
         bitUtils.setInt(ComputationIndicator, 4);
         bitUtils.setInt(HeightIndicator, 2);
-        bitUtils.setInt(B_valid / 2, 19);
-        bitUtils.setInt(L_valid / 2, 20);
-        bitUtils.setInt(dB_valid / 2, 14);
-        bitUtils.setInt(dL_valid / 2, 14);
-        bitUtils.setInt(dX.divide(BigDecimal.valueOf(0.0001), RoundingMode.HALF_EVEN).intValue(), 23);
-        bitUtils.setInt(dY.divide(BigDecimal.valueOf(0.0001), RoundingMode.HALF_EVEN).intValue(), 23);
-        bitUtils.setInt(dZ.divide(BigDecimal.valueOf(0.0001), RoundingMode.HALF_EVEN).intValue(), 23);
-        bitUtils.setInt(Rx.divide(BigDecimal.valueOf(0.00002), RoundingMode.HALF_EVEN).intValue(), 32);
-        bitUtils.setInt(Ry.divide(BigDecimal.valueOf(0.00002), RoundingMode.HALF_EVEN).intValue(), 32);
-        bitUtils.setInt(Rz.divide(BigDecimal.valueOf(0.00002), RoundingMode.HALF_EVEN).intValue(), 32);
-        bitUtils.setInt(dS.divide(BigDecimal.valueOf(0.00001), RoundingMode.HALF_EVEN).intValue(), 25);
-        bitUtils.setInt(As.subtract(a_base).divide(BigDecimal.valueOf(0.001), RoundingMode.HALF_EVEN).intValue(), 24);
-        bitUtils.setInt(Bs.subtract(b_base).divide(BigDecimal.valueOf(0.001), RoundingMode.HALF_EVEN).intValue(), 25);
-        bitUtils.setInt(At.subtract(a_base).divide(BigDecimal.valueOf(0.001), RoundingMode.HALF_EVEN).intValue(), 24);
-        bitUtils.setInt(Bt.subtract(b_base).divide(BigDecimal.valueOf(0.001), RoundingMode.HALF_EVEN).intValue(), 25);
+        bitUtils.setInt((int) Math.round(LatValid * 3600 / 2), 19);
+        bitUtils.setInt((int) Math.round(LonValid * 3600 / 2), 20);
+        bitUtils.setInt((int) Math.round(dLatValid * 3600 / 2), 14);
+        bitUtils.setInt((int) Math.round(dLonValid * 3600 / 2), 14);
+        bitUtils.setInt((int) Math.round(dX * 10000), 23);
+        bitUtils.setInt((int) Math.round(dY * 10000), 23);
+        bitUtils.setInt((int) Math.round(dZ * 10000), 23);
+        bitUtils.setInt((int) Math.round(Rx / 0.00002), 32);
+        bitUtils.setInt((int) Math.round(Ry / 0.00002), 32);
+        bitUtils.setInt((int) Math.round(Rz / 0.00002), 32);
+        bitUtils.setInt((int) Math.round(dS * 100000), 25);
+        bitUtils.setInt((int) Math.round((As - 6370000) * 1000), 24);
+        bitUtils.setInt((int) Math.round((Bs - 6350000) * 1000), 25);
+        bitUtils.setInt((int) Math.round((At - 6370000) * 1000), 24);
+        bitUtils.setInt((int) Math.round((Bt - 6350000) * 1000), 25);
         bitUtils.setInt(HorizontalQuality, 3);
         bitUtils.setInt(VerticalQuality, 3);
         byte[] bytes = bitUtils.getByteArray();
@@ -146,7 +139,7 @@ public class MSG1021 extends RTCM {
     @Override
     public String toString() {
         return "MSG1021{" +
-                "MessageNumber=" + messageNumber +
+                "messageNumber=" + messageNumber +
                 ", SourceName='" + SourceName + '\'' +
                 ", TargetName='" + TargetName + '\'' +
                 ", SystemIdentificationNumber=" + SystemIdentificationNumber +
@@ -154,10 +147,10 @@ public class MSG1021 extends RTCM {
                 ", PlateNumber=" + PlateNumber +
                 ", ComputationIndicator=" + ComputationIndicator +
                 ", HeightIndicator=" + HeightIndicator +
-                ", Fv=" + B_valid / 3600d +
-                ", Lv=" + L_valid / 3600d +
-                ", dFv=" + dB_valid / 3600d +
-                ", dLv=" + dL_valid / 3600d +
+                ", LatValid=" + LatValid +
+                ", LonValid=" + LonValid +
+                ", dLatValid=" + dLatValid +
+                ", dLonValid=" + dLonValid +
                 ", dX=" + dX +
                 ", dY=" + dY +
                 ", dZ=" + dZ +
@@ -165,12 +158,12 @@ public class MSG1021 extends RTCM {
                 ", Ry=" + Ry +
                 ", Rz=" + Rz +
                 ", dS=" + dS +
-                ", add_as=" + As +
-                ", add_bs=" + Bs +
-                ", add_at=" + At +
-                ", add_bt=" + Bt +
-                ", HrInd=" + HorizontalQuality +
-                ", VrInd=" + VerticalQuality +
+                ", As=" + As +
+                ", Bs=" + Bs +
+                ", At=" + At +
+                ", Bt=" + Bt +
+                ", HorizontalQuality=" + HorizontalQuality +
+                ", VerticalQuality=" + VerticalQuality +
                 '}';
     }
 
@@ -287,58 +280,57 @@ public class MSG1021 extends RTCM {
         HeightIndicator = heightIndicator;
     }
 
-    public int getB_valid() {
-        return B_valid;
+    public double getLatValid() {
+        return LatValid;
     }
 
     /**
-     * @param b_valid Latitude of Origin (sec)
+     * @param latValid Latitude of Origin (sec)
      */
-    public void setB_valid(double b_valid) {
-        checkArgument(-90 <= b_valid && b_valid <= 90);
-        B_valid = (int) (b_valid * 3600);
+    public void setLatValid(double latValid) {
+        checkArgument(-90 <= latValid && latValid <= 90);
+        LatValid = BitUtils.normalize(latValid, 6);
     }
 
-    public int getL_valid() {
-        return L_valid;
+    public double getLonValid() {
+        return LonValid;
     }
 
     /**
-     * @param l_valid Longitude of Origin (sec);
+     * @param lonValid Longitude of Origin (sec);
      */
-    public void setL_valid(double l_valid) {
-        checkArgument(-180 <= l_valid && l_valid <= 180);
-        L_valid = (int) (l_valid * 3600);
+    public void setLonValid(double lonValid) {
+        checkArgument(-180 <= lonValid && lonValid <= 180);
+        LonValid = BitUtils.normalize(lonValid, 6);
     }
 
-    public int getdB_valid() {
-        return dB_valid;
+    public double getdLatValid() {
+        return dLatValid;
     }
 
     /**
-     * @param dB_valid Area Extension to North and to South
-     *                 0 - undefined
+     * @param dLatValid Area Extension to North and to South
+     *                  0 - undefined
      */
-    public void setdB_valid(double dB_valid) {
-        checkArgument(0 <= dB_valid && dB_valid <= 9.10);
-        this.dB_valid = (int) (dB_valid * 3600);
-        ;
+    public void setdLatValid(double dLatValid) {
+        checkArgument(0 <= dLatValid && dLatValid <= 9.10166);
+        this.dLatValid = BitUtils.normalize(dLatValid, 6);
     }
 
-    public int getdL_valid() {
-        return dL_valid;
+    public double getdLonValid() {
+        return dLonValid;
     }
 
     /**
-     * @param dL_valid Area Extension to East and to West
-     *                 0 - undefined
+     * @param dLonValid Area Extension to East and to West
+     *                  0 - undefined
      */
-    public void setdL_valid(double dL_valid) {
-        checkArgument(0 <= dL_valid && dL_valid <= 9.10);
-        this.dL_valid = (int) (dL_valid * 3600);
+    public void setdLonValid(double dLonValid) {
+        checkArgument(0 <= dLonValid && dLonValid <= 9.10166);
+        this.dLonValid = BitUtils.normalize(dLonValid, 6);
     }
 
-    public BigDecimal getdX() {
+    public double getdX() {
         return dX;
     }
 
@@ -346,14 +338,12 @@ public class MSG1021 extends RTCM {
      * @param dX Translation in X
      *           ± 4194.303 m
      */
-    public void setdX(BigDecimal dX) {
-        checkNotNull(dX);
-        checkArgument(dX.compareTo(new BigDecimal("4194.303")) <= 0);
-        checkArgument(dX.compareTo(new BigDecimal("-4194.303")) >= 0);
-        this.dX = dX;
+    public void setdX(double dX) {
+        checkArgument(-4194.303 <= dX && dX <= 4194.303);
+        this.dX = BitUtils.normalize(dX, 4);
     }
 
-    public BigDecimal getdY() {
+    public double getdY() {
         return dY;
     }
 
@@ -361,14 +351,12 @@ public class MSG1021 extends RTCM {
      * @param dY Translation in Y
      *           ± 4194.303 m
      */
-    public void setdY(BigDecimal dY) {
-        checkNotNull(dY);
-        checkArgument(dY.compareTo(new BigDecimal("4194.303")) <= 0);
-        checkArgument(dY.compareTo(new BigDecimal("-4194.303")) >= 0);
-        this.dY = dY;
+    public void setdY(double dY) {
+        checkArgument(-4194.303 <= dY && dY <= 4194.303);
+        this.dY = BitUtils.normalize(dY, 4);
     }
 
-    public BigDecimal getdZ() {
+    public double getdZ() {
         return dZ;
     }
 
@@ -376,14 +364,12 @@ public class MSG1021 extends RTCM {
      * @param dZ Translation in Z
      *           ± 4194.303 m
      */
-    public void setdZ(BigDecimal dZ) {
-        checkNotNull(dZ);
-        checkArgument(dZ.compareTo(new BigDecimal("4194.303")) <= 0);
-        checkArgument(dZ.compareTo(new BigDecimal("-4194.303")) >= 0);
-        this.dZ = dZ;
+    public void setdZ(double dZ) {
+        checkArgument(-4194.303 <= dZ && dZ <= 4194.303);
+        this.dZ = BitUtils.normalize(dZ, 4);
     }
 
-    public BigDecimal getRx() {
+    public double getRx() {
         return Rx;
     }
 
@@ -391,15 +377,13 @@ public class MSG1021 extends RTCM {
      * @param rx Rotation around the X-axis in arc seconds
      *           ± 42949.67294"
      */
-    public void setRx(BigDecimal rx) {
-        checkNotNull(rx);
-        checkArgument(rx.compareTo(new BigDecimal("42949.67294")) <= 0);
-        checkArgument(rx.compareTo(new BigDecimal("-42949.67294")) >= 0);
-        Rx = rx;
+    public void setRx(double rx) {
+        checkArgument(-42949.67294 <= rx && rx <= 42949.67294);
+        Rx = BitUtils.normalize(rx, 6);
     }
 
 
-    public BigDecimal getRy() {
+    public double getRy() {
         return Ry;
     }
 
@@ -407,14 +391,12 @@ public class MSG1021 extends RTCM {
      * @param ry Rotation around the Y-axis in arc seconds
      *           ± 42949.67294"
      */
-    public void setRy(BigDecimal ry) {
-        checkNotNull(ry);
-        checkArgument(ry.compareTo(new BigDecimal("42949.67294")) <= 0);
-        checkArgument(ry.compareTo(new BigDecimal("-42949.67294")) >= 0);
-        Ry = ry;
+    public void setRy(double ry) {
+        checkArgument(-42949.67294 <= ry && ry <= 42949.67294);
+        Ry = BitUtils.normalize(ry, 6);
     }
 
-    public BigDecimal getRz() {
+    public double getRz() {
         return Rz;
     }
 
@@ -422,14 +404,12 @@ public class MSG1021 extends RTCM {
      * @param rz Rotation around the Z-axis in arc seconds
      *           ± 42949.67294"
      */
-    public void setRz(BigDecimal rz) {
-        checkNotNull(rz);
-        checkArgument(rz.compareTo(new BigDecimal("42949.67294")) <= 0);
-        checkArgument(rz.compareTo(new BigDecimal("-42949.67294")) >= 0);
-        Rz = rz;
+    public void setRz(double rz) {
+        checkArgument(-42949.67294 <= rz && rz <= 42949.67294);
+        Rz = BitUtils.normalize(rz, 6);
     }
 
-    public BigDecimal getdS() {
+    public double getdS() {
         return dS;
     }
 
@@ -437,44 +417,36 @@ public class MSG1021 extends RTCM {
      * @param dS scale correction
      *           ± 167.77215 PPM
      */
-    public void setdS(BigDecimal dS) {
-        checkNotNull(dS);
-        checkArgument(dS.compareTo(new BigDecimal("42949.67294")) <= 0);
-        checkArgument(dS.compareTo(new BigDecimal("-42949.67294")) >= 0);
-        this.dS = dS;
+    public void setdS(double dS) {
+        checkArgument(-167.77215 <= dS && dS <= 167.77215);
+        this.dS = BitUtils.normalize(dS, 5);
     }
 
-    public BigDecimal getAs() {
+    public double getAs() {
         return As;
     }
 
     /**
      * @param as Semi-major axis of source system ellipsoid
-     *           0 – 16777.215m
      */
-    public void setAs(BigDecimal as) {
-        checkNotNull(as);
-        checkArgument(as.signum() >= 0);
-        checkArgument(as.compareTo(new BigDecimal("16777.215")) >= 0);
-        this.As = as;
+    public void setAs(double as) {
+        checkArgument(6370000 <= as && as <= 6386777.215);
+        this.As = BitUtils.normalize(as, 4);
     }
 
-    public BigDecimal getBs() {
+    public double getBs() {
         return Bs;
     }
 
     /**
      * @param bs Semi-minor axis of source system ellipsoid
-     *           0 – 33554.431m
      */
-    public void setBs(BigDecimal bs) {
-        checkNotNull(bs);
-        checkArgument(bs.signum() >= 0);
-        checkArgument(bs.compareTo(new BigDecimal("33554.431")) >= 0);
-        this.Bs = bs;
+    public void setBs(double bs) {
+        checkArgument(6350000 <= bs && bs <= 6383554.431);
+        this.Bs = BitUtils.normalize(bs, 4);
     }
 
-    public BigDecimal getAt() {
+    public double getAt() {
         return At;
     }
 
@@ -482,14 +454,12 @@ public class MSG1021 extends RTCM {
      * @param at Semi-major axis of target system ellipsoid
      *           0 – 16777.215m
      */
-    public void setAt(BigDecimal at) {
-        checkNotNull(at);
-        checkArgument(at.signum() >= 0);
-        checkArgument(at.compareTo(new BigDecimal("16777.215")) >= 0);
-        this.At = at;
+    public void setAt(double at) {
+        checkArgument(6370000 <= at && at <= 6386777.215);
+        this.At = BitUtils.normalize(at, 4);
     }
 
-    public BigDecimal getBt() {
+    public double getBt() {
         return Bt;
     }
 
@@ -497,11 +467,9 @@ public class MSG1021 extends RTCM {
      * @param bt Semi-minor axis of target system ellipsoid
      *           0 – 33554.431m
      */
-    public void setBt(BigDecimal bt) {
-        checkNotNull(bt);
-        checkArgument(bt.signum() >= 0);
-        checkArgument(bt.compareTo(new BigDecimal("33554.431")) >= 0);
-        this.Bt = bt;
+    public void setBt(double bt) {
+        checkArgument(6350000 <= bt && bt <= 6383554.431);
+        this.Bt = BitUtils.normalize(bt, 4);
     }
 
     public int getHorizontalQuality() {
