@@ -15,13 +15,13 @@ public class MSG1027Test {
         MSG1027 msg1027 = new MSG1027();
         msg1027.setSystemIdentificationNumber(255);
         msg1027.setProjectionType(11);
-        msg1027.setLaPC(new BigDecimal("89.66553321"));
-        msg1027.setLoPC(new BigDecimal("179.999999993"));
-        msg1027.setAzIL(new BigDecimal("360"));
-        msg1027.setRectifiedToSkew(new BigDecimal("359.6309013"));
-        msg1027.setSILppm(BigDecimal.valueOf(1000000));
-        msg1027.setEPC(BigDecimal.valueOf(68719476.735));
-        msg1027.setNPC(BigDecimal.valueOf(17179869.183));
+        msg1027.setLaPC(90);
+        msg1027.setLoPC(180);
+        msg1027.setAzIL(360);
+        msg1027.setRectifiedToSkew(360.369098741);
+        msg1027.setSILppm(1.003737418);
+        msg1027.setEPC(68719476.735);
+        msg1027.setNPC(17179869.183);
 
         byte[] result1 = msg1027.write();
         MSG1027 msg10271 = new MSG1027(result1);

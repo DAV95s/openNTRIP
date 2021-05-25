@@ -3,9 +3,11 @@ package org.dav95s.openNTRIP.Tools.RTCM;
 import com.google.common.primitives.Bytes;
 import org.dav95s.openNTRIP.Tools.RTCMStream.BitUtils;
 
+import java.util.BitSet;
+
 import static com.google.common.base.Preconditions.checkArgument;
 
-public class MSG1021 extends RTCM {
+public class MSG1021 {
 
     protected int messageNumber;
     protected int SourceNameCounter;
@@ -89,7 +91,7 @@ public class MSG1021 extends RTCM {
         setdX(bitUtils.getSignedInt(23) * 0.0001);
         setdY(bitUtils.getSignedInt(23) * 0.0001);
         setdZ(bitUtils.getSignedInt(23) * 0.0001);
-        setRx(bitUtils.getSignedInt(32)* 0.00002);
+        setRx(bitUtils.getSignedInt(32) * 0.00002);
         setRy(bitUtils.getSignedInt(32) * 0.00002);
         setRz(bitUtils.getSignedInt(32) * 0.00002);
         setdS(bitUtils.getSignedInt(25) * 0.00001);
@@ -219,6 +221,8 @@ public class MSG1021 extends RTCM {
      *                                               Bit(5) - 1027
      */
     public void setUtilizedTransformationMessageIndicator(int utilizedTransformationMessageIndicator) {
+        BitSet set = new BitSet(5);
+
         checkArgument(utilizedTransformationMessageIndicator < 1024);
         UtilizedTransformationMessageIndicator = utilizedTransformationMessageIndicator;
     }
@@ -288,8 +292,9 @@ public class MSG1021 extends RTCM {
      * @param latValid Latitude of Origin (sec)
      */
     public void setLatValid(double latValid) {
-        checkArgument(-90 <= latValid && latValid <= 90);
-        LatValid = BitUtils.normalize(latValid, 6);
+        double normalized = BitUtils.normalize(latValid, 6);
+        checkArgument(-90 <= normalized && normalized <= 90);
+        LatValid = normalized;
     }
 
     public double getLonValid() {
@@ -300,8 +305,9 @@ public class MSG1021 extends RTCM {
      * @param lonValid Longitude of Origin (sec);
      */
     public void setLonValid(double lonValid) {
-        checkArgument(-180 <= lonValid && lonValid <= 180);
-        LonValid = BitUtils.normalize(lonValid, 6);
+        double normalized = BitUtils.normalize(lonValid, 6);
+        checkArgument(-180 <= normalized && normalized <= 180);
+        LonValid = normalized;
     }
 
     public double getdLatValid() {
@@ -313,8 +319,9 @@ public class MSG1021 extends RTCM {
      *                  0 - undefined
      */
     public void setdLatValid(double dLatValid) {
-        checkArgument(0 <= dLatValid && dLatValid <= 9.10166);
-        this.dLatValid = BitUtils.normalize(dLatValid, 6);
+        double normalized = BitUtils.normalize(dLatValid, 6);
+        checkArgument(0 <= normalized && normalized <= 9.10166);
+        this.dLatValid = normalized;
     }
 
     public double getdLonValid() {
@@ -326,8 +333,9 @@ public class MSG1021 extends RTCM {
      *                  0 - undefined
      */
     public void setdLonValid(double dLonValid) {
-        checkArgument(0 <= dLonValid && dLonValid <= 9.10166);
-        this.dLonValid = BitUtils.normalize(dLonValid, 6);
+        double normalized = BitUtils.normalize(dLonValid, 6);
+        checkArgument(0 <= normalized && normalized <= 9.10166);
+        this.dLonValid = normalized;
     }
 
     public double getdX() {
@@ -339,8 +347,9 @@ public class MSG1021 extends RTCM {
      *           ± 4194.303 m
      */
     public void setdX(double dX) {
-        checkArgument(-4194.303 <= dX && dX <= 4194.303);
-        this.dX = BitUtils.normalize(dX, 4);
+        double normalized = BitUtils.normalize(dX, 4);
+        checkArgument(-4194.303 <= normalized && normalized <= 4194.303);
+        this.dX = normalized;
     }
 
     public double getdY() {
@@ -352,8 +361,9 @@ public class MSG1021 extends RTCM {
      *           ± 4194.303 m
      */
     public void setdY(double dY) {
-        checkArgument(-4194.303 <= dY && dY <= 4194.303);
-        this.dY = BitUtils.normalize(dY, 4);
+        double normalized = BitUtils.normalize(dY, 4);
+        checkArgument(-4194.303 <= normalized && normalized <= 4194.303);
+        this.dY = normalized;
     }
 
     public double getdZ() {
@@ -365,8 +375,9 @@ public class MSG1021 extends RTCM {
      *           ± 4194.303 m
      */
     public void setdZ(double dZ) {
-        checkArgument(-4194.303 <= dZ && dZ <= 4194.303);
-        this.dZ = BitUtils.normalize(dZ, 4);
+        double normalized = BitUtils.normalize(dZ, 4);
+        checkArgument(-4194.303 <= normalized && normalized <= 4194.303);
+        this.dZ = normalized;
     }
 
     public double getRx() {
@@ -378,8 +389,9 @@ public class MSG1021 extends RTCM {
      *           ± 42949.67294"
      */
     public void setRx(double rx) {
-        checkArgument(-42949.67294 <= rx && rx <= 42949.67294);
-        Rx = BitUtils.normalize(rx, 6);
+        double normalized = BitUtils.normalize(rx, 6);
+        checkArgument(-42949.67294 <= normalized && normalized <= 42949.67294);
+        Rx = normalized;
     }
 
 
@@ -392,8 +404,9 @@ public class MSG1021 extends RTCM {
      *           ± 42949.67294"
      */
     public void setRy(double ry) {
-        checkArgument(-42949.67294 <= ry && ry <= 42949.67294);
-        Ry = BitUtils.normalize(ry, 6);
+        double normalized =BitUtils.normalize(ry, 6);
+        checkArgument(-42949.67294 <= normalized && normalized <= 42949.67294);
+        Ry = normalized;
     }
 
     public double getRz() {
@@ -405,8 +418,9 @@ public class MSG1021 extends RTCM {
      *           ± 42949.67294"
      */
     public void setRz(double rz) {
-        checkArgument(-42949.67294 <= rz && rz <= 42949.67294);
-        Rz = BitUtils.normalize(rz, 6);
+        double normalized = BitUtils.normalize(rz, 6);
+        checkArgument(-42949.67294 <= normalized && normalized <= 42949.67294);
+        Rz = normalized;
     }
 
     public double getdS() {
@@ -418,8 +432,9 @@ public class MSG1021 extends RTCM {
      *           ± 167.77215 PPM
      */
     public void setdS(double dS) {
-        checkArgument(-167.77215 <= dS && dS <= 167.77215);
-        this.dS = BitUtils.normalize(dS, 5);
+        double normalized = BitUtils.normalize(dS, 5);
+        checkArgument(-167.77215 <= normalized && normalized <= 167.77215);
+        this.dS = normalized;
     }
 
     public double getAs() {
@@ -430,8 +445,9 @@ public class MSG1021 extends RTCM {
      * @param as Semi-major axis of source system ellipsoid
      */
     public void setAs(double as) {
-        checkArgument(6370000 <= as && as <= 6386777.215);
-        this.As = BitUtils.normalize(as, 4);
+        double normalized = BitUtils.normalize(as, 4);
+        checkArgument(6370000 <= normalized && normalized <= 6386777.215);
+        this.As = normalized;
     }
 
     public double getBs() {
@@ -442,8 +458,9 @@ public class MSG1021 extends RTCM {
      * @param bs Semi-minor axis of source system ellipsoid
      */
     public void setBs(double bs) {
-        checkArgument(6350000 <= bs && bs <= 6383554.431);
-        this.Bs = BitUtils.normalize(bs, 4);
+        double normalized = BitUtils.normalize(bs, 4);
+        checkArgument(6350000 <= normalized && normalized <= 6383554.431);
+        this.Bs = normalized;
     }
 
     public double getAt() {
@@ -455,8 +472,9 @@ public class MSG1021 extends RTCM {
      *           0 – 16777.215m
      */
     public void setAt(double at) {
-        checkArgument(6370000 <= at && at <= 6386777.215);
-        this.At = BitUtils.normalize(at, 4);
+        double normalized =BitUtils.normalize(at, 4);
+        checkArgument(6370000 <= normalized && normalized <= 6386777.215);
+        this.At = normalized;
     }
 
     public double getBt() {
@@ -468,8 +486,9 @@ public class MSG1021 extends RTCM {
      *           0 – 33554.431m
      */
     public void setBt(double bt) {
-        checkArgument(6350000 <= bt && bt <= 6383554.431);
-        this.Bt = BitUtils.normalize(bt, 4);
+        double normalized = BitUtils.normalize(bt, 4);
+        checkArgument(6350000 <= normalized && normalized <= 6383554.431);
+        this.Bt = normalized;
     }
 
     public int getHorizontalQuality() {

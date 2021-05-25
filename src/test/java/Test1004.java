@@ -1,6 +1,8 @@
 import org.dav95s.openNTRIP.Tools.Decoders.DecoderRTCM3;
+import org.dav95s.openNTRIP.Tools.RTCMStream.BitUtils;
 import org.dav95s.openNTRIP.Tools.RTCMStream.MessagePack;
 import org.dav95s.openNTRIP.Tools.RTCM.MSG1006;
+import org.junit.Assert;
 import org.junit.Test;
 
 import java.io.*;
@@ -25,24 +27,14 @@ public class Test1004 {
 
 
             MSG1006 msg = new MSG1006(bytes);
-            System.out.println(msg.toString());
-            String raw = "";
-            for (byte i : bytes) {
-                raw += msg.toBinaryString(i) + " ";
-            }
-            System.out.println(raw);
-
             byte[] bytes2 = msg.getBytes();
-            String raw2 = "";
-            for (byte i : bytes2) {
-                raw2 += msg.toBinaryString(i) + " ";
-            }
-            System.out.println(raw2);
-
-
             MSG1006 msgnew = new MSG1006(bytes2);
-            System.out.println(msgnew);
-
+            byte[] bytes3 = msgnew.getBytes();
+            Assert.assertArrayEquals(bytes2, bytes3);
+//            System.out.println(msg.toString());
+//            System.out.println(msgnew);
+//            System.out.println(new BitUtils(msg.getBytes()).toString(' '));
+//            System.out.println(new BitUtils(msgnew.getBytes()).toString(' '));
         } catch (IOException e) {
             e.printStackTrace();
         }

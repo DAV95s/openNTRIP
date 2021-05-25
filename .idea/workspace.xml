@@ -22,12 +22,21 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="b7aa1f89-fb3e-44e2-a0de-b72c0eae2f41" name="Default Changelist" comment="support 1021-1027 alpha">
+    <list default="true" id="b7aa1f89-fb3e-44e2-a0de-b72c0eae2f41" name="Default Changelist" comment="refactoring 1021,1022">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/dav95s/openNTRIP/Databases/Models/CRS.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/dav95s/openNTRIP/Databases/Models/CRS.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/dav95s/openNTRIP/Tools/RTCM/MSG1006.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/dav95s/openNTRIP/Tools/RTCM/MSG1006.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/dav95s/openNTRIP/Tools/RTCM/MSG1021.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/dav95s/openNTRIP/Tools/RTCM/MSG1021.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/dav95s/openNTRIP/Tools/RTCM/MSG1022.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/dav95s/openNTRIP/Tools/RTCM/MSG1022.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/org/dav95s/openNTRIP/Tools/RTCM/MSG1021Test.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/org/dav95s/openNTRIP/Tools/RTCM/MSG1021Test.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/dav95s/openNTRIP/Tools/RTCM/MSG1023.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/dav95s/openNTRIP/Tools/RTCM/MSG1023.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/dav95s/openNTRIP/Tools/RTCM/MSG1025.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/dav95s/openNTRIP/Tools/RTCM/MSG1025.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/dav95s/openNTRIP/Tools/RTCM/MSG1026.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/dav95s/openNTRIP/Tools/RTCM/MSG1026.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/dav95s/openNTRIP/Tools/RTCM/MSG1027.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/dav95s/openNTRIP/Tools/RTCM/MSG1027.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/dav95s/openNTRIP/Tools/RTCM/RTCM.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/Test1004.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/Test1004.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/org/dav95s/openNTRIP/Tools/RTCM/MSG1023Test.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/org/dav95s/openNTRIP/Tools/RTCM/MSG1023Test.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/org/dav95s/openNTRIP/Tools/RTCM/MSG1026Test.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/org/dav95s/openNTRIP/Tools/RTCM/MSG1026Test.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/org/dav95s/openNTRIP/Tools/RTCM/MSG1027Test.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/org/dav95s/openNTRIP/Tools/RTCM/MSG1027Test.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -121,7 +130,7 @@
       <recent name="org.adv25.ADVNTRIP.Servers" />
     </key>
   </component>
-  <component name="RunManager" selected="JUnit.MSG1021Test.msg1021MaxValues">
+  <component name="RunManager" selected="JUnit.MSG1023Test.decodeEncode">
     <configuration name="Start" type="Application" factoryName="Application">
       <option name="ALTERNATIVE_JRE_PATH" value="11" />
       <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="true" />
@@ -141,21 +150,6 @@
     <configuration default="true" type="Application" factoryName="Application">
       <module name="openNTRIP" />
       <extension name="recording" autostart="false" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
-    <configuration name="MSG1021Test" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
-      <module name="openNTRIP" />
-      <extension name="coverage">
-        <pattern>
-          <option name="PATTERN" value="org.dav95s.openNTRIP.Tools.RTCM.*" />
-          <option name="ENABLED" value="true" />
-        </pattern>
-      </extension>
-      <option name="PACKAGE_NAME" value="org.dav95s.openNTRIP.Tools.RTCM" />
-      <option name="MAIN_CLASS_NAME" value="org.dav95s.openNTRIP.Tools.RTCM.MSG1021Test" />
-      <option name="TEST_OBJECT" value="class" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
@@ -192,6 +186,38 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
+    <configuration name="MSG1023Test.decodeEncode" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="openNTRIP" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="org.dav95s.openNTRIP.Tools.RTCM.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="org.dav95s.openNTRIP.Tools.RTCM" />
+      <option name="MAIN_CLASS_NAME" value="org.dav95s.openNTRIP.Tools.RTCM.MSG1023Test" />
+      <option name="METHOD_NAME" value="decodeEncode" />
+      <option name="TEST_OBJECT" value="method" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="MSG1027Test.maxValues" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="openNTRIP" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="org.dav95s.openNTRIP.Tools.RTCM.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="org.dav95s.openNTRIP.Tools.RTCM" />
+      <option name="MAIN_CLASS_NAME" value="org.dav95s.openNTRIP.Tools.RTCM.MSG1027Test" />
+      <option name="METHOD_NAME" value="maxValues" />
+      <option name="TEST_OBJECT" value="method" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
     <configuration name="Test1004.start" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="openNTRIP" />
       <option name="PACKAGE_NAME" value="" />
@@ -202,31 +228,21 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="TestDB.mp" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
-      <module name="openNTRIP" />
-      <option name="PACKAGE_NAME" value="" />
-      <option name="MAIN_CLASS_NAME" value="TestDB" />
-      <option name="METHOD_NAME" value="mp" />
-      <option name="TEST_OBJECT" value="method" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
     <list>
       <item itemvalue="Application.Start" />
-      <item itemvalue="JUnit.MSG1021Test" />
       <item itemvalue="JUnit.MSG1021Test.decoderEncode" />
       <item itemvalue="JUnit.MSG1021Test.msg1021MaxValues" />
+      <item itemvalue="JUnit.MSG1023Test.decodeEncode" />
+      <item itemvalue="JUnit.MSG1027Test.maxValues" />
       <item itemvalue="JUnit.Test1004.start" />
-      <item itemvalue="JUnit.TestDB.mp" />
     </list>
     <recent_temporary>
       <list>
-        <item itemvalue="JUnit.MSG1021Test.msg1021MaxValues" />
+        <item itemvalue="JUnit.MSG1023Test.decodeEncode" />
         <item itemvalue="JUnit.MSG1021Test.decoderEncode" />
         <item itemvalue="JUnit.Test1004.start" />
-        <item itemvalue="JUnit.MSG1021Test" />
-        <item itemvalue="JUnit.TestDB.mp" />
+        <item itemvalue="JUnit.MSG1027Test.maxValues" />
+        <item itemvalue="JUnit.MSG1021Test.msg1021MaxValues" />
       </list>
     </recent_temporary>
   </component>
@@ -319,7 +335,14 @@
       <option name="project" value="LOCAL" />
       <updated>1621525651261</updated>
     </task>
-    <option name="localTasksCounter" value="12" />
+    <task id="LOCAL-00012" summary="refactoring 1021,1022">
+      <created>1621533109479</created>
+      <option name="number" value="00012" />
+      <option name="presentableId" value="LOCAL-00012" />
+      <option name="project" value="LOCAL" />
+      <updated>1621533109479</updated>
+    </task>
+    <option name="localTasksCounter" value="13" />
     <servers />
   </component>
   <component name="Vcs.Log.History.Properties">
@@ -356,7 +379,8 @@
     <MESSAGE value="replace ntrip.sql" />
     <MESSAGE value="support 1021-1027" />
     <MESSAGE value="support 1021-1027 alpha" />
-    <option name="LAST_COMMIT_MESSAGE" value="support 1021-1027 alpha" />
+    <MESSAGE value="refactoring 1021,1022" />
+    <option name="LAST_COMMIT_MESSAGE" value="refactoring 1021,1022" />
   </component>
   <component name="WindowStateProjectService">
     <state x="418" y="177" key="#Customize_Data_Views" timestamp="1616765916679">
@@ -375,10 +399,10 @@
       <screen x="0" y="0" width="1440" height="920" />
     </state>
     <state x="93" y="93" width="1255" height="735" key="#com.intellij.execution.junit2.states.ComparisonFailureState$DiffDialog/0.0.1440.920@0.0.1440.920" timestamp="1620595988919" />
-    <state x="574" y="180" key="#com.intellij.ide.util.MemberChooser" timestamp="1621531151466">
+    <state x="574" y="180" key="#com.intellij.ide.util.MemberChooser" timestamp="1621753345888">
       <screen x="0" y="0" width="1440" height="920" />
     </state>
-    <state x="574" y="180" key="#com.intellij.ide.util.MemberChooser/0.0.1440.920@0.0.1440.920" timestamp="1621531151466" />
+    <state x="574" y="180" key="#com.intellij.ide.util.MemberChooser/0.0.1440.920@0.0.1440.920" timestamp="1621753345888" />
     <state x="307" y="385" key="#com.intellij.refactoring.move.MoveHandler.SelectRefactoringDialog" timestamp="1615874474513">
       <screen x="0" y="0" width="1440" height="920" />
     </state>
@@ -387,12 +411,16 @@
       <screen x="0" y="0" width="1440" height="920" />
     </state>
     <state x="504" y="330" width="432" height="267" key="#com.intellij.refactoring.move.moveClassesOrPackages.MoveClassesOrPackagesDialog.classes/0.0.1440.920@0.0.1440.920" timestamp="1616755847124" />
-    <state x="0" y="0" key="#com.intellij.refactoring.rename.AutomaticRenamingDialog" timestamp="1621527388771">
+    <state x="0" y="0" key="#com.intellij.refactoring.rename.AutomaticRenamingDialog" timestamp="1621718268105">
       <screen x="0" y="0" width="1440" height="920" />
     </state>
     <state x="0" y="0" key="#com.intellij.refactoring.rename.AutomaticRenamingDialog/0.0.1440.920/118.-1080.1920.1040@0.0.1440.920" timestamp="1615725615101" />
     <state x="118" y="-1080" key="#com.intellij.refactoring.rename.AutomaticRenamingDialog/0.0.1440.920/118.-1080.1920.1040@118.-1080.1920.1040" timestamp="1615726671697" />
-    <state x="0" y="0" key="#com.intellij.refactoring.rename.AutomaticRenamingDialog/0.0.1440.920@0.0.1440.920" timestamp="1621527388771" />
+    <state x="0" y="0" key="#com.intellij.refactoring.rename.AutomaticRenamingDialog/0.0.1440.920@0.0.1440.920" timestamp="1621718268105" />
+    <state x="451" y="208" key="#com.intellij.refactoring.safeDelete.UnsafeUsagesDialog" timestamp="1621716230977">
+      <screen x="0" y="0" width="1440" height="920" />
+    </state>
+    <state x="451" y="208" key="#com.intellij.refactoring.safeDelete.UnsafeUsagesDialog/0.0.1440.920@0.0.1440.920" timestamp="1621716230977" />
     <state x="612" y="184" key="#xdebugger.XInspectDialog" timestamp="1616765900982">
       <screen x="0" y="0" width="1440" height="920" />
     </state>
@@ -401,30 +429,30 @@
       <screen x="0" y="0" width="1440" height="920" />
     </state>
     <state width="581" height="414" key="DebuggerActiveHint/0.0.1440.920@0.0.1440.920" timestamp="1616765133984" />
-    <state width="1397" height="210" key="GridCell.Tab.0.bottom" timestamp="1621533045682">
+    <state width="1397" height="210" key="GridCell.Tab.0.bottom" timestamp="1621758660584">
       <screen x="0" y="0" width="1440" height="920" />
     </state>
     <state width="698" height="283" key="GridCell.Tab.0.bottom/0.0.1440.920/118.-1080.1920.1040@0.0.1440.920" timestamp="1620320405891" />
     <state width="1877" height="283" key="GridCell.Tab.0.bottom/0.0.1440.920/118.-1080.1920.1040@118.-1080.1920.1040" timestamp="1620325923391" />
-    <state width="1397" height="210" key="GridCell.Tab.0.bottom/0.0.1440.920@0.0.1440.920" timestamp="1621533045682" />
-    <state width="1397" height="210" key="GridCell.Tab.0.center" timestamp="1621533045682">
+    <state width="1397" height="210" key="GridCell.Tab.0.bottom/0.0.1440.920@0.0.1440.920" timestamp="1621758660584" />
+    <state width="1397" height="210" key="GridCell.Tab.0.center" timestamp="1621758660584">
       <screen x="0" y="0" width="1440" height="920" />
     </state>
     <state width="698" height="283" key="GridCell.Tab.0.center/0.0.1440.920/118.-1080.1920.1040@0.0.1440.920" timestamp="1620320405891" />
     <state width="1877" height="283" key="GridCell.Tab.0.center/0.0.1440.920/118.-1080.1920.1040@118.-1080.1920.1040" timestamp="1620325923391" />
-    <state width="1397" height="210" key="GridCell.Tab.0.center/0.0.1440.920@0.0.1440.920" timestamp="1621533045682" />
-    <state width="1397" height="210" key="GridCell.Tab.0.left" timestamp="1621533045681">
+    <state width="1397" height="210" key="GridCell.Tab.0.center/0.0.1440.920@0.0.1440.920" timestamp="1621758660584" />
+    <state width="1397" height="210" key="GridCell.Tab.0.left" timestamp="1621758660584">
       <screen x="0" y="0" width="1440" height="920" />
     </state>
     <state width="698" height="283" key="GridCell.Tab.0.left/0.0.1440.920/118.-1080.1920.1040@0.0.1440.920" timestamp="1620320405891" />
     <state width="1877" height="283" key="GridCell.Tab.0.left/0.0.1440.920/118.-1080.1920.1040@118.-1080.1920.1040" timestamp="1620325923391" />
-    <state width="1397" height="210" key="GridCell.Tab.0.left/0.0.1440.920@0.0.1440.920" timestamp="1621533045681" />
-    <state width="1397" height="210" key="GridCell.Tab.0.right" timestamp="1621533045682">
+    <state width="1397" height="210" key="GridCell.Tab.0.left/0.0.1440.920@0.0.1440.920" timestamp="1621758660584" />
+    <state width="1397" height="210" key="GridCell.Tab.0.right" timestamp="1621758660584">
       <screen x="0" y="0" width="1440" height="920" />
     </state>
     <state width="698" height="283" key="GridCell.Tab.0.right/0.0.1440.920/118.-1080.1920.1040@0.0.1440.920" timestamp="1620320405891" />
     <state width="1877" height="283" key="GridCell.Tab.0.right/0.0.1440.920/118.-1080.1920.1040@118.-1080.1920.1040" timestamp="1620325923391" />
-    <state width="1397" height="210" key="GridCell.Tab.0.right/0.0.1440.920@0.0.1440.920" timestamp="1621533045682" />
+    <state width="1397" height="210" key="GridCell.Tab.0.right/0.0.1440.920@0.0.1440.920" timestamp="1621758660584" />
     <state width="1397" height="267" key="GridCell.Tab.1.bottom" timestamp="1621511707196">
       <screen x="0" y="0" width="1440" height="920" />
     </state>
@@ -491,11 +519,11 @@
     </state>
     <state x="734" y="-840" key="run.anything.popup/0.0.1440.920/118.-1080.1920.1040@118.-1080.1920.1040" timestamp="1615567419354" />
     <state x="462" y="212" width="672" height="677" key="run.anything.popup/0.0.1440.920@0.0.1440.920" timestamp="1621531995310" />
-    <state x="467" y="199" width="672" height="601" key="search.everywhere.popup" timestamp="1621507886700">
+    <state x="467" y="199" width="672" height="601" key="search.everywhere.popup" timestamp="1621755363522">
       <screen x="0" y="0" width="1440" height="920" />
     </state>
     <state x="741" y="-855" width="896" height="680" key="search.everywhere.popup/0.0.1440.920/118.-1080.1920.1040@118.-1080.1920.1040" timestamp="1615728905131" />
-    <state x="467" y="199" width="672" height="601" key="search.everywhere.popup/0.0.1440.920@0.0.1440.920" timestamp="1621507886700" />
+    <state x="467" y="199" width="672" height="601" key="search.everywhere.popup/0.0.1440.920@0.0.1440.920" timestamp="1621755363522" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

@@ -109,11 +109,11 @@ class CRS {
         msg1025 = new MSG1025();
         msg1025.setSystemIdentificationNumber(id);  //todo error if crs id > 255
         msg1025.setProjectionType(projectionType.nmb);
-        msg1025.setLaNO(proj.getBigDecimal("Lan0"));
-        msg1025.setLoNO(proj.getBigDecimal("Lon0"));
-        msg1025.setS(proj.getBigDecimal("S"));
-        msg1025.setFalseEasting(proj.getBigDecimal("FalseEasting"));
-        msg1025.setFalseNorthing(proj.getBigDecimal("FalseNorthing"));
+        msg1025.setLaNO(proj.getDouble("Lan0"));
+        msg1025.setLoNO(proj.getDouble("Lon0"));
+        msg1025.setS(proj.getDouble("S"));
+        msg1025.setFalseEasting(proj.getDouble("FalseEasting"));
+        msg1025.setFalseNorthing(proj.getDouble("FalseNorthing"));
         System.out.println(msg1025);
     }
 

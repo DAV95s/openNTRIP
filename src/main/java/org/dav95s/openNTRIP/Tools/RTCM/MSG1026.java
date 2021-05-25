@@ -3,7 +3,6 @@ package org.dav95s.openNTRIP.Tools.RTCM;
 import com.google.common.primitives.Bytes;
 import org.dav95s.openNTRIP.Tools.RTCMStream.BitUtils;
 
-import java.math.BigDecimal;
 import java.math.RoundingMode;
 
 import static com.google.common.base.Preconditions.checkArgument;
@@ -13,13 +12,12 @@ public class MSG1026 {
     private int messageNumber;
     private int SystemIdentificationNumber;
     private int ProjectionType;
-    private final BigDecimal degRes = new BigDecimal("0.000000011");
-    BigDecimal LaFO; // – Latitude of False Origin
-    BigDecimal LoFO; // – Longitude of False Origin
-    BigDecimal LaSP1; // – Latitude of Standard Parallel No. 1
-    BigDecimal LaSP2; // – Latitude of Standard Parallel No. 2
-    BigDecimal EFO; // – Easting of False Origin
-    BigDecimal NFO; // – Northing of False Origin
+    double LaFO; // – Latitude of False Origin
+    double LoFO; // – Longitude of False Origin
+    double LaSP1; // – Latitude of Standard Parallel No. 1
+    double LaSP2; // – Latitude of Standard Parallel No. 2
+    double EFO; // – Easting of False Origin
+    double NFO; // – Northing of False Origin
 
     public MSG1026() {
         messageNumber = 1026;
@@ -31,12 +29,12 @@ public class MSG1026 {
         messageNumber = bitUtils.getUnsignedInt(12);
         SystemIdentificationNumber = bitUtils.getUnsignedInt(8);
         ProjectionType = bitUtils.getUnsignedInt(6);
-        setLaFO(new BigDecimal(bitUtils.getSignedLong(34)).multiply(degRes));
-        setLoFO(new BigDecimal(bitUtils.getSignedLong(35)).multiply(degRes));
-        setLaSP1(new BigDecimal(bitUtils.getSignedLong(34)).multiply(degRes));
-        setLaSP2(new BigDecimal(bitUtils.getSignedLong(34)).multiply(degRes));
-        setEFO(new BigDecimal(bitUtils.getUnsignedLong(36)).multiply(BigDecimal.valueOf(0.001)));
-        setNFO(new BigDecimal(bitUtils.getSignedLong(35)).multiply(BigDecimal.valueOf(0.001)));
+        setLaFO(bitUtils.getSignedLong(34) * 0.000000011);
+        setLoFO(bitUtils.getSignedLong(35) * 0.000000011);
+        setLaSP1(bitUtils.getSignedLong(34) * 0.000000011);
+        setLaSP2(bitUtils.getSignedLong(34) * 0.000000011);
+        setEFO(bitUtils.getUnsignedLong(36) * 0.001);
+        setNFO(bitUtils.getSignedLong(35) * 0.001);
     }
 
     public byte[] write() {
@@ -46,12 +44,12 @@ public class MSG1026 {
         bitUtils.setInt(messageNumber, 12);
         bitUtils.setInt(SystemIdentificationNumber, 8);
         bitUtils.setInt(ProjectionType, 6);
-        bitUtils.setLong(LaFO.divide(degRes, RoundingMode.HALF_UP).longValue(), 34);
-        bitUtils.setLong(LoFO.divide(degRes, RoundingMode.HALF_UP).longValue(), 35);
-        bitUtils.setLong(LaSP1.divide(degRes, RoundingMode.HALF_UP).longValue(), 34);
-        bitUtils.setLong(LaSP2.divide(degRes, RoundingMode.HALF_UP).longValue(), 34);
-        bitUtils.setLong(EFO.divide(BigDecimal.valueOf(0.001), RoundingMode.HALF_UP).longValue(), 36);
-        bitUtils.setLong(NFO.divide(BigDecimal.valueOf(0.001), RoundingMode.HALF_UP).longValue(), 35);
+        bitUtils.setLong(Math.round(LaFO / 0.000000011), 34);
+        bitUtils.setLong(Math.round(LoFO / 0.000000011), 35);
+        bitUtils.setLong(Math.round(LaSP1 / 0.000000011), 34);
+        bitUtils.setLong(Math.round(LaSP2 / 0.000000011), 34);
+        bitUtils.setLong(Math.round(EFO / 0.001), 36);
+        bitUtils.setLong(Math.round(NFO / 0.001), 35);
 
         byte[] bytes = bitUtils.getByteArray();
         return Bytes.concat(bytes, bitUtils.crc24q(bytes, bytes.length, 0));
@@ -75,68 +73,67 @@ public class MSG1026 {
         ProjectionType = projectionType;
     }
 
-    public BigDecimal getLaFO() {
+    public double getLaFO() {
 
         return LaFO;
     }
 
-    public void setLaFO(BigDecimal laFO) {
-        checkArgument(laFO.compareTo(new BigDecimal(-90)) >= 0);
-        checkArgument(laFO.compareTo(new BigDecimal(90)) <= 0);
-
-        LaFO = laFO.setScale(4, RoundingMode.HALF_EVEN);
+    public void setLaFO(double laFO) {
+        double normalized = BitUtils.normalize(laFO, 8);
+        checkArgument(-90 <= normalized && normalized <= 90);
+        LaFO = normalized;
     }
 
-    public BigDecimal getLoFO() {
+    public double getLoFO() {
         return LoFO;
     }
 
-    public void setLoFO(BigDecimal loFO) {
-        checkArgument(loFO.compareTo(new BigDecimal(-180)) >= 0);
-        checkArgument(loFO.compareTo(new BigDecimal(180)) <= 0);
-        LoFO = loFO.setScale(4, RoundingMode.HALF_EVEN);
+    public void setLoFO(double loFO) {
+        double normalized = BitUtils.normalize(loFO, 8);
+        checkArgument(-180 <= normalized && normalized <= 180);
+        LoFO = normalized;
     }
 
-    public BigDecimal getLaSP1() {
+    public double getLaSP1() {
         return LaSP1;
     }
 
-    public void setLaSP1(BigDecimal laSP1) {
-        checkArgument(laSP1.compareTo(new BigDecimal(-90)) >= 0);
-        checkArgument(laSP1.compareTo(new BigDecimal(90)) <= 0);
-        LaSP1 = laSP1.setScale(4, RoundingMode.HALF_EVEN);
+    public void setLaSP1(double laSP1) {
+        double normalized = BitUtils.normalize(laSP1, 8);
+        checkArgument(-90 <= normalized && normalized <= 90);
+        LaSP1 = normalized;
 
     }
 
-    public BigDecimal getLaSP2() {
+    public double getLaSP2() {
         return LaSP2;
     }
 
-    public void setLaSP2(BigDecimal laSP2) {
-        checkArgument(laSP2.compareTo(new BigDecimal(-90)) >= 0);
-        checkArgument(laSP2.compareTo(new BigDecimal(90)) <= 0);
-        LaSP2 = laSP2.setScale(4, RoundingMode.HALF_EVEN);
+    public void setLaSP2(double laSP2) {
+        double normalized = BitUtils.normalize(laSP2, 8);
+        checkArgument(-90 <= normalized && normalized <= 90);
+        LaSP2 = normalized;
 
     }
 
-    public BigDecimal getEFO() {
+    public double getEFO() {
         return EFO;
     }
 
-    public void setEFO(BigDecimal EFO) {
-        checkArgument(EFO.compareTo(BigDecimal.ZERO) >= 0);
-        checkArgument(EFO.compareTo(new BigDecimal("68719476.735")) <= 0);
-        this.EFO = EFO.setScale(3, RoundingMode.HALF_UP);
+    public void setEFO(double EFO) {
+        double normalized = BitUtils.normalize(EFO, 4);
+        checkArgument(0 <= normalized && normalized <= 68719476.735);
+        this.EFO = normalized;
     }
 
-    public BigDecimal getNFO() {
+    public double getNFO() {
         return NFO;
     }
 
-    public void setNFO(BigDecimal NFO) {
-        checkArgument(NFO.compareTo(new BigDecimal("-17179869.183")) >= 0);
-        checkArgument(NFO.compareTo(new BigDecimal("17179869.183")) <= 0);
-        this.NFO = NFO.setScale(3, RoundingMode.HALF_EVEN);
+    public void setNFO(double NFO) {
+        double normalized = BitUtils.normalize(NFO, 4);
+        checkArgument(-17179869.183 <= normalized && normalized <= 17179869.183);
+        this.NFO = normalized;
     }
 
     @Override
@@ -145,7 +142,6 @@ public class MSG1026 {
                 "messageNumber=" + messageNumber +
                 ", SystemIdentificationNumber=" + SystemIdentificationNumber +
                 ", ProjectionType=" + ProjectionType +
-                ", degRes=" + degRes +
                 ", LaFO=" + LaFO +
                 ", LoFO=" + LoFO +
                 ", LaSP1=" + LaSP1 +

@@ -4,7 +4,7 @@ import com.google.common.base.Preconditions;
 import com.google.common.primitives.Bytes;
 import org.dav95s.openNTRIP.Tools.RTCMStream.BitUtils;
 
-public class MSG1006 extends RTCM {
+public class MSG1006 {
 
     private int messageNumber = 1005;
     private int stationID;

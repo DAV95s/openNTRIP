@@ -30,6 +30,15 @@ public class MSG1023Test {
             MSG1023 msg10233 = new MSG1023(bytes);
             System.out.println(msg10233);
 
+            double Mdlat = 0;
+            double Mdlon = 0;
+            double mdH = 0;
+            int i = msg1023.gridMap.length;
+            for (Grid grid : msg1023.gridMap) {
+                Mdlat = BitUtils.normalize(Mdlat + grid.dLat, 5);
+                Mdlon = BitUtils.normalize(Mdlon + grid.dLon, 5);
+                mdH = BitUtils.normalize(mdH + grid.dH, 5);
+            }
             System.out.println(new BitUtils(msg.getBytes()).toString(' '));
             System.out.println(new BitUtils(bytes).toString(' '));
             Assert.assertArrayEquals(msg.getBytes(), bytes);

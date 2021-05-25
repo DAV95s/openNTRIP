@@ -3,7 +3,6 @@ package org.dav95s.openNTRIP.Tools.RTCM;
 import com.google.common.primitives.Bytes;
 import org.dav95s.openNTRIP.Tools.RTCMStream.BitUtils;
 
-import java.math.BigDecimal;
 import java.math.RoundingMode;
 
 import static com.google.common.base.Preconditions.*;
@@ -13,13 +12,11 @@ public class MSG1025 {
     private int messageNumber;
     private int SystemIdentificationNumber;
     private int ProjectionType;
-    private BigDecimal LaNO;
-    private BigDecimal LoNO;
-    private BigDecimal S;
-    private BigDecimal FalseEasting;
-    private BigDecimal FalseNorthing;
-
-    private BigDecimal degRes = BigDecimal.valueOf(0.000000011d);
+    private double LaNO;
+    private double LoNO;
+    private double S;
+    private double FalseEasting;
+    private double FalseNorthing;
 
     public MSG1025() {
         messageNumber = 1025;
@@ -29,13 +26,13 @@ public class MSG1025 {
         BitUtils bitUtils = new BitUtils(msg);
         bitUtils.setPointer(24);
         messageNumber = bitUtils.getUnsignedInt(12);
-        SystemIdentificationNumber = bitUtils.getUnsignedInt(8);
-        ProjectionType = bitUtils.getUnsignedInt(6);
-        LaNO = new BigDecimal(bitUtils.getSignedLong(34)).multiply(degRes);
-        LoNO = new BigDecimal(bitUtils.getSignedLong(35)).multiply(degRes);
-        S = new BigDecimal(bitUtils.getUnsignedLong(30)).multiply(BigDecimal.valueOf(0.00001d)).add(BigDecimal.valueOf(993000));
-        FalseEasting = new BigDecimal(bitUtils.getUnsignedLong(36)).multiply(BigDecimal.valueOf(0.001d));
-        FalseNorthing = new BigDecimal(bitUtils.getSignedLong(35)).multiply(BigDecimal.valueOf(0.001d));
+        setSystemIdentificationNumber(bitUtils.getUnsignedInt(8));
+        setProjectionType(bitUtils.getUnsignedInt(6));
+        setLaNO(bitUtils.getSignedLong(34) * 0.000000011d);
+        setLoNO(bitUtils.getSignedLong(35) * 0.000000011d);
+        setS((bitUtils.getUnsignedLong(30) * 0.00001d + 993000) / 1000000);
+        setFalseEasting(bitUtils.getUnsignedLong(36) * 0.001d);
+        setFalseNorthing(bitUtils.getSignedLong(35) * 0.001d);
     }
 
     public byte[] write() {
@@ -45,11 +42,11 @@ public class MSG1025 {
         bitUtils.setInt(messageNumber, 12);
         bitUtils.setInt(SystemIdentificationNumber, 8);
         bitUtils.setInt(ProjectionType, 6);
-        bitUtils.setLong(LaNO.divide(degRes, RoundingMode.HALF_EVEN).longValue(), 34);
-        bitUtils.setLong(LoNO.divide(degRes, RoundingMode.HALF_EVEN).longValue(), 35);
-        bitUtils.setLong(S.subtract(BigDecimal.valueOf(993000)).divide(BigDecimal.valueOf(0.00001d), RoundingMode.HALF_EVEN).longValue(), 30);
-        bitUtils.setLong(FalseEasting.divide(BigDecimal.valueOf(0.001d), RoundingMode.HALF_EVEN).longValue(), 36);
-        bitUtils.setLong(FalseNorthing.divide(BigDecimal.valueOf(0.001d), RoundingMode.HALF_EVEN).longValue(), 35);
+        bitUtils.setLong(Math.round(LaNO / 0.000000011d), 34);
+        bitUtils.setLong(Math.round(LoNO / 0.000000011d), 35);
+        bitUtils.setLong(Math.round((S * 1000000 - 993000) / 0.00001d), 30);
+        bitUtils.setLong(Math.round(FalseEasting / 0.001d), 36);
+        bitUtils.setLong(Math.round(FalseNorthing / 0.001d), 35);
         byte[] bytes = bitUtils.getByteArray();
         return Bytes.concat(bytes, bitUtils.crc24q(bytes, bytes.length, 0));
     }
@@ -90,53 +87,53 @@ public class MSG1025 {
         ProjectionType = projectionType;
     }
 
-    public BigDecimal getLaNO() {
+    public double getLaNO() {
         return LaNO;
     }
 
-    public void setLaNO(BigDecimal laNO) {
-        checkArgument(laNO.compareTo(new BigDecimal(-90)) >= 0);
-        checkArgument(laNO.compareTo(new BigDecimal(90)) <= 0);
-        LaNO = laNO;
+    public void setLaNO(double laNO) {
+        double normalized = BitUtils.normalize(laNO, 8);
+        checkArgument(-90 <= normalized && normalized <= 90);
+        LaNO = normalized;
     }
 
-    public BigDecimal getLoNO() {
+    public double getLoNO() {
         return LoNO;
     }
 
-    public void setLoNO(BigDecimal loNO) {
-        checkArgument(loNO.compareTo(new BigDecimal(-180)) >= 0);
-        checkArgument(loNO.compareTo(new BigDecimal(180)) <= 0);
-        LoNO = loNO;
+    public void setLoNO(double loNO) {
+        double normalized = BitUtils.normalize(loNO, 8);
+        checkArgument(-180 <= normalized && normalized <= 180);
+        LoNO = normalized;
     }
 
-    public BigDecimal getS() {
+    public double getS() {
         return S;
     }
 
-    public void setS(BigDecimal s) {
-        checkArgument(s.compareTo(BigDecimal.ZERO) >= 0);
-        checkArgument(s.compareTo(new BigDecimal("10737.41823")) <= 0);
-        this.S = s;
+    public void setS(double s) {
+        double normalized = BitUtils.normalize(s, 6);
+        checkArgument(0.993 <= normalized && normalized <= 1.003737418);
+        this.S = normalized;
     }
 
-    public BigDecimal getFalseEasting() {
+    public double getFalseEasting() {
         return FalseEasting;
     }
 
-    public void setFalseEasting(BigDecimal falseEasting) {
-        checkArgument(falseEasting.compareTo(BigDecimal.ZERO) >= 0);
-        checkArgument(falseEasting.compareTo(new BigDecimal("68719476.735")) <= 0);
-        FalseEasting = falseEasting;
+    public void setFalseEasting(double falseEasting) {
+        double normalized = BitUtils.normalize(falseEasting, 4);
+        checkArgument(0 <= normalized && normalized <= 68719476.735);
+        FalseEasting = normalized;
     }
 
-    public BigDecimal getFalseNorthing() {
+    public double getFalseNorthing() {
         return FalseNorthing;
     }
 
-    public void setFalseNorthing(BigDecimal falseNorthing) {
-        checkArgument(falseNorthing.compareTo(new BigDecimal("-17179869.183")) >= 0);
-        checkArgument(falseNorthing.compareTo(new BigDecimal("+17179869.183")) <= 0);
-        FalseNorthing = falseNorthing;
+    public void setFalseNorthing(double falseNorthing) {
+        double normalized = BitUtils.normalize(falseNorthing, 4);
+        checkArgument(-17179869.183 <= normalized && normalized <= 17179869.183);
+        FalseNorthing = normalized;
     }
 }

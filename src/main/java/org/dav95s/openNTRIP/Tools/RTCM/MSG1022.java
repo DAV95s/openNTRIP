@@ -89,8 +89,9 @@ public class MSG1022 extends MSG1021 {
     }
 
     public void setXp(double xp) {
-        Preconditions.checkArgument(-17179869.184 <= xp && xp <= 17179869.184);
-        Xp = BitUtils.normalize(xp, 4);
+        double normalized = BitUtils.normalize(xp, 4);
+        Preconditions.checkArgument(-17179869.184 <= normalized && normalized <= 17179869.184);
+        Xp = normalized;
     }
 
     public double getYp() {
@@ -98,8 +99,9 @@ public class MSG1022 extends MSG1021 {
     }
 
     public void setYp(double yp) {
-        Preconditions.checkArgument(-17179869.184 <= yp && yp <= 17179869.184);
-        Yp = BitUtils.normalize(yp, 4);
+        double normalized = BitUtils.normalize(yp, 4);
+        Preconditions.checkArgument(-17179869.184 <= normalized && normalized <= 17179869.184);
+        Yp = normalized;
     }
 
     public double getZp() {
@@ -107,7 +109,8 @@ public class MSG1022 extends MSG1021 {
     }
 
     public void setZp(double zp) {
-        Preconditions.checkArgument(-17179869.184 <= zp && zp <= 17179869.184);
-        Zp = BitUtils.normalize(zp, 4);
+        double normalized = BitUtils.normalize(zp, 4);
+        Preconditions.checkArgument(-17179869.184 <= normalized && normalized <= 17179869.184);
+        Zp = normalized;
     }
 }
