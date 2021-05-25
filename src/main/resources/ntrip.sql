@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: Mar 17, 2021 at 07:29 PM
+-- Generation Time: May 25, 2021 at 10:28 PM
 -- Server version: 10.5.6-MariaDB
 -- PHP Version: 7.3.6
 
@@ -90,15 +90,17 @@ INSERT INTO `config` (`id`, `group`, `key`, `value`) VALUES
 
 CREATE TABLE `crs` (
   `id` int(11) NOT NULL,
-  `proj4` text NOT NULL
+  `mountpoint_id` int(11) DEFAULT NULL,
+  `crs` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT NULL CHECK (json_valid(`crs`)),
+  `geoid_path` varchar(255) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
 -- Dumping data for table `crs`
 --
 
-INSERT INTO `crs` (`id`, `proj4`) VALUES
-(1, '+proj=tmerc +lat_0=0 +lon_0=30 +k=1 +x_0=95900 +y_0=-6552800 +ellps=WGS84 +towgs84=5.476,2.074,9.338,3.38086,5.93454,-0.49579,-1.676094 +units=m +no_defs');
+INSERT INTO `crs` (`id`, `mountpoint_id`, `crs`, `geoid_path`) VALUES
+(1, 1, '{\r\n   \"TransformationType\":\"HelmertLinearExpression\",\r\n   \"HorizontalQuality\":2,\r\n   \"VerticalQuality\":2,\r\n   \"ComputationIndicator\":1,\r\n   \"HeightIndicator\":1,\r\n   \"Plate Number\":\"0\",\r\n   \"AreaOfValidity\":{\r\n      \"LatCenter\":60.0,\r\n      \"LonCenter\":30.0,\r\n      \"Height\":0.50,\r\n      \"Width\":0.50\r\n   },\r\n   \"Source\":{\r\n      \"Name\":\"WGS 84 (geocentric)\",\r\n      \"Ellipsoid\":{\r\n         \"a\":6378137,\r\n         \"b\":6356752.3142\r\n      }\r\n   },\r\n   \"Target\":{\r\n      \"Name\":\"XXX123\",\r\n      \"Ellipsoid\":{\r\n         \"a\":6378137,\r\n         \"b\":6356752.3142\r\n      },\r\n      \"Datum\":{\r\n         \"dX\":12,\r\n         \"dY\":21,\r\n         \"dZ\":213,\r\n         \"rX\":1,\r\n         \"rY\":3,\r\n         \"rZ\":2,\r\n         \"dS\":12,\r\n         \"pX\":0,\r\n         \"pY\":0,\r\n         \"pZ\":0\r\n      },\r\n      \"Projection\":{\r\n         \"ProjectionType\":\"TM\",\r\n         \"Lan0\":0,\r\n         \"Lon0\":30,\r\n         \"S\":0,\r\n         \"FalseEasting\":0,\r\n         \"FalseNorthing\":0\r\n      }\r\n   }\r\n}', NULL);
 
 -- --------------------------------------------------------
 
@@ -222,7 +224,7 @@ CREATE TABLE `reference_stations` (
 --
 
 INSERT INTO `reference_stations` (`id`, `name`, `identifier`, `format`, `format_details`, `carrier`, `nav_system`, `country`, `lat`, `lon`, `alt`, `bitrate`, `misc`, `is_online`, `password`, `hz`) VALUES
-(1, 'AL1', 'Juneau', 'RTCM 3.1', '1004(1),1005(30),1007(30),1033(30)', 2, 'GPS', 'USA', 58.41677474975586, -134.54530334472656, 0, 123, '', 0, '44444', 4),
+(1, 'AL1', 'Juneau', 'RTCM 3.1', '1004(1),1005(0),1007(0),1033(0)', 2, 'GPS', 'USA', 58.41677474975586, -134.54530334472656, 0, 123, '', 0, '44444', 4),
 (2, 'AL2', 'Capital Regional District', 'RTCM 3.2', '1006(10),1008(10),1013(60),1019(1),1020(1),1033(10),1077(1),1087(1),1097(1)', 2, 'GPS+GLO+GAL', 'CAN', 48.3897819519043, -123.48747253417969, 0, 0, '', 0, '44444', 0);
 
 -- --------------------------------------------------------
@@ -328,7 +330,9 @@ ALTER TABLE `config`
 -- Indexes for table `crs`
 --
 ALTER TABLE `crs`
-  ADD KEY `id` (`id`);
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `id` (`id`),
+  ADD KEY `mountpoint_id` (`mountpoint_id`);
 
 --
 -- Indexes for table `groups`
@@ -398,7 +402,7 @@ ALTER TABLE `users_groups`
 -- AUTO_INCREMENT for table `casters`
 --
 ALTER TABLE `casters`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=23;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=28;
 
 --
 -- AUTO_INCREMENT for table `clients_log`
@@ -411,6 +415,12 @@ ALTER TABLE `clients_log`
 --
 ALTER TABLE `config`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+
+--
+-- AUTO_INCREMENT for table `crs`
+--
+ALTER TABLE `crs`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `groups`
@@ -428,13 +438,13 @@ ALTER TABLE `login_attempts`
 -- AUTO_INCREMENT for table `mountpoints`
 --
 ALTER TABLE `mountpoints`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=31;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=34;
 
 --
 -- AUTO_INCREMENT for table `reference_stations`
 --
 ALTER TABLE `reference_stations`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=66;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=71;
 
 --
 -- AUTO_INCREMENT for table `reference_stations_fix_position`
@@ -446,7 +456,7 @@ ALTER TABLE `reference_stations_fix_position`
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=22;
 
 --
 -- AUTO_INCREMENT for table `users_groups`
