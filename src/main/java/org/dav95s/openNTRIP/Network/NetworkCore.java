@@ -4,7 +4,6 @@ package org.dav95s.openNTRIP.Network;
 import org.dav95s.openNTRIP.Servers.NtripCaster;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.slf4j.event.Level;
 
 import java.io.IOException;
 import java.nio.channels.SelectionKey;
@@ -20,7 +19,7 @@ public class NetworkCore implements Runnable {
 
     private Selector selector;
     private Thread thread;
-
+    private boolean isAlive = true;
     private static NetworkCore instance;
     private final ExecutorService executor = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors());
 
@@ -46,12 +45,13 @@ public class NetworkCore implements Runnable {
     }
 
     public void close() throws IOException {
+        this.isAlive = false;
         this.selector.close();
         this.thread.interrupt();
     }
 
     public void run() {
-        while (true) {
+        while (isAlive) {
             try {
                 int count = selector.select();
 
@@ -70,12 +70,7 @@ public class NetworkCore implements Runnable {
                     }
 
                     if (selectionKey.isAcceptable()) {
-                        ServerSocketChannel server = (ServerSocketChannel) selectionKey.channel();
-                        SocketChannel connectSocket = server.accept();
-                        connectSocket.configureBlocking(false);
-                        SelectionKey clientKey = connectSocket.register(this.selector, SelectionKey.OP_READ);
-                        new ConnectHandler(new Socket(clientKey), (NtripCaster) selectionKey.attachment());
-
+                        accept(selectionKey);
                     } else if (selectionKey.isReadable()) {
                         INetworkHandler handler = (INetworkHandler) selectionKey.attachment();
                         try {
@@ -93,5 +88,13 @@ public class NetworkCore implements Runnable {
                 logger.error(ex.getMessage());
             }
         }
+    }
+
+    private void accept(SelectionKey selectionKey) throws IOException {
+        ServerSocketChannel server = (ServerSocketChannel) selectionKey.channel();
+        SocketChannel connectSocket = server.accept();
+        connectSocket.configureBlocking(false);
+        SelectionKey clientKey = connectSocket.register(this.selector, SelectionKey.OP_READ);
+        new ConnectHandler(new Socket(clientKey), (NtripCaster) selectionKey.attachment());
     }
 }
