@@ -12,6 +12,8 @@ import java.nio.channels.Selector;
 import java.nio.channels.ServerSocketChannel;
 import java.nio.channels.SocketChannel;
 import java.util.Iterator;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 public class NetworkCore implements Runnable {
     final static private Logger logger = LoggerFactory.getLogger(NetworkCore.class.getName());
@@ -20,7 +22,7 @@ public class NetworkCore implements Runnable {
     private Thread thread;
 
     private static NetworkCore instance;
-    private final Worker worker = Worker.getInstance();
+    private final ExecutorService executor = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors());
 
     public static NetworkCore getInstance() {
         if (instance == null)
@@ -78,7 +80,7 @@ public class NetworkCore implements Runnable {
                         INetworkHandler handler = (INetworkHandler) selectionKey.attachment();
                         try {
                             handler.readChannel();
-                            worker.addWork(handler);
+                            executor.submit(handler);
                         } catch (IOException e) {
                             logger.error(e.getMessage());
                             handler.close();
