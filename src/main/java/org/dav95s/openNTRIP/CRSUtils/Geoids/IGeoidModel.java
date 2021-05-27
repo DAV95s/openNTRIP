@@ -1,4 +1,4 @@
-package org.dav95s.openNTRIP.Tools.Geoids;
+package org.dav95s.openNTRIP.CRSUtils.Geoids;
 
 import org.dav95s.openNTRIP.Tools.NMEA;
 

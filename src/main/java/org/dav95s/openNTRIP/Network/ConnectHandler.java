@@ -37,7 +37,7 @@ public class ConnectHandler implements INetworkHandler {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        logger.debug(socket.toString() + " closed!");
+        logger.debug(socket + " closed!");
     }
 
     @Override
@@ -45,7 +45,7 @@ public class ConnectHandler implements INetworkHandler {
         ByteBuffer buffer = bufferPool.take(1024);
 
         if (socket.endOfStreamReached) {
-            throw new IOException(socket.toString() + " end of stream reached.");
+            throw new IOException(socket + " end of stream reached.");
         }
 
         int count = this.socket.read(buffer);

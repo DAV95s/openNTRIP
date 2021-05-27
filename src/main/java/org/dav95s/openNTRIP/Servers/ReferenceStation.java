@@ -69,7 +69,7 @@ public class ReferenceStation implements INetworkHandler {
         ByteBuffer buffer = bufferPool.take(BYTE_BUFFER_SIZE);
 
         if (socket.endOfStreamReached)
-            throw new IOException(socket.toString() + " end of stream reached.");
+            throw new IOException(socket + " end of stream reached.");
 
         this.socket.read(buffer);
         buffer.flip();

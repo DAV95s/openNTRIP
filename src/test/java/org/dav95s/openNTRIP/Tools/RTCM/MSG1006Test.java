@@ -1,14 +1,19 @@
+package org.dav95s.openNTRIP.Tools.RTCM;
+
 import org.dav95s.openNTRIP.Tools.Decoders.DecoderRTCM3;
-import org.dav95s.openNTRIP.Tools.RTCMStream.BitUtils;
 import org.dav95s.openNTRIP.Tools.RTCMStream.MessagePack;
-import org.dav95s.openNTRIP.Tools.RTCM.MSG1006;
 import org.junit.Assert;
 import org.junit.Test;
 
-import java.io.*;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.nio.ByteBuffer;
 
-public class Test1004 {
+import static org.junit.Assert.*;
+
+public class MSG1006Test {
     String path = "src/test/resources/RTCM_32";
 
     @Test
@@ -40,5 +45,6 @@ public class Test1004 {
         }
 
     }
+
 
 }

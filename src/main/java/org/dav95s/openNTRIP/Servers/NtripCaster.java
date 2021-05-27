@@ -24,6 +24,7 @@ public class NtripCaster {
     final private HashMap<String, MountPoint> mountPoints = new HashMap<>();
 
     public NtripCaster(NtripCasterModel model) throws IOException, SQLException {
+        logger.debug("Caster [Port:" + model.getPort() + "] starts initialization...");
         this.model = model;
 
         this.serverChannel = ServerSocketChannel.open();
@@ -33,12 +34,12 @@ public class NtripCaster {
         NetworkCore.getInstance().registerServerChannel(serverChannel, this);
 
         ArrayList<Integer> mountpointsId = this.model.readMountpointsId();
-        for (int id : mountpointsId) {
+        this.model.readMountpointsId().forEach((id)-> {
             MountPointModel mountPointModel = new MountPointModel(id);
             mountPoints.put(mountPointModel.getName(), new MountPoint(mountPointModel));
-        }
+        });
 
-        logger.info("NtripCaster :" + model.getPort() + " has been initiated!");
+        logger.info("NtripCaster :" + model.getPort() + " is running!");
     }
 
     public void close() {

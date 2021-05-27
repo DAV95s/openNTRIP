@@ -29,7 +29,7 @@ public class Socket {
         this.socketId = socketIdCounter.incrementAndGet();
         this.socketChannel = (SocketChannel) selectionKey.channel();
 
-        logger.info("New connection: " + this.toString() + socketChannel.getRemoteAddress());
+        logger.info("New connection: " + this + socketChannel.getRemoteAddress());
     }
 
 
@@ -37,7 +37,7 @@ public class Socket {
         this.write(ByteBuffer.wrap(OK_MESSAGE));
 
         if (logger.isDebugEnabled()) {
-            logger.debug(this.toString() + " response: ICY 200 OK");
+            logger.debug(this + " response: ICY 200 OK");
         }
     }
 
@@ -49,7 +49,7 @@ public class Socket {
         }
 
         if (logger.isDebugEnabled()) {
-            logger.debug(this.toString() + " response: ERROR - Bad Password");
+            logger.debug(this + " response: ERROR - Bad Password");
         }
     }
 
@@ -63,7 +63,7 @@ public class Socket {
         }
         if (bytesRead == -1) {
             this.endOfStreamReached = true;
-            throw new IOException(this.toString() + "endOfStreamReached");
+            throw new IOException(this + "endOfStreamReached");
         }
 
         return totalBytesRead;

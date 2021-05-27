@@ -22,10 +22,27 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="b7aa1f89-fb3e-44e2-a0de-b72c0eae2f41" name="Default Changelist" comment="refactoring 1021,1023, 1027">
+    <list default="true" id="b7aa1f89-fb3e-44e2-a0de-b72c0eae2f41" name="Default Changelist" comment="core refactoring">
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/dav95s/openNTRIP/CRSUtils/GridShift/Node.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/dav95s/openNTRIP/CRSUtils/GridShift/RTree.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/dav95s/openNTRIP/CRSUtils/GridShift/Triangle.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/test/java/Triangles.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/test/java/org/dav95s/openNTRIP/CRSUtils/GridShift/TriangleTest.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/test/java/org/dav95s/openNTRIP/Tools/RTCM/MSG1006Test.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/dav95s/openNTRIP/Network/NetworkCore.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/dav95s/openNTRIP/Network/NetworkCore.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/dav95s/openNTRIP/Network/Worker.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/dav95s/openNTRIP/Databases/Models/MountPointModel.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/dav95s/openNTRIP/Databases/Models/MountPointModel.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/dav95s/openNTRIP/Databases/Models/ReferenceStationModel.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/dav95s/openNTRIP/Databases/Models/ReferenceStationModel.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/dav95s/openNTRIP/Network/ConnectHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/dav95s/openNTRIP/Network/ConnectHandler.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/dav95s/openNTRIP/Network/Socket.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/dav95s/openNTRIP/Network/Socket.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/dav95s/openNTRIP/Servers/NtripCaster.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/dav95s/openNTRIP/Servers/NtripCaster.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/dav95s/openNTRIP/Servers/ReferenceStation.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/dav95s/openNTRIP/Servers/ReferenceStation.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/dav95s/openNTRIP/Tools/Geoids/GGF.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/dav95s/openNTRIP/CRSUtils/Geoids/GGF.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/dav95s/openNTRIP/Tools/Geoids/IGeoidModel.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/dav95s/openNTRIP/CRSUtils/Geoids/IGeoidModel.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/db.properties" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/db.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/Test1004.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/Test1021.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/RTCMExtractor.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/TestDB.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/TestDB.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/org/dav95s/openNTRIP/Tools/Geoids/GGFTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/org/dav95s/openNTRIP/Tools/Geoids/GGFTest.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -37,8 +54,8 @@
       <list>
         <option value="Enum" />
         <option value="JUnit3 Test Class" />
-        <option value="Class" />
         <option value="Interface" />
+        <option value="Class" />
         <option value="JUnit4 Test Class" />
       </list>
     </option>
@@ -91,35 +108,35 @@
     <property name="settings.editor.selected.configurable" value="preferences.pluginManager" />
   </component>
   <component name="RecentsManager">
-    <key name="CreateTestDialog.RecentsKey">
-      <recent name="org.dav95s.openNTRIP.Tools.RTCM" />
-      <recent name="org.dav95s.openNTRIP.Tools.RTCMStream" />
-      <recent name="org.dav95s.openNTRIP.Databases.Models" />
-      <recent name="org.dav95s.openNTRIP.Tools.Geoids" />
-      <recent name="org.dav95s.openNTRIP.Tools.Geoids.Readers" />
+    <key name="CreateClassDialog.RecentsKey">
+      <recent name="org.adv25.ADVNTRIP.Servers" />
+    </key>
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\Main\Documents\ADVNTRIP\src\main\java\org\adv25\ADVNTRIP\Network" />
     </key>
     <key name="CreateTestDialog.Recents.Supers">
       <recent name="" />
       <recent name="junit.framework.TestCase" />
       <recent name="groovy.util.GroovyTestCase" />
     </key>
-    <key name="MoveClassesOrPackagesDialog.RECENTS_KEY">
-      <recent name="" />
-      <recent name="org.dav95s.openNTRIP" />
-    </key>
     <key name="MoveFile.RECENT_KEYS">
       <recent name="C:\Users\Main\Documents\ADVNTRIP\src\main\resources" />
       <recent name="C:\Users\Main\Documents\ADVNTRIP\src\main\java\org\adv25\ADVNTRIP\Tools" />
       <recent name="C:\Users\Main\Documents\ADVNTRIP\src\main\java\org\adv25\ADVNTRIP" />
     </key>
-    <key name="CopyFile.RECENT_KEYS">
-      <recent name="C:\Users\Main\Documents\ADVNTRIP\src\main\java\org\adv25\ADVNTRIP\Network" />
+    <key name="MoveClassesOrPackagesDialog.RECENTS_KEY">
+      <recent name="" />
+      <recent name="org.dav95s.openNTRIP" />
     </key>
-    <key name="CreateClassDialog.RecentsKey">
-      <recent name="org.adv25.ADVNTRIP.Servers" />
+    <key name="CreateTestDialog.RecentsKey">
+      <recent name="org.dav95s.openNTRIP.CRSUtils.GridShift" />
+      <recent name="org.dav95s.openNTRIP.Tools.RTCM" />
+      <recent name="org.dav95s.openNTRIP.Tools.RTCMStream" />
+      <recent name="org.dav95s.openNTRIP.Databases.Models" />
+      <recent name="org.dav95s.openNTRIP.Tools.Geoids" />
     </key>
   </component>
-  <component name="RunManager" selected="JUnit.MSG1023Test.decodeEncode">
+  <component name="RunManager" selected="JUnit.Triangles.one">
     <configuration name="Start" type="Application" factoryName="Application">
       <option name="ALTERNATIVE_JRE_PATH" value="11" />
       <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="true" />
@@ -143,75 +160,74 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="MSG1021Test.decoderEncode" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+    <configuration name="TriangleTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="openNTRIP" />
       <extension name="coverage">
         <pattern>
-          <option name="PATTERN" value="org.dav95s.openNTRIP.Tools.RTCM.*" />
+          <option name="PATTERN" value="org.dav95s.openNTRIP.CRSUtils.GridShift.*" />
           <option name="ENABLED" value="true" />
         </pattern>
       </extension>
-      <option name="PACKAGE_NAME" value="org.dav95s.openNTRIP.Tools.RTCM" />
-      <option name="MAIN_CLASS_NAME" value="org.dav95s.openNTRIP.Tools.RTCM.MSG1021Test" />
-      <option name="METHOD_NAME" value="decoderEncode" />
+      <option name="PACKAGE_NAME" value="org.dav95s.openNTRIP.CRSUtils.GridShift" />
+      <option name="MAIN_CLASS_NAME" value="org.dav95s.openNTRIP.CRSUtils.GridShift.TriangleTest" />
+      <option name="TEST_OBJECT" value="class" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="TriangleTest.initTest2" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="openNTRIP" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="org.dav95s.openNTRIP.CRSUtils.GridShift.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="org.dav95s.openNTRIP.CRSUtils.GridShift" />
+      <option name="MAIN_CLASS_NAME" value="org.dav95s.openNTRIP.CRSUtils.GridShift.TriangleTest" />
+      <option name="METHOD_NAME" value="initTest2" />
       <option name="TEST_OBJECT" value="method" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="MSG1021Test.msg1021MaxValues" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+    <configuration name="TriangleTest.initTest3" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="openNTRIP" />
       <extension name="coverage">
         <pattern>
-          <option name="PATTERN" value="org.dav95s.openNTRIP.Tools.RTCM.*" />
+          <option name="PATTERN" value="org.dav95s.openNTRIP.CRSUtils.GridShift.*" />
           <option name="ENABLED" value="true" />
         </pattern>
       </extension>
-      <option name="PACKAGE_NAME" value="org.dav95s.openNTRIP.Tools.RTCM" />
-      <option name="MAIN_CLASS_NAME" value="org.dav95s.openNTRIP.Tools.RTCM.MSG1021Test" />
-      <option name="METHOD_NAME" value="msg1021MaxValues" />
+      <option name="PACKAGE_NAME" value="org.dav95s.openNTRIP.CRSUtils.GridShift" />
+      <option name="MAIN_CLASS_NAME" value="org.dav95s.openNTRIP.CRSUtils.GridShift.TriangleTest" />
+      <option name="METHOD_NAME" value="initTest3" />
       <option name="TEST_OBJECT" value="method" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="MSG1023Test.decodeEncode" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+    <configuration name="TriangleTest.initTest4" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="openNTRIP" />
       <extension name="coverage">
         <pattern>
-          <option name="PATTERN" value="org.dav95s.openNTRIP.Tools.RTCM.*" />
+          <option name="PATTERN" value="org.dav95s.openNTRIP.CRSUtils.GridShift.*" />
           <option name="ENABLED" value="true" />
         </pattern>
       </extension>
-      <option name="PACKAGE_NAME" value="org.dav95s.openNTRIP.Tools.RTCM" />
-      <option name="MAIN_CLASS_NAME" value="org.dav95s.openNTRIP.Tools.RTCM.MSG1023Test" />
-      <option name="METHOD_NAME" value="decodeEncode" />
+      <option name="PACKAGE_NAME" value="org.dav95s.openNTRIP.CRSUtils.GridShift" />
+      <option name="MAIN_CLASS_NAME" value="org.dav95s.openNTRIP.CRSUtils.GridShift.TriangleTest" />
+      <option name="METHOD_NAME" value="initTest4" />
       <option name="TEST_OBJECT" value="method" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="MSG1027Test.maxValues" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
-      <module name="openNTRIP" />
-      <extension name="coverage">
-        <pattern>
-          <option name="PATTERN" value="org.dav95s.openNTRIP.Tools.RTCM.*" />
-          <option name="ENABLED" value="true" />
-        </pattern>
-      </extension>
-      <option name="PACKAGE_NAME" value="org.dav95s.openNTRIP.Tools.RTCM" />
-      <option name="MAIN_CLASS_NAME" value="org.dav95s.openNTRIP.Tools.RTCM.MSG1027Test" />
-      <option name="METHOD_NAME" value="maxValues" />
-      <option name="TEST_OBJECT" value="method" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
-    <configuration name="Test1004.start" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+    <configuration name="Triangles.one" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="openNTRIP" />
       <option name="PACKAGE_NAME" value="" />
-      <option name="MAIN_CLASS_NAME" value="Test1004" />
-      <option name="METHOD_NAME" value="start" />
+      <option name="MAIN_CLASS_NAME" value="Triangles" />
+      <option name="METHOD_NAME" value="one" />
       <option name="TEST_OBJECT" value="method" />
       <method v="2">
         <option name="Make" enabled="true" />
@@ -219,19 +235,19 @@
     </configuration>
     <list>
       <item itemvalue="Application.Start" />
-      <item itemvalue="JUnit.MSG1021Test.decoderEncode" />
-      <item itemvalue="JUnit.MSG1021Test.msg1021MaxValues" />
-      <item itemvalue="JUnit.MSG1023Test.decodeEncode" />
-      <item itemvalue="JUnit.MSG1027Test.maxValues" />
-      <item itemvalue="JUnit.Test1004.start" />
+      <item itemvalue="JUnit.TriangleTest.initTest2" />
+      <item itemvalue="JUnit.TriangleTest.initTest3" />
+      <item itemvalue="JUnit.TriangleTest.initTest4" />
+      <item itemvalue="JUnit.TriangleTest" />
+      <item itemvalue="JUnit.Triangles.one" />
     </list>
     <recent_temporary>
       <list>
-        <item itemvalue="JUnit.MSG1023Test.decodeEncode" />
-        <item itemvalue="JUnit.MSG1021Test.decoderEncode" />
-        <item itemvalue="JUnit.Test1004.start" />
-        <item itemvalue="JUnit.MSG1027Test.maxValues" />
-        <item itemvalue="JUnit.MSG1021Test.msg1021MaxValues" />
+        <item itemvalue="JUnit.Triangles.one" />
+        <item itemvalue="JUnit.TriangleTest" />
+        <item itemvalue="JUnit.TriangleTest.initTest4" />
+        <item itemvalue="JUnit.TriangleTest.initTest3" />
+        <item itemvalue="JUnit.TriangleTest.initTest2" />
       </list>
     </recent_temporary>
   </component>
@@ -331,7 +347,21 @@
       <option name="project" value="LOCAL" />
       <updated>1621533109479</updated>
     </task>
-    <option name="localTasksCounter" value="13" />
+    <task id="LOCAL-00013" summary="core refactoring">
+      <created>1622055009230</created>
+      <option name="number" value="00013" />
+      <option name="presentableId" value="LOCAL-00013" />
+      <option name="project" value="LOCAL" />
+      <updated>1622055009230</updated>
+    </task>
+    <task id="LOCAL-00014" summary="core refactoring">
+      <created>1622055185417</created>
+      <option name="number" value="00014" />
+      <option name="presentableId" value="LOCAL-00014" />
+      <option name="project" value="LOCAL" />
+      <updated>1622055185417</updated>
+    </task>
+    <option name="localTasksCounter" value="15" />
     <servers />
   </component>
   <component name="Vcs.Log.History.Properties">
@@ -369,7 +399,8 @@
     <MESSAGE value="support 1021-1027" />
     <MESSAGE value="support 1021-1027 alpha" />
     <MESSAGE value="refactoring 1021,1022" />
-    <option name="LAST_COMMIT_MESSAGE" value="refactoring 1021,1022" />
+    <MESSAGE value="core refactoring" />
+    <option name="LAST_COMMIT_MESSAGE" value="core refactoring" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

@@ -109,25 +109,4 @@ public class TestDB {
         Assert.assertTrue(model.delete());
         Assert.assertFalse(model.read());
     }
-
-
-    @Test
-    public void mp() throws SQLException {
-        Random random = new Random();
-
-        while (true){
-            System.out.println(normalize(random.nextFloat() / random.nextFloat(), 4));
-            try {
-                Thread.sleep(500);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-        }
-    }
-
-    public double normalize(double d, int scale) {
-        int res = (int) Math.pow(10, scale);
-        double d2 = d * res;
-        return (double) Math.round(d2) / res;
-    }
 }

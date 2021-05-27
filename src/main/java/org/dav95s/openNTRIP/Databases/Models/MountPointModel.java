@@ -7,13 +7,19 @@ import org.dav95s.openNTRIP.Clients.Authentication.None;
 import org.dav95s.openNTRIP.Clients.User;
 import org.dav95s.openNTRIP.Databases.DataSource;
 import org.dav95s.openNTRIP.ServerBootstrap;
+import org.dav95s.openNTRIP.Servers.NtripCaster;
 import org.dav95s.openNTRIP.Servers.ReferenceStation;
 import org.dav95s.openNTRIP.Tools.NMEA;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.stream.Collectors;
 
 public class MountPointModel {
+    final static private Logger logger = LoggerFactory.getLogger(MountPointModel.class.getName());
     private int id;
     private String name;
     private String identifier;
@@ -42,10 +48,15 @@ public class MountPointModel {
 
     }
 
-    public MountPointModel(int id) throws SQLException {
-        this.id = id;
-        this.read();
-        this.readAccessibleReferenceStations();
+    public MountPointModel(int id) {
+        try {
+            this.id = id;
+            this.read();
+            this.readAccessibleReferenceStations();
+        } catch (SQLException e) {
+            logger.error("Mountpoint [" + name + "] can't get data from the database!", e);
+        }
+        logger.debug("Mountpoint [" + name + "]" + " - OK!");
     }
 
     public void setAuthenticator(String authenticator) {
@@ -251,6 +262,7 @@ public class MountPointModel {
                     pool.add(ServerBootstrap.getInstance().getReferenceStationById(rs.getInt("station_id")));
                 }
                 stationsPool = pool;
+                logger.debug("Mountpoint [" + name + "]" + " has " + stationsPool.stream().map(ReferenceStation::getName).collect(Collectors.joining(", ")));
             }
         }
     }

@@ -1,12 +1,11 @@
 package org.dav95s.openNTRIP.Databases.Models;
 
 import org.dav95s.openNTRIP.Databases.DataSource;
-import org.dav95s.openNTRIP.Tools.RTCMStream.Message;
-import org.dav95s.openNTRIP.Tools.RTCMStream.MessagePack;
 import org.dav95s.openNTRIP.Tools.NMEA;
 import org.dav95s.openNTRIP.Tools.RTCM.MSG1006;
+import org.dav95s.openNTRIP.Tools.RTCMStream.Message;
+import org.dav95s.openNTRIP.Tools.RTCMStream.MessagePack;
 
-import java.math.BigDecimal;
 import java.sql.*;
 
 public class ReferenceStationModel {
@@ -326,60 +325,62 @@ public class ReferenceStationModel {
             throw new SQLException("Can't read from DB", e);
         }
     }
-}
 
-class ReplaceCoordinates {
-    double ECEFX;
-    double ECEFY;
-    double ECEFZ;
-    double antennaHeight;
-    int stationID;
+    class ReplaceCoordinates {
+        double ECEFX;
+        double ECEFY;
+        double ECEFZ;
+        double antennaHeight;
+        int stationID;
 
-    public MessagePack handle(MessagePack pack) {
+        public MessagePack handle(MessagePack pack) {
 
-        Message msg = pack.getMessageByNmb(1005);
+            Message msg = pack.getMessageByNmb(1005);
 
-        if (msg != null) {
-            MSG1006 msg_new = new MSG1006(msg.getBytes());
-            msg_new.setECEFX(ECEFX);
-            msg_new.setECEFY(ECEFY);
-            msg_new.setECEFZ(ECEFZ);
-            pack.removeMessage(msg);
-            pack.addMessage(1005, msg_new.getBytes());
+            if (msg != null) {
+                MSG1006 msg_new = new MSG1006(msg.getBytes());
+                msg_new.setECEFX(ECEFX);
+                msg_new.setECEFY(ECEFY);
+                msg_new.setECEFZ(ECEFZ);
+                pack.removeMessage(msg);
+                pack.addMessage(1005, msg_new.getBytes());
+            }
+
+            msg = pack.getMessageByNmb(1006);
+
+            if (msg != null) {
+                MSG1006 msg_new = new MSG1006(msg.getBytes());
+                msg_new.setECEFX(ECEFX);
+                msg_new.setECEFY(ECEFY);
+                msg_new.setECEFZ(ECEFZ);
+                msg_new.setAntennaHeight(antennaHeight);
+                pack.removeMessage(msg);
+                pack.addMessage(1006, msg_new.getBytes());
+            }
+
+            return pack;
         }
 
-        msg = pack.getMessageByNmb(1006);
-
-        if (msg != null) {
-            MSG1006 msg_new = new MSG1006(msg.getBytes());
-            msg_new.setECEFX(ECEFX);
-            msg_new.setECEFY(ECEFY);
-            msg_new.setECEFZ(ECEFZ);
-            msg_new.setAntennaHeight(antennaHeight);
-            pack.removeMessage(msg);
-            pack.addMessage(1006, msg_new.getBytes());
+        public void setECEFX(double ECEFX) {
+            this.ECEFX = ECEFX;
         }
 
-        return pack;
-    }
+        public void setECEFY(double ECEFY) {
+            this.ECEFY = ECEFY;
+        }
 
-    public void setECEFX(double ECEFX) {
-        this.ECEFX = ECEFX;
-    }
+        public void setECEFZ(double ECEFZ) {
+            this.ECEFZ = ECEFZ;
+        }
 
-    public void setECEFY(double ECEFY) {
-        this.ECEFY = ECEFY;
-    }
+        public void setAntennaHeight(double antennaHeight) {
+            this.antennaHeight = antennaHeight;
+        }
 
-    public void setECEFZ(double ECEFZ) {
-        this.ECEFZ = ECEFZ;
-    }
-
-    public void setAntennaHeight(double antennaHeight) {
-        this.antennaHeight = antennaHeight;
-    }
-
-    public void setStationID(int stationID) {
-        this.stationID = stationID;
+        public void setStationID(int stationID) {
+            this.stationID = stationID;
+        }
     }
 }
+
+

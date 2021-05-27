@@ -10,11 +10,9 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 
-public class Test1021 {
+public class RTCMExtractor {
 
-    public void extractor() {
-        String path = "C:\\Users\\1663646\\Desktop\\123";
-
+    public void extractor(String path, int msgNmb) {
         try {
             InputStream input = new FileInputStream(path);
             ByteBuffer buffer = ByteBuffer.wrap(input.readAllBytes());
@@ -26,7 +24,7 @@ public class Test1021 {
             OutputStream out = new FileOutputStream(new_path);
             ArrayList<Message> arr = pack.getArray();
             for (Message msg : arr) {
-                if (msg.getNmb() == 1025)
+                if (msg.getNmb() == msgNmb)
                     out.write(msg.getBytes());
             }
             out.flush();
