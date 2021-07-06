@@ -1,4 +1,6 @@
+
 import org.dav95s.openNTRIP.Tools.Decoders.DecoderRTCM3;
+import org.dav95s.openNTRIP.Tools.RTCMStream.BitUtils;
 import org.dav95s.openNTRIP.Tools.RTCMStream.Message;
 import org.dav95s.openNTRIP.Tools.RTCMStream.MessagePack;
 import org.junit.Test;
@@ -6,9 +8,6 @@ import org.junit.Test;
 import java.io.*;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.Future;
 
 public class RTCMExtractor {
 
@@ -30,6 +29,34 @@ public class RTCMExtractor {
             out.flush();
             out.close();
 
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+
+    @Test
+    public void generator() {
+        String path = "C:\\Users\\root\\Desktop\\1222.csv";
+
+        try {
+            BufferedReader reader = new BufferedReader(new FileReader(path));
+            BufferedWriter writer = new BufferedWriter(new FileWriter(path + ".txt"));
+            while (reader.ready()) {
+                String base = reader.readLine();
+                String[] split = base.split(";");
+                String request = base + "\t";
+                for (String str : split) {
+                    double one = Double.parseDouble(str);
+                    request += one + BitUtils.normalize(Math.random(), 6) * 0.000001 + "\t";
+                }
+                writer.write(request + "\r\n");
+            }
+            writer.flush();
+            reader.close();
+            writer.close();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
         }

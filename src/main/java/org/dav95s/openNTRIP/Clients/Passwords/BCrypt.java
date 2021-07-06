@@ -11,9 +11,9 @@ public class BCrypt implements PasswordHandler {
         }
         DBPassword = DBPassword.trim();
         UserPassword = UserPassword.trim();
-        if (DBPassword.isEmpty() || UserPassword.isEmpty()) {
-            return false;
-        }
+//        if (DBPassword.isEmpty() && UserPassword.isEmpty()) {
+//            return true;
+//        }
 
         return verifyer().verify(UserPassword.getBytes(), DBPassword.getBytes()).verified;
     }

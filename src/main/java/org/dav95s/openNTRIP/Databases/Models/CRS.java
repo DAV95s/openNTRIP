@@ -1,5 +1,6 @@
 package org.dav95s.openNTRIP.Databases.Models;
 
+import org.dav95s.openNTRIP.CRSUtils.GridShift.GridShift;
 import org.dav95s.openNTRIP.Databases.DataSource;
 
 import org.dav95s.openNTRIP.Tools.RTCM.MSG1021;
@@ -31,9 +32,13 @@ class CRS {
 
     public CRS(int mountpointId) throws SQLException {
         this.mountpoint_id = mountpointId;
-        this.read();
+        if (!this.read()) {
+            return;
+        }
+
         json = new JSONObject(crs);
         crsParser();
+        GridShift gridShift = new GridShift(id, json.getJSONObject("AreaOfValidity"), geoidPath);
     }
 
     private void crsParser() {
@@ -43,7 +48,7 @@ class CRS {
         proj = target.getJSONObject("Projection");
         projectionType = ProjectionType.valueOf(proj.getString("ProjectionType"));
 
-       factory1021(transformationType);
+        factory1021(transformationType);
 
         switch (projectionType) {
             case TM:
@@ -122,6 +127,10 @@ class CRS {
     }
 
     private void factory1027() {
+
+    }
+
+    public void get1023or1024msg() {
 
     }
 

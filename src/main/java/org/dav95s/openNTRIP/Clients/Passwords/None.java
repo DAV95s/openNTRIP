@@ -19,8 +19,6 @@ public class None implements PasswordHandler {
         if (rawPassword == null)
             throw new IllegalArgumentException("Can't hash of null!");
 
-        if (rawPassword == "")
-            throw new IllegalArgumentException("Can't hash of empty string!");
 
         return rawPassword;
     }

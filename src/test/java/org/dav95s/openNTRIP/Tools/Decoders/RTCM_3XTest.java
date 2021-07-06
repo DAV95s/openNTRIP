@@ -68,21 +68,48 @@ public class RTCM_3XTest {
     }
 
     @Test
+    public void cutedMessage() throws IOException {
+        String path = "src/test/resources/RTCM_30";
+        DecoderRTCM3 rtcm3X = new DecoderRTCM3();
+
+        ByteBuffer buffer = ByteBuffer.allocate(100_000);
+
+        RandomAccessFile reader = new RandomAccessFile(path, "r");
+        FileChannel fileChannel = reader.getChannel();
+
+        fileChannel.read(buffer);
+
+
+
+        MessagePack messagePack = rtcm3X.separate(buffer);
+        Assert.assertEquals(buffer.flip(), messagePack.getByteBuffer().flip());
+        Assert.assertNotNull(messagePack.getMessageByNmb(1004));
+        Assert.assertNotNull(messagePack.getMessageByNmb(1005));
+        Assert.assertNotNull(messagePack.getMessageByNmb(1007));
+        Assert.assertNotNull(messagePack.getMessageByNmb(1033));
+        messagePack.removeMessage(1033);
+        Assert.assertNull(messagePack.getMessageByNmb(1033));
+        fileChannel.close();
+    }
+
+    @Test
     public void testConcat() {
         DecoderRTCM3 rtcm3X = new DecoderRTCM3();
         ByteBuffer b1 = ByteBuffer.allocate(3);
         b1.put((byte) 1);
         b1.put((byte) 2);
         b1.put((byte) 3);
+        b1.flip();
 
         ByteBuffer b2 = ByteBuffer.allocate(2);
         b2.put((byte) 4);
         b2.put((byte) 5);
+        b2.flip();
 
         ByteBuffer result = rtcm3X.concatByteBuffer(b1, b2);
 
         byte[] bytes = new byte[]{1, 2, 3, 4, 5};
 
-        Assert.assertArrayEquals(result.array(), bytes);
+        Assert.assertArrayEquals(bytes, result.array());
     }
 }

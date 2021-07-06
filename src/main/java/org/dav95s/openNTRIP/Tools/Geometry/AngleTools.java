@@ -8,4 +8,11 @@ public class AngleTools {
 
         return Math.signum(degrees) * (Math.abs(degrees) + (minutes / 60.0) + (seconds / 3600.0));
     }
+    static public double dmsToDecimal(int degrees, int minutes){
+        if (minutes > 59){
+            throw new IllegalArgumentException("minutes or seconds more than 59");
+        }
+
+        return Math.signum(degrees) * (Math.abs(degrees) + (minutes / 60.0));
+    }
 }

@@ -47,7 +47,7 @@ public class DecoderRTCM3 implements IDecoder {
             nmb = (buffer.getShort(preamble + 3) & 0xffff) >> 4;
             buffer.position(preamble);
 
-            if (!checkExistsMessageNumber(nmb)) {
+            if (!checkExistingMessageNumber(nmb)) {
                 break;
             }
 
@@ -68,17 +68,20 @@ public class DecoderRTCM3 implements IDecoder {
                 buffer.position(preamble);
 
             } catch (BufferUnderflowException e) {
-                buffer.position(preamble);
-                residue = ByteBuffer.allocate(buffer.remaining());
+                residue = ByteBuffer.allocate(buffer.capacity());
+                buffer.rewind();
                 residue.put(buffer);
                 residue.flip();
+//                residue = ByteBuffer.allocate(buffer.remaining());
+//                residue.put(buffer);
+//                residue.flip();
             }
         }
 
         return messagePack;
     }
 
-    private boolean checkExistsMessageNumber(int nmb) {
+    private boolean checkExistingMessageNumber(int nmb) {
         return (1001 <= nmb && nmb <= 1039) || (1057 <= nmb && nmb <= 1068)
                 || (1071 <= nmb && nmb <= 1230) || (4001 <= nmb && nmb <= 4095);
     }
@@ -93,7 +96,7 @@ public class DecoderRTCM3 implements IDecoder {
     }
 
     public ByteBuffer concatByteBuffer(ByteBuffer residue, ByteBuffer buffer) {
-        ByteBuffer b3 = ByteBuffer.allocate(residue.remaining() + buffer.remaining());
+        ByteBuffer b3 = ByteBuffer.allocate(residue.limit() + buffer.limit());
         b3.put(residue);
         b3.put(buffer);
         b3.flip();

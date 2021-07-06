@@ -16,11 +16,11 @@ public class BCryptTest {
         assertTrue(bCrypt.compare("$2a$04$YFzshOrWKAZ8iu4gW0/NhOo9B.A1Lnn8k6uzXivraiAKv66ByW1q6", "rqrqrqr1144"));
         assertTrue(bCrypt.compare("$2b$10$uayG5HrmJSRK7.gDW9QX7.e9RYM0lwlUbzieDbVCcVrKJ14XFHwx6", "ttt4444ccz"));
         assertTrue(bCrypt.compare("$2a$04$AQgn0ch7ZWrrfP8Opq/k8.xazPZcqyvbz/8xf52W69utG9onGhi16", "yyytttqqee4444"));
+        assertTrue(bCrypt.compare("$2y$12$8TkvffyD05BaK7KGKNDTD.AdvYKs0W6dfoWGvQUmbZy.9kNf0jze6", ""));
 
-        assertFalse(bCrypt.compare("    ", " "));
-        assertFalse(bCrypt.compare("",""));
+
         assertFalse(bCrypt.compare("2cf24dba5fb0a30e26e83b2ac5b9e29e1b161e5c1fa7425e73043362938b9824", "hallo"));
-        assertFalse(bCrypt.compare("", "!2@@#31"));
+        assertFalse(bCrypt.compare("$2y$12$8TkvffyD05BaK7KGKNDTD.AdvYKs0W6dfoWGvQUmbZy.9kNf0jze6", "!2@@#31"));
         assertFalse(bCrypt.compare(null, "11313"));
         assertFalse(bCrypt.compare(null, null));
         assertFalse(bCrypt.compare("2cf24dba5fb0a30e26e83b2ac5b9e29e1b161e5c1fa7425e73043362938b9824", null));

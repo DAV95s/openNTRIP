@@ -7,7 +7,6 @@ import org.dav95s.openNTRIP.Clients.Authentication.None;
 import org.dav95s.openNTRIP.Clients.User;
 import org.dav95s.openNTRIP.Databases.DataSource;
 import org.dav95s.openNTRIP.ServerBootstrap;
-import org.dav95s.openNTRIP.Servers.NtripCaster;
 import org.dav95s.openNTRIP.Servers.ReferenceStation;
 import org.dav95s.openNTRIP.Tools.NMEA;
 import org.slf4j.Logger;
@@ -15,7 +14,6 @@ import org.slf4j.LoggerFactory;
 
 import java.sql.*;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.stream.Collectors;
 
 public class MountPointModel {
@@ -43,6 +41,7 @@ public class MountPointModel {
     private boolean available;
     private int plugin_id;
     private ArrayList<ReferenceStation> stationsPool;
+    private CRS crs;
 
     public MountPointModel() {
 
@@ -53,6 +52,7 @@ public class MountPointModel {
             this.id = id;
             this.read();
             this.readAccessibleReferenceStations();
+            this.crs = new CRS(id);
         } catch (SQLException e) {
             logger.error("Mountpoint [" + name + "] can't get data from the database!", e);
         }
@@ -61,9 +61,11 @@ public class MountPointModel {
 
     public void setAuthenticator(String authenticator) {
         switch (authenticator) {
+            case "B":
             case "Basic":
                 this.authenticator = new Basic();
                 break;
+            case "D":
             case "Digest":
                 this.authenticator = new Digest();
                 break;
@@ -199,7 +201,7 @@ public class MountPointModel {
     }
 
     public boolean update() throws SQLException {
-        String sql = "UPDATE `mountpoints` SET `name`=?,`identifier`=?,`format`=?,`format_details`=?,`carrier`=?,`nav_system`=?,`network`=?,`country`=?,`latitude`=?,`longitude`=?,`nmea`=?,`solution`=?,`generator`=?,`compression`=?,`authenticator`=?,`fee`=?,`bitrate`=?,`misc`=?,`caster_id`=?,`available`=?,`plugin_id`=? WHERE `id` = ?";
+        String sql = "UPDATE `mountpoints` SET `name`= ?,`identifier`= ?,`format`= ?,`format_details`= ?,`carrier`= ?,`nav_system`= ?,`network`= ?,`country`= ?,`latitude`= ?,`longitude`= ?,`nmea`= ?,`solution`= ?,`generator`= ?,`compression`= ?,`authenticator`= ?,`fee`= ?,`bitrate`= ?,`misc`= ?,`caster_id`= ?,`available`= ?,`plugin_id`= ? WHERE `id` = ?";
 
         try (Connection con = DataSource.getConnection();
              PreparedStatement statement = con.prepareStatement(sql)) {

@@ -1,6 +1,6 @@
 package org.dav95s.openNTRIP.CRSUtils.Geoids;
 
-import org.dav95s.openNTRIP.Tools.NMEA;
+import org.dav95s.openNTRIP.Tools.RTCMStream.BitUtils;
 
 import java.io.IOException;
 import java.io.RandomAccessFile;
@@ -8,7 +8,7 @@ import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.channels.FileChannel;
 
-public class GGF implements IGeoidModel {
+public class GGF implements IGeoid {
 
     Header header;
     float[][] model;
@@ -38,67 +38,27 @@ public class GGF implements IGeoidModel {
         }
     }
 
-    public void validateGeoidData() {
-        //lat
-        double deltaLat = header.latMax - header.latMin;
-        System.out.println(deltaLat);
-        double resol = deltaLat / header.resolutionLat;
-        if (Math.abs(resol - header.countLat) < 0.00027777)
-            System.out.println(Double.compare(resol, 2300.0d));
-    }
 
-    // |01|02|03|04|
-    // |05|06|07|08|
-    // |09|10|11|12|
-    // |13|14|15|16|
-    public float[][] get16PointsAroundUser(NMEA.GPSPosition user) {
-        //checkArgument(isInArea(user));
-
-        float[][] points = new float[4][4];
-        float f1 = (float) (getDeltaLatToUser(user.lat) / header.resolutionLat);
-        float f2 = (float) (getDeltaLonToUser(user.lon) / header.resolutionLon);
-        int latPointer = (int) f1 - 1;
-        int lonPointer = (int) f2 - 1;
-
-        for (int row = 0; row < 4; row++) {
-            System.arraycopy(model[latPointer + row], lonPointer, points[row], 0, 4);
+    public double getValueByPoint(double lat, double lon) {
+        if (lon < 0 || header.lonMax > 360) {
+            lon += 360;
         }
 
-        return points;
+        int latP = (int) BitUtils.normalize((lat - header.latMin) / header.resolutionLat, 4);
+        int lonP = (int) (BitUtils.normalize((lon - header.lonMin) / header.resolutionLon, 4));
+
+        double dLon = lon - (lonP * header.resolutionLon + header.lonMin);
+        double dLat = lat - (latP * header.resolutionLat + header.latMin);
+
+        float[][] v = new float[][]{{model[latP][lonP], model[latP][lonP + 1]}, {model[latP + 1][lonP], model[latP + 1][lonP + 1]}};
+
+        return bilinear(dLat / header.resolutionLat, dLon / header.resolutionLon, v);
     }
 
-    private double getDeltaLonToUser(float userLon) {
-        //Pacific ocean case
-        if (header.lonMin > 0 && userLon < 0) {
-            return (180 + userLon) - (180 + header.lonMin) + 360;
-        }
-        //American case
-        if (header.lonMin < 0 && userLon < 0) {
-            return Math.abs(header.lonMin) - Math.abs(userLon);
-        }
-        return (180 + userLon) - (180 + header.lonMin);
+    public static float bilinear(double x, double y, float[][] v) {
+        return (float) (v[0][0] * (1 - x) * (1 - y) + v[1][0] * x * (1 - y) + v[0][1] * (1 - x) * y + v[1][1] * x * y);
     }
 
-    private double getDeltaLatToUser(float userLat) {
-        return Math.abs(header.latMax - userLat);
-    }
-
-    private boolean isInArea(NMEA.GPSPosition position) {
-        return isInAreaLat(header.latMax, position.lat, header.latMin)
-                && isInAreaLon(header.lonMin, position.lon, header.lonMax);
-    }
-
-    public boolean isInAreaLon(double leftLon, double userLon, double rightLon) {
-        if (leftLon > 0 && rightLon < 0) {
-            return (leftLon < userLon && userLon < 180.00027) || (-180.00027 < userLon && userLon < rightLon);
-        } else {
-            return (leftLon < userLon) && (userLon < rightLon);
-        }
-    }
-
-    public boolean isInAreaLat(double topLat, double userLat, double bottomLat) {
-        return (topLat > userLat) && (userLat > bottomLat);
-    }
 
     @Override
     public String toString() {

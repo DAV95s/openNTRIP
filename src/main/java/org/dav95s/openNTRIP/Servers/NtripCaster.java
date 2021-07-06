@@ -13,7 +13,6 @@ import java.net.InetSocketAddress;
 import java.nio.ByteBuffer;
 import java.nio.channels.ServerSocketChannel;
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.HashMap;
 
 public class NtripCaster {
@@ -33,8 +32,7 @@ public class NtripCaster {
 
         NetworkCore.getInstance().registerServerChannel(serverChannel, this);
 
-        ArrayList<Integer> mountpointsId = this.model.readMountpointsId();
-        this.model.readMountpointsId().forEach((id)-> {
+        this.model.readMountpointsId().forEach((id) -> {
             MountPointModel mountPointModel = new MountPointModel(id);
             mountPoints.put(mountPointModel.getName(), new MountPoint(mountPointModel));
         });
@@ -69,14 +67,12 @@ public class NtripCaster {
     }
 
     /**
-     * This method will be call on get request and after NMEA message from a client.
-     *
      * @param user
      * @throws IOException
      */
     public void clientAuthorization(User user) throws IOException, SQLException {
         MountPoint mountPoint = this.getMountpoint(user.getHttpHeader("GET"));
-        logger.debug(user.toString() + " requested mountpoint " + user.getHttpHeader("GET"));
+        logger.debug(user + " requested mountpoint " + user.getHttpHeader("GET"));
 
         //The requested point does not exist. Send sourcetable.
         if (mountPoint == null) {
@@ -100,7 +96,7 @@ public class NtripCaster {
 
     public void refresh() throws SQLException {
         this.model.read();
-        model.readMountpointsId();
+        this.model.readMountpointsId();
         for (MountPoint mp : mountPoints.values()) {
             mp.model.read();
             mp.model.readAccessibleReferenceStations();

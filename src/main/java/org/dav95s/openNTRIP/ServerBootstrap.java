@@ -18,7 +18,7 @@ import java.util.*;
 
 public class ServerBootstrap {
     private final Logger logger = LoggerFactory.getLogger(ServerBootstrap.class.getName());
-    private final Timer timer = new Timer();
+    private final Timer timer = new Timer("ThreadServerUpdater");
 
     private static ServerBootstrap instance;
 
