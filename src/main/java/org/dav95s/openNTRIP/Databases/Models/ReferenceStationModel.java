@@ -148,7 +148,7 @@ public class ReferenceStationModel {
         }
     }
 
-    public boolean getOnlineStatus(boolean status) {
+    public boolean OnlineStatus(boolean status) {
         String sql = "UPDATE `reference_stations` SET `is_online` = ? WHERE id = ?";
 
         try (Connection con = DataSource.getConnection();

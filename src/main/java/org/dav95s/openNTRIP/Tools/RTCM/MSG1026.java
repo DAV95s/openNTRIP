@@ -1,13 +1,12 @@
 package org.dav95s.openNTRIP.Tools.RTCM;
 
 import com.google.common.primitives.Bytes;
+import org.dav95s.openNTRIP.Tools.RTCM.Assets.CRS3;
 import org.dav95s.openNTRIP.Tools.RTCMStream.BitUtils;
-
-import java.math.RoundingMode;
 
 import static com.google.common.base.Preconditions.checkArgument;
 
-public class MSG1026 {
+public class MSG1026 implements CRS3 {
 
     private int messageNumber;
     private int SystemIdentificationNumber;

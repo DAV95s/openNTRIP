@@ -55,10 +55,8 @@ public class NtripCaster {
                 "Connection: close\r\n";
 
         StringBuilder body = new StringBuilder();
-        for (MountPoint mountPoint : this.mountPoints.values()) {
-            body.append(mountPoint.toString());
-        }
 
+        this.mountPoints.values().forEach((mp) -> body.append(mp.toString()));
         body.append("ENDSOURCETABLE\r\n");
         String bodyString = body.toString();
         header += "Content-Length: " + bodyString.getBytes().length + "\r\n\n";

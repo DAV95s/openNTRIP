@@ -7,6 +7,7 @@ import org.dav95s.openNTRIP.Clients.Authentication.None;
 import org.dav95s.openNTRIP.Clients.User;
 import org.dav95s.openNTRIP.Databases.DataSource;
 import org.dav95s.openNTRIP.ServerBootstrap;
+import org.dav95s.openNTRIP.Servers.Crs;
 import org.dav95s.openNTRIP.Servers.ReferenceStation;
 import org.dav95s.openNTRIP.Tools.NMEA;
 import org.slf4j.Logger;
@@ -41,7 +42,7 @@ public class MountPointModel {
     private boolean available;
     private int plugin_id;
     private ArrayList<ReferenceStation> stationsPool;
-    private CRS crs;
+    private Crs crs;
 
     public MountPointModel() {
 
@@ -52,7 +53,7 @@ public class MountPointModel {
             this.id = id;
             this.read();
             this.readAccessibleReferenceStations();
-            this.crs = new CRS(id);
+            this.crs = new Crs(id);
         } catch (SQLException e) {
             logger.error("Mountpoint [" + name + "] can't get data from the database!", e);
         }
@@ -94,7 +95,7 @@ public class MountPointModel {
         ArrayList<ReferenceStation> refStationPool = stationsPool;
 
         if (refStationPool.size() == 0)
-            throw new IllegalStateException(this.toString() + " does not have accessible Reference stations!");
+            throw new IllegalStateException(this + " does not have accessible Reference stations!");
 
         ReferenceStation response = refStationPool.get(0);
         float minDistance = response.distance(clientPosition);

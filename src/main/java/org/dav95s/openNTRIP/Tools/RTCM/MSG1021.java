@@ -1,13 +1,14 @@
 package org.dav95s.openNTRIP.Tools.RTCM;
 
 import com.google.common.primitives.Bytes;
+import org.dav95s.openNTRIP.Tools.RTCM.Assets.CRS1;
 import org.dav95s.openNTRIP.Tools.RTCMStream.BitUtils;
 
 import java.util.BitSet;
 
 import static com.google.common.base.Preconditions.checkArgument;
 
-public class MSG1021 {
+public class MSG1021 implements CRS1 {
 
     protected int messageNumber;
     protected int SourceNameCounter;
@@ -37,35 +38,6 @@ public class MSG1021 {
     protected int HorizontalQuality; //Horizontal Helmert/Molodenski Quality Indicator
     protected int VerticalQuality; //Vertical Helmert/Molodenski Quality Indicator
 
-    public enum Plates {
-        Africa(1),
-        Antarctica(2),
-        Arabia(3),
-        Australia(4),
-        Caribbean(5),
-        Cocos(6),
-        Eurasia(7),
-        India(8),
-        NorthAmerica(9),
-        Nazca(10),
-        Pacific(11),
-        SouthAmerica(12),
-        JuandeFuca(13),
-        Philippine(14),
-        Rivera(15),
-        Scotia(16);
-
-        private int id;
-
-        public int getId() {
-            return id;
-        }
-
-        Plates(int i) {
-            id = i;
-        }
-    }
-
     public MSG1021() {
         messageNumber = 1021;
     }
@@ -73,7 +45,6 @@ public class MSG1021 {
     public MSG1021(byte[] msg) {
         BitUtils bitUtils = new BitUtils(msg);
         bitUtils.setPointer(24);
-
         messageNumber = bitUtils.getUnsignedInt(12);
         SourceNameCounter = bitUtils.getUnsignedInt(5);
         setSourceName(bitUtils.getString(SourceNameCounter * 8));
@@ -527,3 +498,4 @@ public class MSG1021 {
         VerticalQuality = verticalQuality;
     }
 }
+

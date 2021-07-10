@@ -2,9 +2,10 @@ package org.dav95s.openNTRIP.Tools.RTCM;
 
 import com.google.common.base.Preconditions;
 import com.google.common.primitives.Bytes;
+import org.dav95s.openNTRIP.Tools.RTCM.Assets.CRS1;
 import org.dav95s.openNTRIP.Tools.RTCMStream.BitUtils;
 
-public class MSG1022 extends MSG1021 {
+public class MSG1022 extends MSG1021 implements CRS1 {
 
     double Xp;
     double Yp;

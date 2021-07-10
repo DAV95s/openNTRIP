@@ -1,10 +1,9 @@
-package org.dav95s.openNTRIP.Databases.Models;
+package org.dav95s.openNTRIP.Servers;
 
-import org.dav95s.openNTRIP.CRSUtils.GridShift.GridShift;
+import org.dav95s.openNTRIP.CRSUtils.GridShift.ResidualsGrid;
 import org.dav95s.openNTRIP.Databases.DataSource;
-
+import org.dav95s.openNTRIP.Tools.RTCM.Assets.*;
 import org.dav95s.openNTRIP.Tools.RTCM.MSG1021;
-import org.dav95s.openNTRIP.Tools.RTCM.MSG1023;
 import org.dav95s.openNTRIP.Tools.RTCM.MSG1025;
 import org.json.JSONObject;
 
@@ -12,8 +11,12 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Timer;
+import java.util.TimerTask;
 
-class CRS {
+public class Crs {
+    private static final Timer crsDispenser = new Timer("crsDispenser");
+
     int id;
     int mountpoint_id;
     String crs;
@@ -26,19 +29,67 @@ class CRS {
     JSONObject proj;
     JSONObject source;
 
-    MSG1021 msg1021;
-    MSG1023 msg1023;
-    MSG1025 msg1025;
+    CRS1 crs1;
+    CRS2 crs2;
+    CRS3 crs3;
 
-    public CRS(int mountpointId) throws SQLException {
+    /**
+     * Message 1021 or 1022
+     */
+    private TimerTask crsTask1 = new TimerTask() {
+        int stage = 0;
+        int[] delays = new int[]{3000, 8000, 13000, 60000};
+
+        @Override
+        public void run() {
+
+            crsDispenser.schedule(this, delays[stage]);
+
+            if (stage < 3) {
+                stage++;
+            } else {
+                crsDispenser.schedule(this, 60000, 60000);
+            }
+
+        }
+    };
+
+    /**
+     * Message 1023 or 1024
+     */
+    private TimerTask crsTask2 = new TimerTask() {
+        int stage = 0;
+        int[] delays = new int[]{4, 9, 14, 60};
+
+        @Override
+        public void run() {
+
+        }
+    };
+
+    /**
+     * Message 1025 or 1026 or 1027
+     */
+    private TimerTask crsTask3 = new TimerTask() {
+        int stage = 0;
+        int[] delays = new int[]{5, 10, 15, 60};
+
+        @Override
+        public void run() {
+
+        }
+    };
+
+    public Crs(int mountpointId) throws SQLException {
         this.mountpoint_id = mountpointId;
         if (!this.read()) {
             return;
         }
 
+
         json = new JSONObject(crs);
         crsParser();
-        GridShift gridShift = new GridShift(id, json.getJSONObject("AreaOfValidity"), geoidPath);
+        ResidualsGrid gridShift = new ResidualsGrid(id, json.getJSONObject("AreaOfValidity"), geoidPath);
     }
 
     private void crsParser() {
@@ -74,7 +125,7 @@ class CRS {
     }
 
     private void factory1021(TransformationType transformationType) {
-        msg1021 = new MSG1021();
+        MSG1021 msg1021 = new MSG1021();
         JSONObject areaOfValidity = json.getJSONObject("AreaOfValidity");
         msg1021.setSourceName(source.getString("Name"));
         msg1021.setTargetName(target.getString("Name"));
@@ -103,7 +154,8 @@ class CRS {
         msg1021.setBt(targetEllipsoid.getDouble("b"));
         msg1021.setHorizontalQuality(json.getInt("HorizontalQuality"));
         msg1021.setVerticalQuality(json.getInt("VerticalQuality"));
-        System.out.println(msg1021);
+        crs1 = msg1021;
+        System.out.println(crs1);
     }
 
     private void factory1022() {
@@ -111,15 +163,15 @@ class CRS {
     }
 
     private void factory1025() {
-        msg1025 = new MSG1025();
+        MSG1025 msg1025 = new MSG1025();
         msg1025.setSystemIdentificationNumber(id);  //todo error if crs id > 255
-        msg1025.setProjectionType(projectionType.nmb);
+        msg1025.setProjectionType(projectionType.getNmb());
         msg1025.setLaNO(proj.getDouble("Lan0"));
         msg1025.setLoNO(proj.getDouble("Lon0"));
         msg1025.setS(proj.getDouble("S"));
         msg1025.setFalseEasting(proj.getDouble("FalseEasting"));
         msg1025.setFalseNorthing(proj.getDouble("FalseNorthing"));
-        System.out.println(msg1025);
+        System.out.println(crs3);
     }
 
     private void factory1026() {
@@ -158,27 +210,6 @@ class CRS {
         }
     }
 
-    enum TransformationType {
-        HelmertLinearExpression(0),
-        HelmertStrict(1),
-        MolodenskiAbridged(2),
-        MolodenskiBadekas(3);
 
-        private int index;
-
-        TransformationType(int i) {
-            this.index = i;
-        }
-    }
-
-    enum ProjectionType {
-        NONE(0), TM(1), TMS(2), LCC1SP(3), LCC2SP(4),
-        LCCW(5), CS(6), OM(7), OS(8), MC(9), PS(10), DS(11);
-
-        int nmb;
-
-        ProjectionType(int i) {
-            nmb = i;
-        }
-    }
 }
+

@@ -1,6 +1,5 @@
 package org.dav95s.openNTRIP.Servers;
 
-
 import org.dav95s.openNTRIP.Clients.Authentication.IAuthenticator;
 import org.dav95s.openNTRIP.Clients.User;
 import org.dav95s.openNTRIP.Databases.Models.MountPointModel;

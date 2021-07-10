@@ -1,13 +1,14 @@
 package org.dav95s.openNTRIP.Tools.RTCM;
 
 import com.google.common.primitives.Bytes;
+import org.dav95s.openNTRIP.Tools.RTCM.Assets.CRS2;
 import org.dav95s.openNTRIP.Tools.RTCMStream.BitUtils;
 
 import java.util.Arrays;
 
 import static com.google.common.base.Preconditions.checkArgument;
 
-public class MSG1023 {
+public class MSG1023 implements CRS2 {
     private int messageNumber = 1023;
     private int SystemIdentificationNumber;
     private boolean HorizontalShiftIndicator;

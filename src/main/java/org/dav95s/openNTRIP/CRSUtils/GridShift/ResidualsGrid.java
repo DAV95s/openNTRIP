@@ -17,8 +17,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class GridShift {
-    private final Logger logger = LoggerFactory.getLogger(GridShift.class.getName());
+public class ResidualsGrid {
+    private final Logger logger = LoggerFactory.getLogger(ResidualsGrid.class.getName());
     //crs boundary box
     double area_top;
     double area_bottom;
@@ -35,7 +35,7 @@ public class GridShift {
 
     GridNode[][] grid;
 
-    public GridShift(int crs_id, JSONObject validArea, String geoidPath) {
+    public ResidualsGrid(int crs_id, JSONObject validArea, String geoidPath) {
         geoid = initGeoid(geoidPath);
         double latC = validArea.getDouble("LatCenter");
         double lonC = validArea.getDouble("LonCenter");
