@@ -2,13 +2,17 @@ package org.dav95s.openNTRIP.Databases.Models;
 
 import org.dav95s.openNTRIP.Databases.DataSource;
 import org.dav95s.openNTRIP.Tools.Config;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.sql.*;
 import java.time.Instant;
 import java.util.HashSet;
+import java.util.OptionalInt;
 import java.util.Set;
 
 public class UserModel {
+    final static private Logger logger = LoggerFactory.getLogger(UserModel.class.getName());
     private int id;
     private String username;
     private String password;
@@ -20,7 +24,7 @@ public class UserModel {
         this.password = password;
     }
 
-    public int create() throws SQLException {
+    public OptionalInt create() {
         String sql = "INSERT INTO `users`(`username`, `password`, `email`, `created_on`) VALUES (?,?,?,?)";
 
         if (email == null) {
@@ -37,14 +41,19 @@ public class UserModel {
 
             statement.executeUpdate();
             ResultSet rs = statement.getGeneratedKeys();
-            rs.next();
-
-            id = rs.getInt(1);
-            return id;
+            if (rs.next()) {
+                id = rs.getInt(1);
+                return OptionalInt.of(id);
+            } else {
+                return OptionalInt.empty();
+            }
+        } catch (SQLException e) {
+            logger.error("SQL Error", e);
+            return OptionalInt.empty();
         }
     }
 
-    public boolean read() throws SQLException {
+    public boolean read() {
         String sql;
         String searchIndex;
 
@@ -55,7 +64,8 @@ public class UserModel {
             sql = "SELECT * FROM users WHERE `email` = ?";
             searchIndex = email;
         } else {
-            throw new SQLException("Need username of email, for the select query!");
+            logger.error("Need username of email, for the select query!");
+            return false;
         }
 
         try (Connection con = DataSource.getConnection();
@@ -76,6 +86,9 @@ public class UserModel {
                 }
             }
 
+        } catch (SQLException e) {
+            logger.error("SQL Error", e);
+            return false;
         }
     }
 
@@ -98,7 +111,7 @@ public class UserModel {
         }
     }
 
-    public boolean delete() throws SQLException {
+    public boolean delete() {
         String sql = "DELETE FROM `users` WHERE `id` = ?";
 
         try (Connection con = DataSource.getConnection();
@@ -107,10 +120,14 @@ public class UserModel {
             statement.setInt(1, id);
 
             return statement.executeUpdate() > 0;
+
+        } catch (SQLException e) {
+            logger.error("SQL Error", e);
+            return false;
         }
     }
 
-    public void readGroups() throws SQLException {
+    public boolean readGroups() {
         String sql = "SELECT groups.name, groups.description, groups.id FROM users_groups LEFT JOIN groups ON users_groups.group_id = groups.id WHERE users_groups.user_id = ?";
 
         try (Connection con = DataSource.getConnection();
@@ -121,7 +138,7 @@ public class UserModel {
             try (ResultSet rs = statement.executeQuery()) {
 
                 if (!rs.next())
-                    throw new SQLException("Can't read user groups. User does not exist.");
+                    return false;
 
                 do {
                     UserGroupModel group = new UserGroupModel();
@@ -130,11 +147,16 @@ public class UserModel {
                     group.setDescription(rs.getString("description"));
                     listGroups.add(group);
                 } while (rs.next());
+
+                return true;
             }
+        } catch (SQLException e) {
+            logger.error("SQL Error", e);
+            return false;
         }
     }
 
-    public void deleteFromGroup(int group_id) throws SQLException {
+    public boolean deleteFromGroup(int group_id) {
         String sql = "DELETE FROM `users_groups` WHERE `users_groups.user_id` = ? AND `users_groups.group_id` = ?";
 
         try (Connection con = DataSource.getConnection();
@@ -142,15 +164,18 @@ public class UserModel {
 
             statement.setInt(1, id);
             statement.setInt(2, group_id);
-            statement.executeUpdate();
+            return statement.executeUpdate() > 0;
+        } catch (SQLException e) {
+            logger.error("SQL Error", e);
+            return false;
         }
     }
 
-    public void deleteFromGroup(UserGroupModel model) throws SQLException {
+    public void deleteFromGroup(UserGroupModel model) {
         deleteFromGroup(model.getGroup_id());
     }
 
-    public void addToGroup(int group_id) throws SQLException {
+    public boolean addToGroup(int group_id) {
         String sql = "INSERT INTO `users_groups`(`user_id`, `group_id`) VALUES (?,?)";
 
         try (Connection con = DataSource.getConnection();
@@ -158,7 +183,11 @@ public class UserModel {
 
             statement.setInt(1, id);
             statement.setInt(2, group_id);
-            statement.executeUpdate();
+
+            return statement.executeUpdate() > 0;
+        } catch (SQLException e) {
+            logger.error("SQL Error", e);
+            return false;
         }
     }
 

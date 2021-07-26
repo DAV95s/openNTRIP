@@ -8,6 +8,8 @@ import org.junit.Test;
 import java.io.*;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 public class RTCMExtractor {
 
@@ -59,6 +61,26 @@ public class RTCMExtractor {
             e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
+        }
+    }
+
+    @Test
+    public void te() {
+
+
+        ExecutorService service = Executors.newSingleThreadExecutor();
+        Run rr = null;
+        service.submit(rr);
+        service.submit(rr);
+        service.submit(rr);
+    }
+
+    class Run implements Runnable {
+        int i = 0;
+
+        @Override
+        public void run() {
+            System.out.println(i++);
         }
     }
 

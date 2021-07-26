@@ -6,11 +6,12 @@ import org.slf4j.LoggerFactory;
 
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.OptionalInt;
 
 public class NtripCasterModel {
     final static private Logger logger = LoggerFactory.getLogger(NtripCasterModel.class.getName());
 
-    public NtripCasterModel(int id) throws SQLException {
+    public NtripCasterModel(int id) {
         this.id = id;
         this.read();
     }
@@ -25,7 +26,7 @@ public class NtripCasterModel {
     private int group_id;
     private boolean status;
 
-    public int create() throws SQLException {
+    public OptionalInt create() {
         String sql = "INSERT INTO `casters`(`address`, `port`, `group_id`, `status`) VALUES (?,?,?,?)";
 
         try (Connection con = DataSource.getConnection();
@@ -35,19 +36,23 @@ public class NtripCasterModel {
             statement.setInt(2, port);
             statement.setInt(3, group_id);
             statement.setBoolean(4, status);
-
             statement.executeUpdate();
-            ResultSet rs = statement.getGeneratedKeys();
-            rs.next();
 
-            id = rs.getInt(1);
-            return id;
+            ResultSet rs = statement.getGeneratedKeys();
+            if (rs.next()) {
+                id = rs.getInt(1);
+                return OptionalInt.of(id);
+            } else {
+                return OptionalInt.empty();
+            }
+
         } catch (SQLException e) {
-            throw new SQLException("Can't create new caster", e);
+            logger.error("SQL Error", e);
+            return OptionalInt.empty();
         }
     }
 
-    public boolean read() throws SQLException {
+    public boolean read() {
         String sql = "SELECT * FROM casters WHERE `id` = ?";
 
         try (Connection con = DataSource.getConnection();
@@ -68,7 +73,8 @@ public class NtripCasterModel {
             }
 
         } catch (SQLException e) {
-            throw new SQLException("Can't read from DB", e);
+            logger.error("SQL Error", e);
+            return false;
         }
     }
 
@@ -87,10 +93,9 @@ public class NtripCasterModel {
             return statement.executeUpdate() > 0;
 
         } catch (SQLException e) {
-            e.printStackTrace();
+            logger.error("SQL Error", e);
             return false;
         }
-
     }
 
     public boolean delete() {
@@ -103,12 +108,12 @@ public class NtripCasterModel {
             return statement.executeUpdate() > 0;
 
         } catch (SQLException e) {
-            e.printStackTrace();
+            logger.error("SQL Error", e);
             return false;
         }
     }
 
-    public ArrayList<Integer> readMountpointsId() throws SQLException {
+    public ArrayList<Integer> readAccessibleMountpoint() {
         String sql = "SELECT `id` FROM `mountpoints` WHERE `caster_id` = ?";
 
         ArrayList<Integer> response = new ArrayList<>();
@@ -126,7 +131,8 @@ public class NtripCasterModel {
             }
             return response;
         } catch (SQLException e) {
-            throw new SQLException("Can't read from DB", e);
+            logger.error("SQL Error", e);
+            return new ArrayList<>();
         }
     }
 

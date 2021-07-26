@@ -8,4 +8,7 @@ public class GridNode {
 
     public double dNorth;
     public double dEast;
+    public double dH;
+
+
 }

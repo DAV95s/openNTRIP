@@ -10,6 +10,8 @@ import org.dav95s.openNTRIP.Tools.Decoders.IDecoder;
 import org.dav95s.openNTRIP.Tools.Decoders.RAW;
 import org.dav95s.openNTRIP.Tools.HttpParser;
 import org.dav95s.openNTRIP.Tools.NMEA;
+import org.dav95s.openNTRIP.Tools.Observer.IObservable;
+import org.dav95s.openNTRIP.Tools.Observer.IObserver;
 import org.dav95s.openNTRIP.Tools.RTCMStream.Analyzer;
 import org.dav95s.openNTRIP.Tools.RTCMStream.MessagePack;
 import org.json.JSONObject;
@@ -20,20 +22,19 @@ import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.sql.SQLException;
 import java.util.ArrayDeque;
-import java.util.Arrays;
+import java.util.ArrayList;
 import java.util.Queue;
-import java.util.concurrent.CopyOnWriteArrayList;
 
 /**
  * All reference station from the database, contains in memory and waiting for connect base receiver.
  * After successful connect, setSocket() method is called.
  */
-public class ReferenceStation implements INetworkHandler {
+public class ReferenceStation implements INetworkHandler, IObservable {
     static final private Logger logger = LoggerFactory.getLogger(ReferenceStation.class.getName());
     static final private int BYTE_BUFFER_SIZE = 32768;
     static final private ByteBufferPool bufferPool = new ByteBufferPool();
 
-    final private CopyOnWriteArrayList<User> subscribers = new CopyOnWriteArrayList<>();
+
     final private Queue<ByteBuffer> dataQueue = new ArrayDeque<>();
     final private ReferenceStationModel model;
 
@@ -48,14 +49,10 @@ public class ReferenceStation implements INetworkHandler {
     //connect lost
     @Override
     public void close() {
-        try {
-            this.analyzer.close();
-            this.socket.close();
-            this.model.setOnline(false);
-            this.model.update();
-        } catch (IOException | SQLException e) {
-            logger.error(e.getMessage());
-        }
+        this.analyzer.close();
+        this.socket.close();
+        this.model.setOnline(false);
+        this.model.update();
     }
 
     //The reference station has removed from database.
@@ -86,7 +83,7 @@ public class ReferenceStation implements INetworkHandler {
         try {
             MessagePack messagePack = decoder.separate(buffer);
             this.model.replaceCoordinates(messagePack);
-            this.sendMessagesToClients(messagePack);
+            this.notifyObservers(messagePack.getByteBuffer());
             this.analyzer.analyze(messagePack);
 
             if (logger.isDebugEnabled()) {
@@ -113,18 +110,6 @@ public class ReferenceStation implements INetworkHandler {
         }
     }
 
-    private void sendMessagesToClients(MessagePack messagePack) {
-        ByteBuffer localBuffer = messagePack.getByteBuffer();
-
-        for (User user : subscribers) {
-            localBuffer.flip();
-            try {
-                user.write(localBuffer);
-            } catch (IOException e) {
-                user.close();
-            }
-        }
-    }
 
     public void referenceStationAuthentication(Socket socket, HttpParser httpParser) throws IOException {
 
@@ -166,7 +151,8 @@ public class ReferenceStation implements INetworkHandler {
      * @return float
      * @throws IllegalArgumentException
      */
-    public float distance(NMEA.GPSPosition position) {
+    public float distance(User user) {
+        NMEA.GPSPosition position = user.getPosition();
         if (!this.model.getPosition().isSet()) {
             throw new IllegalStateException("Reference station does not have coordinates " + this.toString());
         }
@@ -178,30 +164,10 @@ public class ReferenceStation implements INetworkHandler {
                 Math.cos(Math.toRadians(model.getPosition().lat)) * Math.cos(Math.toRadians(position.lat)) *
                         Math.sin(dLng / 2) * Math.sin(dLng / 2);
         double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+        System.out.println("DISTANCE " + model.getName() + " " + (float) (earthRadius * c));
         return (float) (earthRadius * c);
     }
 
-    public void addClient(User user) {
-        subscribers.add(user);
-
-        if (logger.isDebugEnabled()) {
-            JSONObject object = new JSONObject();
-            object.put("add client", user);
-            object.put("contains", Arrays.toString(subscribers.toArray()));
-            logger.debug(object.toString());
-        }
-    }
-
-    public void removeClient(User user) {
-        subscribers.remove(user);
-
-        if (logger.isDebugEnabled()) {
-            JSONObject object = new JSONObject();
-            object.put("remove client", user);
-            object.put("contains", Arrays.toString(subscribers.toArray()));
-            logger.debug(object.toString());
-        }
-    }
 
     public ReferenceStationModel getModel() {
         return this.model;
@@ -228,4 +194,24 @@ public class ReferenceStation implements INetworkHandler {
         model.read();
         model.readReplaceCoordinates();
     }
+
+    private final ArrayList<IObserver> observers = new ArrayList<>();
+
+    @Override
+    public void registerObserver(IObserver o) {
+        observers.add(o);
+    }
+
+    @Override
+    public void removeObserver(IObserver o) {
+        observers.remove(o);
+    }
+
+    @Override
+    public void notifyObservers(ByteBuffer buffer) {
+        observers.forEach(o -> {
+            o.notify(this, buffer);
+        });
+    }
+
 }

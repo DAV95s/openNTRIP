@@ -32,7 +32,7 @@ public class NtripCaster {
 
         NetworkCore.getInstance().registerServerChannel(serverChannel, this);
 
-        this.model.readMountpointsId().forEach((id) -> {
+        this.model.readAccessibleMountpoint().forEach((id) -> {
             MountPointModel mountPointModel = new MountPointModel(id);
             mountPoints.put(mountPointModel.getName(), new MountPoint(mountPointModel));
         });
@@ -68,7 +68,7 @@ public class NtripCaster {
      * @param user
      * @throws IOException
      */
-    public void clientAuthorization(User user) throws IOException, SQLException {
+    public void clientAuthorization(User user) throws IOException, SQLException, IllegalAccessException {
         MountPoint mountPoint = this.getMountpoint(user.getHttpHeader("GET"));
         logger.debug(user + " requested mountpoint " + user.getHttpHeader("GET"));
 
@@ -94,10 +94,7 @@ public class NtripCaster {
 
     public void refresh() throws SQLException {
         this.model.read();
-        this.model.readMountpointsId();
-        for (MountPoint mp : mountPoints.values()) {
-            mp.model.read();
-            mp.model.readAccessibleReferenceStations();
-        }
+        this.model.readAccessibleMountpoint();
+        this.mountPoints.values().forEach(MountPoint::refresh);
     }
 }

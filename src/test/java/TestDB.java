@@ -1,15 +1,11 @@
-import org.dav95s.openNTRIP.Clients.Passwords.PasswordHandler;
-import org.dav95s.openNTRIP.Databases.Models.UserModel;
 import org.dav95s.openNTRIP.Databases.Models.MountPointModel;
 import org.dav95s.openNTRIP.Databases.Models.NtripCasterModel;
 import org.dav95s.openNTRIP.Databases.Models.ReferenceStationModel;
-import org.dav95s.openNTRIP.Tools.Config;
+import org.dav95s.openNTRIP.Databases.Models.UserModel;
 import org.junit.Assert;
 import org.junit.Test;
 
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.Random;
 
 public class TestDB {
     @Test
@@ -66,7 +62,7 @@ public class TestDB {
         model.setCaster_id(4);
 
         model.setFormat("123");
-        model.create();
+        Assert.assertTrue(model.create().isPresent());
         model.setFormat("321");
 
         Assert.assertTrue(model.read());

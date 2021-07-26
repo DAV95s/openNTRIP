@@ -2,6 +2,8 @@ package org.dav95s.openNTRIP.Databases.Models;
 
 import org.dav95s.openNTRIP.CRSUtils.GridShift.GeodeticPoint;
 import org.dav95s.openNTRIP.Databases.DataSource;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -10,8 +12,9 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 
 public class GridModel {
+    static final private Logger logger = LoggerFactory.getLogger(GridModel.class.getName());
 
-    public ArrayList<GeodeticPoint> getAddGeodeticPointByCrsId(int crsId) throws SQLException {
+    public ArrayList<GeodeticPoint> getAddGeodeticPointByCrsId(int crsId) {
         String sql = "SELECT id, ROUND(X(geodetic_point_measured), 9) AS north, ROUND(Y(geodetic_point_measured), 9) AS east, ROUND(X(geodetic_point_from_catalog)-X(geodetic_point_measured), 9) AS dnorth, ROUND(Y(geodetic_point_from_catalog)-Y(geodetic_point_measured), 9) AS deast FROM `crs_grids` WHERE `crs_id` = ?;";
 
         try (Connection con = DataSource.getConnection();
@@ -34,7 +37,8 @@ public class GridModel {
             }
 
         } catch (SQLException e) {
-            throw new SQLException(e);
+            logger.error("SQL Error", e);
+            return new ArrayList<>();
         }
     }
 }

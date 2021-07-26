@@ -54,6 +54,10 @@ public class MSG1026 implements CRS3 {
         return Bytes.concat(bytes, bitUtils.crc24q(bytes, bytes.length, 0));
     }
 
+    public int getMessageNumber(){
+        return messageNumber;
+    }
+
     public int getSystemIdentificationNumber() {
         return SystemIdentificationNumber;
     }

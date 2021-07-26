@@ -12,7 +12,6 @@ import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -33,6 +32,8 @@ public class ResidualsGrid {
 
     IGeoid geoid;
 
+    // [0],[1],[2],[3],[4],[5],[6],...[N]
+    // [N+1],[N+2],[N+3],[N+4],[N+5],[N+6],[N+7],...
     GridNode[][] grid;
 
     public ResidualsGrid(int crs_id, JSONObject validArea, String geoidPath) {
@@ -73,40 +74,38 @@ public class ResidualsGrid {
     private void initGrid(int crs_id) {
         KDTree<GeodeticPoint> kdTree = new KDTree<>(2);
         GridModel gridModel = new GridModel();
-        try {
-            //get from db all geodetic point
-            ArrayList<GeodeticPoint> points = gridModel.getAddGeodeticPointByCrsId(crs_id);
-            //create spatial index
-            for (GeodeticPoint point : points) {
+
+        //get from db all geodetic point
+        ArrayList<GeodeticPoint> points = gridModel.getAddGeodeticPointByCrsId(crs_id);
+        //create spatial index
+        for (GeodeticPoint point : points) {
+            try {
+                kdTree.insert(new double[]{point.north, point.east}, point);
+            } catch (KeySizeException | KeyDuplicateException e) {
+                e.printStackTrace();
+            }
+        }
+
+        //delete array from memory
+        points = null;
+
+        //generate grid
+        for (int row = 0; row < rowCount; row++) {
+            for (int col = 0; col < colCount; col++) {
                 try {
-                    kdTree.insert(new double[]{point.north, point.east}, point);
-                } catch (KeySizeException | KeyDuplicateException e) {
+                    double nodeLat = area_top - row * dLat0;
+                    double nodeLon = area_left + col * dLon0;
+                    //get nearest geodetic point for node of grid
+                    List<GeodeticPoint> nearestPoints = kdTree.nearest(new double[]{nodeLat, nodeLon}, 5);
+                    //init node of grid
+                    grid[row][col] = IDW(nearestPoints, nodeLat, nodeLon);
+                    grid[row][col].height = geoid.getValueByPoint(nodeLat, nodeLon);
+                } catch (KeySizeException e) {
                     e.printStackTrace();
                 }
             }
-
-            //delete array from memory
-            points = null;
-
-            //generate grid
-            for (int row = 0; row < rowCount; row++) {
-                for (int col = 0; col < colCount; col++) {
-                    try {
-                        double nodeLat = area_top - row * dLat0;
-                        double nodeLon = area_left + col * dLon0;
-                        //get nearest geodetic point for node of grid
-                        List<GeodeticPoint> nearestPoints = kdTree.nearest(new double[]{nodeLat, nodeLon}, 5);
-                        //init node of grid
-                        grid[row][col] = IDW(nearestPoints, nodeLat, nodeLon);
-                        grid[row][col].height = geoid.getValueByPoint(nodeLat, nodeLon);
-                    } catch (KeySizeException e) {
-                        e.printStackTrace();
-                    }
-                }
-            }
-        } catch (SQLException throwables) {
-            throwables.printStackTrace();
         }
+
     }
 
     private GridNode IDW(List<GeodeticPoint> gridNodes, double nodeLat, double nodeLon) {

@@ -4,21 +4,20 @@ import org.dav95s.openNTRIP.Clients.Authentication.Basic;
 import org.dav95s.openNTRIP.Clients.Authentication.Digest;
 import org.dav95s.openNTRIP.Clients.Authentication.IAuthenticator;
 import org.dav95s.openNTRIP.Clients.Authentication.None;
-import org.dav95s.openNTRIP.Clients.User;
 import org.dav95s.openNTRIP.Databases.DataSource;
 import org.dav95s.openNTRIP.ServerBootstrap;
-import org.dav95s.openNTRIP.Servers.Crs;
 import org.dav95s.openNTRIP.Servers.ReferenceStation;
-import org.dav95s.openNTRIP.Tools.NMEA;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.OptionalInt;
 import java.util.stream.Collectors;
 
 public class MountPointModel {
     final static private Logger logger = LoggerFactory.getLogger(MountPointModel.class.getName());
+
     private int id;
     private String name;
     private String identifier;
@@ -42,22 +41,17 @@ public class MountPointModel {
     private boolean available;
     private int plugin_id;
     private ArrayList<ReferenceStation> stationsPool;
-    private Crs crs;
+
 
     public MountPointModel() {
 
     }
 
     public MountPointModel(int id) {
-        try {
-            this.id = id;
-            this.read();
-            this.readAccessibleReferenceStations();
-            this.crs = new Crs(id);
-        } catch (SQLException e) {
-            logger.error("Mountpoint [" + name + "] can't get data from the database!", e);
+        this.id = id;
+        if (this.read() && this.readAccessibleReferenceStations()) {
+            logger.info("Mountpoint [" + name + "]" + " - initialized successfully!");
         }
-        logger.debug("Mountpoint [" + name + "]" + " - OK!");
     }
 
     public void setAuthenticator(String authenticator) {
@@ -76,41 +70,6 @@ public class MountPointModel {
         }
     }
 
-    public ReferenceStation getReferenceStation(User user) {
-        if (nmea) {
-            if (user.getPosition() == null)
-                return null;
-
-            return getNearestStation(user);
-        }
-
-        return stationsPool.get(0);
-    }
-
-
-    private ReferenceStation getNearestStation(User user) {
-        NMEA.GPSPosition clientPosition = user.getPosition();
-
-        //concurrent fix
-        ArrayList<ReferenceStation> refStationPool = stationsPool;
-
-        if (refStationPool.size() == 0)
-            throw new IllegalStateException(this + " does not have accessible Reference stations!");
-
-        ReferenceStation response = refStationPool.get(0);
-        float minDistance = response.distance(clientPosition);
-
-        for (ReferenceStation station : refStationPool) {
-            float distance = station.distance(clientPosition);
-            if (distance < minDistance) {
-                response = station;
-                minDistance = distance;
-            }
-        }
-
-        return response;
-    }
-
     @Override
     public String toString() {
         return "STR" + ';' + getName() + ';' + getIdentifier() + ';' + getFormat() + ';' + getFormat_details() + ';' + getCarrier() + ';' + getNav_system() + ';' + getNetwork() + ';' + getCountry()
@@ -118,7 +77,7 @@ public class MountPointModel {
                 + ';' + getAuthenticator().toString() + ';' + (isFee() ? 'Y' : 'N') + ';' + getBitRate() + ';' + getMisc() + "\r\n";
     }
 
-    public int create() throws SQLException {
+    public OptionalInt create() {
         String sql = "INSERT INTO `mountpoints`(`name`, `identifier`, `format`, `format_details`, `carrier`, `nav_system`, `network`, `country`, `latitude`, `longitude`, `nmea`, `solution`, `generator`, `compression`, `authenticator`, `fee`, `bitrate`, `misc`, `caster_id`, `available`, `plugin_id`) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
 
         try (Connection con = DataSource.getConnection();
@@ -146,21 +105,22 @@ public class MountPointModel {
             statement.setBoolean(20, available);
             statement.setInt(21, plugin_id);
             statement.executeUpdate();
-            ResultSet rs = statement.getGeneratedKeys();
 
+            ResultSet rs = statement.getGeneratedKeys();
             if (rs.next()) {
                 id = rs.getInt(1);
-                return id;
+                return OptionalInt.of(id);
             } else {
-                throw new SQLException("Database does not return the id.");
+                return OptionalInt.empty();
             }
 
         } catch (SQLException e) {
-            throw new SQLException("Can't create new mountpoint", e);
+            logger.error("Can't create new mountpoint", e);
+            return OptionalInt.empty();
         }
     }
 
-    public boolean read() throws SQLException {
+    public boolean read() {
         String sql = "SELECT * FROM `mountpoints` WHERE `id` = ?";
 
         try (Connection con = DataSource.getConnection();
@@ -197,11 +157,12 @@ public class MountPointModel {
                 }
             }
         } catch (SQLException e) {
-            throw new SQLException(e);
+            logger.error("SQL Error", e);
+            return false;
         }
     }
 
-    public boolean update() throws SQLException {
+    public boolean update() {
         String sql = "UPDATE `mountpoints` SET `name`= ?,`identifier`= ?,`format`= ?,`format_details`= ?,`carrier`= ?,`nav_system`= ?,`network`= ?,`country`= ?,`latitude`= ?,`longitude`= ?,`nmea`= ?,`solution`= ?,`generator`= ?,`compression`= ?,`authenticator`= ?,`fee`= ?,`bitrate`= ?,`misc`= ?,`caster_id`= ?,`available`= ?,`plugin_id`= ? WHERE `id` = ?";
 
         try (Connection con = DataSource.getConnection();
@@ -232,11 +193,12 @@ public class MountPointModel {
 
             return statement.executeUpdate() > 0;
         } catch (SQLException e) {
-            throw new SQLException(e);
+            logger.error("SQL Error", e);
+            return false;
         }
     }
 
-    public boolean delete() throws SQLException {
+    public boolean delete() {
         String sql = "DELETE FROM `mountpoints` WHERE `id` = ?";
 
         try (Connection con = DataSource.getConnection();
@@ -246,11 +208,12 @@ public class MountPointModel {
             return statement.executeUpdate() > 0;
 
         } catch (SQLException e) {
-            throw new SQLException(e);
+            logger.error("SQL Error", e);
+            return false;
         }
     }
 
-    public void readAccessibleReferenceStations() throws SQLException {
+    public boolean readAccessibleReferenceStations() {
         String sql = "SELECT `station_id` FROM `mountpoints_stations` WHERE `mountpoint_id` = ?";
 
         ArrayList<ReferenceStation> pool = new ArrayList<>();
@@ -267,6 +230,11 @@ public class MountPointModel {
                 stationsPool = pool;
                 logger.debug("Mountpoint [" + name + "]" + " has " + stationsPool.stream().map(ReferenceStation::getName).collect(Collectors.joining(", ")));
             }
+            return pool.size() > 0;
+
+        } catch (SQLException e) {
+            logger.error("SQL Error", e);
+            return false;
         }
     }
 

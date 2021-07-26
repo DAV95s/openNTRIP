@@ -10,7 +10,6 @@ import org.junit.Test;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.math.BigDecimal;
 import java.nio.ByteBuffer;
 
 
@@ -44,9 +43,9 @@ public class MSG1021Test {
         msg1021Max.setHorizontalQuality(7);
         msg1021Max.setVerticalQuality(7);
 
-        byte[] check1 = msg1021Max.write();
+        byte[] check1 = msg1021Max.getBytes();
         MSG1021 msg10212 = new MSG1021(check1);
-        byte[] check2 = msg10212.write();
+        byte[] check2 = msg10212.getBytes();
 
         Assert.assertArrayEquals(check1, check2);
     }
@@ -62,7 +61,7 @@ public class MSG1021Test {
             MessagePack pack = decoder.separate(buffer);
             Message msg = pack.getMessageByNmb(1021);
             MSG1021 msg1021 = new MSG1021(msg.getBytes());
-            byte[] bytes = msg1021.write();
+            byte[] bytes = msg1021.getBytes();
 
             System.out.println(msg1021);
             System.out.println(new MSG1021(bytes));

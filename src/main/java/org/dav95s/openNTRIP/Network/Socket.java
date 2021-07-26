@@ -81,9 +81,13 @@ public class Socket {
         return totalBytesWritten;
     }
 
-    public void close() throws IOException {
-        this.selectionKey.cancel();
-        this.socketChannel.close();
+    public void close() {
+        try {
+            this.selectionKey.cancel();
+            this.socketChannel.close();
+        } catch (IOException e) {
+            logger.error(this + " Error", e);
+        }
     }
 
     public void attach(INetworkHandler handler) {
@@ -92,6 +96,10 @@ public class Socket {
 
     public boolean isRegistered() {
         return this.socketChannel.isRegistered();
+    }
+
+    public boolean isOpen(){
+        return socketChannel.isOpen();
     }
 
     @Override

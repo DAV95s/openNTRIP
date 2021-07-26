@@ -64,12 +64,8 @@ public class ServerBootstrap {
     }
 
     private void addNewReferenceStation(Integer id) {
-        try {
-            ReferenceStation newStation = new ReferenceStation(new ReferenceStationModel(id));
-            referenceStations.add(newStation);
-        } catch (SQLException e) {
-            logger.error(e.getMessage());
-        }
+        ReferenceStation newStation = new ReferenceStation(new ReferenceStationModel(id));
+        referenceStations.add(newStation);
     }
 
     private ArrayList<Integer> getAllReferenceStation() {

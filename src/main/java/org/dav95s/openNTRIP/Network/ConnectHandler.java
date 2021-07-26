@@ -32,11 +32,7 @@ public class ConnectHandler implements INetworkHandler {
 
     @Override
     public void close() {
-        try {
-            socket.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        socket.close();
         logger.debug(socket + " closed!");
     }
 
@@ -100,8 +96,7 @@ public class ConnectHandler implements INetworkHandler {
             }
 
         } catch (Exception e) {
-            logger.error(e.getMessage());
-
+            logger.error("ConnectHandler", e);
             this.socket.sendBadMessageAndClose();
         }
     }

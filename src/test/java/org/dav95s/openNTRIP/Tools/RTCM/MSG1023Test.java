@@ -1,5 +1,6 @@
 package org.dav95s.openNTRIP.Tools.RTCM;
 
+import org.dav95s.openNTRIP.CRSUtils.GridShift.GridNode;
 import org.dav95s.openNTRIP.Tools.Decoders.DecoderRTCM3;
 import org.dav95s.openNTRIP.Tools.RTCMStream.BitUtils;
 import org.dav95s.openNTRIP.Tools.RTCMStream.Message;
@@ -34,9 +35,9 @@ public class MSG1023Test {
             double Mdlon = 0;
             double mdH = 0;
             int i = msg1023.gridMap.length;
-            for (Grid grid : msg1023.gridMap) {
-                Mdlat = BitUtils.normalize(Mdlat + grid.dLat, 5);
-                Mdlon = BitUtils.normalize(Mdlon + grid.dLon, 5);
+            for (GridNode grid : msg1023.gridMap) {
+                Mdlat = BitUtils.normalize(Mdlat + grid.dNorth, 5);
+                Mdlon = BitUtils.normalize(Mdlon + grid.dEast, 5);
                 mdH = BitUtils.normalize(mdH + grid.dH, 5);
             }
             System.out.println(new BitUtils(msg.getBytes()).toString(' '));

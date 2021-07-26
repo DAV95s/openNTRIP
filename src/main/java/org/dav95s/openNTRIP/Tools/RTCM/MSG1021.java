@@ -74,7 +74,7 @@ public class MSG1021 implements CRS1 {
         setVerticalQuality(bitUtils.getUnsignedInt(3));
     }
 
-    public byte[] write() {
+    public byte[] getBytes() {
         BitUtils bitUtils = new BitUtils();
         bitUtils.setBitString("11010011000000"); //preamble + 6 reserved bit
         bitUtils.setInt(52 + SourceNameCounter + TargetNameCounter, 10);
@@ -192,15 +192,22 @@ public class MSG1021 implements CRS1 {
      *                                               Bit(5) - 1027
      */
     public void setUtilizedTransformationMessageIndicator(int utilizedTransformationMessageIndicator) {
-        BitSet set = new BitSet(5);
-
-        checkArgument(utilizedTransformationMessageIndicator < 1024);
+        checkArgument(utilizedTransformationMessageIndicator < 32);
         UtilizedTransformationMessageIndicator = utilizedTransformationMessageIndicator;
+    }
+
+    public void setUtilizedTransformationMessageIndicator(BitSet bitSet) {
+        int value = 0;
+        for (int i = 0; i < bitSet.length(); ++i) {
+            value += bitSet.get(i) ? (1 << i) : 0;
+        }
+        setUtilizedTransformationMessageIndicator(value);
     }
 
     public int getPlateNumber() {
         return PlateNumber;
     }
+
 
     /**
      * @param plateNumber 0: unknown plate
@@ -375,7 +382,7 @@ public class MSG1021 implements CRS1 {
      *           ± 42949.67294"
      */
     public void setRy(double ry) {
-        double normalized =BitUtils.normalize(ry, 6);
+        double normalized = BitUtils.normalize(ry, 6);
         checkArgument(-42949.67294 <= normalized && normalized <= 42949.67294);
         Ry = normalized;
     }
@@ -443,7 +450,7 @@ public class MSG1021 implements CRS1 {
      *           0 – 16777.215m
      */
     public void setAt(double at) {
-        double normalized =BitUtils.normalize(at, 4);
+        double normalized = BitUtils.normalize(at, 4);
         checkArgument(6370000 <= normalized && normalized <= 6386777.215);
         this.At = normalized;
     }

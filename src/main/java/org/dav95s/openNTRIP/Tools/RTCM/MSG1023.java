@@ -1,6 +1,7 @@
 package org.dav95s.openNTRIP.Tools.RTCM;
 
 import com.google.common.primitives.Bytes;
+import org.dav95s.openNTRIP.CRSUtils.GridShift.GridNode;
 import org.dav95s.openNTRIP.Tools.RTCM.Assets.CRS2;
 import org.dav95s.openNTRIP.Tools.RTCMStream.BitUtils;
 
@@ -20,7 +21,7 @@ public class MSG1023 implements CRS2 {
     private double MdLat;
     private double MdLon;
     private double MdH;
-    Grid[] gridMap = new Grid[16];
+    GridNode[] gridMap = new GridNode[16];
     private int HorizontalInterpolationMethodIndicator;
     private int VerticalInterpolationMethodIndicator;
     private int HorizontalGridQualityIndicator;
@@ -43,9 +44,9 @@ public class MSG1023 implements CRS2 {
         setMdH(bitUtils.getSignedInt(15) * 0.01d);
 
         for (int i = 0; i < gridMap.length; i++) {
-            gridMap[i] = new Grid();
-            gridMap[i].dLat = BitUtils.normalize(bitUtils.getSignedInt(9) * 0.00003d, 8);
-            gridMap[i].dLon = BitUtils.normalize(bitUtils.getSignedInt(9) * 0.00003d, 8);
+            gridMap[i] = new GridNode();
+            gridMap[i].dNorth = BitUtils.normalize(bitUtils.getSignedInt(9) * 0.00003d, 8);
+            gridMap[i].dEast = BitUtils.normalize(bitUtils.getSignedInt(9) * 0.00003d, 8);
             gridMap[i].dH = BitUtils.normalize(bitUtils.getSignedInt(9) * 0.00003d, 8);
         }
 
@@ -54,6 +55,10 @@ public class MSG1023 implements CRS2 {
         setHorizontalGridQualityIndicator(bitUtils.getUnsignedInt(3));
         setVerticalGridQualityIndicator(bitUtils.getUnsignedInt(3));
         setModifiedJulianDayNumber(bitUtils.getUnsignedInt(16));
+    }
+
+    public MSG1023(){
+
     }
 
     public byte[] write() {
@@ -72,9 +77,9 @@ public class MSG1023 implements CRS2 {
         bitUtils.setInt((int) Math.round(MdLon / 0.001d), 8);
         bitUtils.setInt((int) Math.round(MdH / 0.01d), 15);
 
-        for (Grid grid : gridMap) {
-            bitUtils.setInt((int) Math.round(grid.dLat / 0.00003), 9);
-            bitUtils.setInt((int) Math.round(grid.dLon / 0.00003), 9);
+        for (GridNode grid : gridMap) {
+            bitUtils.setInt((int) Math.round(grid.dNorth / 0.00003), 9);
+            bitUtils.setInt((int) Math.round(grid.dEast / 0.00003), 9);
             bitUtils.setInt((int) Math.round(grid.dH / 0.00003d), 9);
         }
 
@@ -108,6 +113,10 @@ public class MSG1023 implements CRS2 {
                 ", VerticalGridQualityIndicator=" + VerticalGridQualityIndicator +
                 ", ModifiedJulianDayNumber=" + ModifiedJulianDayNumber +
                 '}';
+    }
+
+    public int getMessageNumber() {
+        return messageNumber;
     }
 
     public int getSystemIdentificationNumber() {
@@ -205,11 +214,11 @@ public class MSG1023 implements CRS2 {
         MdH = normalized;
     }
 
-    public Grid[] getGridMap() {
+    public GridNode[] getGridMap() {
         return gridMap;
     }
 
-    public void setGridMap(Grid[] gridMap) {
+    public void setGridMap(GridNode[] gridMap) {
         this.gridMap = gridMap;
     }
 
@@ -254,19 +263,6 @@ public class MSG1023 implements CRS2 {
     }
 }
 
-class Grid {
-    public double dLat;
-    public double dLon;
-    public double dH;
 
-    @Override
-    public String toString() {
-        return "Grid{" +
-                "dFi=" + dLat +
-                ", dAi=" + dLon +
-                ", dHi=" + dH +
-                '}';
-    }
-}
 
 

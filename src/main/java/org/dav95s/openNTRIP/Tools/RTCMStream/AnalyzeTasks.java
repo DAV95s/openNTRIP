@@ -13,7 +13,6 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.sql.SQLException;
 import java.util.Locale;
 import java.util.TimerTask;
 
@@ -66,11 +65,9 @@ public class AnalyzeTasks {
                 model.setFormat("RTCM 3.0");
             }
 
-            try {
-                model.update();
-            } catch (SQLException throwables) {
-                throwables.printStackTrace();
-            }
+
+            model.update();
+
 
             logger.debug(referenceStation.getName() + ": update RTCM Version");
         }
@@ -115,11 +112,9 @@ public class AnalyzeTasks {
             } else {
                 model.setNav_system("");
             }
-            try {
-                model.update();
-            } catch (SQLException throwables) {
-                throwables.printStackTrace();
-            }
+
+            model.update();
+
             logger.debug(referenceStation.getName() + ": update Nav Systems -> " + model.getNav_system());
         }
     };
@@ -146,11 +141,9 @@ public class AnalyzeTasks {
             }
 
             model.setCarrier(carrier);
-            try {
-                model.update();
-            } catch (SQLException throwables) {
-                throwables.printStackTrace();
-            }
+
+            model.update();
+
             logger.debug(referenceStation.getName() + ": update Carrier");
         }
     };
@@ -177,11 +170,9 @@ public class AnalyzeTasks {
 
             model.getPosition().lat = (float) lla[0];
             model.getPosition().lon = (float) lla[1];
-            try {
-                model.update();
-            } catch (SQLException throwables) {
-                throwables.printStackTrace();
-            }
+
+            model.update();
+
             logger.debug(referenceStation.getName() + ": update position " + position.toString());
         }
     };
@@ -193,11 +184,9 @@ public class AnalyzeTasks {
             if (model.getPosition().lat == 0.0d || model.getPosition().lon == 0.0d) {
                 model.setIdentifier("");
                 model.setCountry("");
-                try {
-                    model.update();
-                } catch (SQLException throwables) {
-                    throwables.printStackTrace();
-                }
+
+                model.update();
+
                 return;
             }
 
@@ -206,26 +195,22 @@ public class AnalyzeTasks {
             String[] identifier = {"suburb", "village", "city", "county", "state"};
 
 
-            try {
-                JSONObject json = new JSONObject(rawJson);
-                json = (JSONObject) json.get("address");
+            JSONObject json = new JSONObject(rawJson);
+            json = (JSONObject) json.get("address");
 
-                for (String match : identifier) {
-                    if (json.has(match)) {
-                        model.setIdentifier((String) json.get(match));
-                        break;
-                    }
+            for (String match : identifier) {
+                if (json.has(match)) {
+                    model.setIdentifier((String) json.get(match));
+                    break;
                 }
-
-                if (json.getString("country_code") != null) {
-                    String iso = iso2CountryCodeToIso3CountryCode((String) json.get("country_code"));
-                    model.setCountry(iso);
-                    model.update();
-                }
-
-            } catch (SQLException throwables) {
-                throwables.printStackTrace();
             }
+
+            if (json.getString("country_code") != null) {
+                String iso = iso2CountryCodeToIso3CountryCode((String) json.get("country_code"));
+                model.setCountry(iso);
+                model.update();
+            }
+
         }
     };
 
@@ -233,12 +218,9 @@ public class AnalyzeTasks {
 
         @Override
         public void run() {
-            try {
-                model.setFormat_details(messagePool.toString());
-                model.update();
-            } catch (SQLException throwables) {
-                throwables.printStackTrace();
-            }
+            model.setFormat_details(messagePool.toString());
+            model.update();
+
         }
     };
 

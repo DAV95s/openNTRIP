@@ -5,13 +5,12 @@ import org.dav95s.openNTRIP.Clients.User;
 import org.dav95s.openNTRIP.Databases.Models.UserModel;
 import org.dav95s.openNTRIP.Tools.Config;
 
-import java.sql.SQLException;
 import java.util.Base64;
 
 public class Basic implements IAuthenticator {
 
     @Override
-    public boolean authentication(User user) throws SQLException {
+    public boolean authentication(User user) {
         String basicAuth = user.getHttpHeader("Authorization");
         if (basicAuth == null)
             return false;

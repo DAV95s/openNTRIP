@@ -5,10 +5,14 @@ import org.dav95s.openNTRIP.Tools.NMEA;
 import org.dav95s.openNTRIP.Tools.RTCM.MSG1006;
 import org.dav95s.openNTRIP.Tools.RTCMStream.Message;
 import org.dav95s.openNTRIP.Tools.RTCMStream.MessagePack;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.sql.*;
+import java.util.OptionalInt;
 
 public class ReferenceStationModel {
+    final static private Logger logger = LoggerFactory.getLogger(ReferenceStationModel.class.getName());
     private int id;
     private String name;
     private String identifier;
@@ -22,18 +26,18 @@ public class ReferenceStationModel {
     private boolean online;
     private String password;
     private int hz;
-    private NMEA.GPSPosition position = new NMEA().getPosition();
+    private NMEA.GPSPosition position = new NMEA().parse("");
     private ReplaceCoordinates replaceCoordinates;
 
     public ReferenceStationModel() {
     }
 
-    public ReferenceStationModel(int id) throws SQLException {
+    public ReferenceStationModel(int id) {
         this.id = id;
         this.read();
     }
 
-    public int create() throws SQLException {
+    public OptionalInt create() {
         String sql = "INSERT INTO `reference_stations`(`name`, `identifier`, `format`, `format_details`, `carrier`, `nav_system`, `country`, `lat`, `lon`, `alt`, `bitrate`, `misc`, `is_online`, `password`, `hz`) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
 
         try (Connection con = DataSource.getConnection();
@@ -57,16 +61,20 @@ public class ReferenceStationModel {
 
             statement.executeUpdate();
             ResultSet rs = statement.getGeneratedKeys();
-            rs.next();
-            id = rs.getInt(1);
+            if (rs.next()) {
+                id = rs.getInt(1);
+                return OptionalInt.of(id);
+            } else {
+                return OptionalInt.empty();
+            }
 
-            return id;
         } catch (SQLException e) {
-            throw new SQLException("Can't create new reference station", e);
+            logger.error("SQL Error", e);
+            return OptionalInt.empty();
         }
     }
 
-    public boolean read() throws SQLException {
+    public boolean read() {
         String sql = "SELECT * FROM `reference_stations` WHERE `id` = ?";
 
         try (Connection con = DataSource.getConnection();
@@ -97,11 +105,12 @@ public class ReferenceStationModel {
                 }
             }
         } catch (SQLException e) {
-            throw new SQLException("Can't read from DB", e);
+            logger.error("SQL Error", e);
+            return false;
         }
     }
 
-    public boolean update() throws SQLException {
+    public boolean update() {
         String sql = "UPDATE `reference_stations` SET `name`=?,`identifier`=?,`format`=?,`format_details`=?,`carrier`=?,`nav_system`=?,`country`=?,`lat`=?,`lon`=?,`alt`=?,`bitrate`=?,`misc`=?,`is_online`=?,`password`=?,`hz`=? WHERE `id` = ?";
 
         try (Connection con = DataSource.getConnection();
@@ -122,13 +131,13 @@ public class ReferenceStationModel {
             statement.setBoolean(13, online);
             statement.setString(14, password);
             statement.setInt(15, hz);
-
             statement.setInt(16, id);
 
             return statement.executeUpdate() > 0;
 
         } catch (SQLException e) {
-            throw new SQLException("Can't create new reference station", e);
+            logger.error("SQL Error", e);
+            return false;
         }
     }
 
@@ -143,7 +152,7 @@ public class ReferenceStationModel {
             return statement.executeUpdate() > 0;
 
         } catch (SQLException e) {
-            e.printStackTrace();
+            logger.error("SQL Error", e);
             return false;
         }
     }
@@ -160,7 +169,7 @@ public class ReferenceStationModel {
             return statement.executeUpdate() > 0;
 
         } catch (SQLException e) {
-            e.printStackTrace();
+            logger.error("SQL Error", e);
             return false;
         }
     }
@@ -298,7 +307,7 @@ public class ReferenceStationModel {
         return this.replaceCoordinates != null;
     }
 
-    public boolean readReplaceCoordinates() throws SQLException {
+    public boolean readReplaceCoordinates() {
         String sql = "SELECT * FROM `reference_stations_fix_position` WHERE `station_id` = ?";
 
         try (Connection con = DataSource.getConnection();
@@ -322,7 +331,8 @@ public class ReferenceStationModel {
                 }
             }
         } catch (SQLException e) {
-            throw new SQLException("Can't read from DB", e);
+            logger.error("SQL Error", e);
+            return false;
         }
     }
 

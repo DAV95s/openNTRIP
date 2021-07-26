@@ -5,6 +5,14 @@
         </encoder>
     </appender>
 
+    <logger name="com.zaxxer.hikari.pool.HikariPool" level="OFF"/>
+    <logger name="com.zaxxer.hikari.HikariConfig" level="OFF"/>
+    <logger name="c.z.hikari.util.DriverDataSource" level="OFF"/>
+    <logger name="com.zaxxer.hikari.HikariDataSource" level="OFF"/>
+    <logger name="o.d.openNTRIP.Network.NetworkCore" level="OFF"/>
+    <logger name="openNTRIP.Network.NetworkCore" level="OFF"/>
+    <logger name="o.d.o.Servers.ReferenceStation" level="OFF"/>
+
     <root level="debug">
         <appender-ref ref="STDOUT"/>
     </root>

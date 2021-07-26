@@ -9,9 +9,10 @@ import java.util.Map;
 public class NMEA {
 
     interface SentenceParser {
-        boolean parse(String[] tokens, GPSPosition position);
+        public boolean parse(String[] tokens, GPSPosition position);
     }
 
+    // utils
     static float Latitude2Decimal(String lat, String NS) {
         float med = Float.parseFloat(lat.substring(2)) / 60.0f;
         med += Float.parseFloat(lat.substring(0, 2));
@@ -30,6 +31,7 @@ public class NMEA {
         return med;
     }
 
+    // parsers
     class GPGGA implements SentenceParser {
         public boolean parse(String[] tokens, GPSPosition position) {
             position.time = Float.parseFloat(tokens[1]);
@@ -75,7 +77,8 @@ public class NMEA {
         }
     }
 
-    public static class GPSPosition {
+
+    public class GPSPosition {
         public float time = 0.0f;
         public float lat = 0.0f;
         public float lon = 0.0f;
@@ -94,7 +97,8 @@ public class NMEA {
         }
 
         public boolean isSet() {
-            return lat != 0.0f && lon != 0.0f;
+            System.out.println(position.lat != 0.0f && position.lon != 0.0f);
+            return position.lat != 0.0f && position.lon != 0.0f;
         }
     }
 
@@ -103,15 +107,15 @@ public class NMEA {
     private static final Map<String, SentenceParser> sentenceParsers = new HashMap<String, SentenceParser>();
 
     public NMEA() {
+        //Add new message
+        sentenceParsers.put("GNGGA", new GPGGA());
+
         sentenceParsers.put("GPGGA", new GPGGA());
         sentenceParsers.put("GPGGL", new GPGGL());
         sentenceParsers.put("GPRMC", new GPRMC());
         sentenceParsers.put("GPRMZ", new GPRMZ());
+        //only really good GPS devices have this sentence but ...
         sentenceParsers.put("GPVTG", new GPVTG());
-    }
-
-    public GPSPosition getPosition() {
-        return position;
     }
 
     public GPSPosition parse(String line) {

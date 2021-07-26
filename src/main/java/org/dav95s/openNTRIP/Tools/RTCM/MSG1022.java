@@ -47,7 +47,7 @@ public class MSG1022 extends MSG1021 implements CRS1 {
         setVerticalQuality(bitUtils.getUnsignedInt(3));
     }
 
-    public byte[] write() {
+    public byte[] getBytes() {
         BitUtils bitUtils = new BitUtils();
         bitUtils.setBitString("11010011000000"); //preamble + 6 reserved bit
         bitUtils.setInt(65 + SourceNameCounter + TargetNameCounter, 10);

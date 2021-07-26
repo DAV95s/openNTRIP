@@ -1,6 +1,8 @@
 package org.dav95s.openNTRIP.Databases.Models;
 
 import org.dav95s.openNTRIP.Databases.DataSource;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -10,12 +12,13 @@ import java.util.HashSet;
 import java.util.Set;
 
 public class UserGroupModel {
+    final static private Logger logger = LoggerFactory.getLogger(UserGroupModel.class.getName());
 
     private int group_id;
     private String name;
     private String description;
 
-    public Set<UserGroupModel> readAllGroups() throws SQLException {
+    public Set<UserGroupModel> readAllGroups() {
         String sql = "SELECT * FROM `groups`";
         Set<UserGroupModel> groups = new HashSet<>();
 
@@ -33,6 +36,9 @@ public class UserGroupModel {
                 }
                 return groups;
             }
+        } catch (SQLException e) {
+            logger.error("SQL Error", e);
+            return new HashSet<>();
         }
     }
 

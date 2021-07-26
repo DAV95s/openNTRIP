@@ -1,30 +1,16 @@
 package org.dav95s.openNTRIP.Tools.RTCM.Assets;
 
-public enum Plates {
-    Africa(1),
-    Antarctica(2),
-    Arabia(3),
-    Australia(4),
-    Caribbean(5),
-    Cocos(6),
-    Eurasia(7),
-    India(8),
-    NorthAmerica(9),
-    Nazca(10),
-    Pacific(11),
-    SouthAmerica(12),
-    JuandeFuca(13),
-    Philippine(14),
-    Rivera(15),
-    Scotia(16);
+enum Plates {
+    AFRC(1), ANTA(2), ARAB(3), AUST(4), CARB(5), COCO(6), EURA(7), INDI(8),
+    NOAM(9), NAZC(10), PCFC(11), SOAM(12), JUFU(13), PHIL(14), RIVR(15), SCOT(16);
 
-    private int id;
+    int plateNmb;
 
-    public int getId() {
-        return id;
+    public int getPlateNmb() {
+        return plateNmb;
     }
 
     Plates(int i) {
-        id = i;
+        plateNmb = i;
     }
 }

@@ -1,18 +1,15 @@
 package org.dav95s.openNTRIP.Clients;
 
-
 import com.github.pbbl.heap.ByteBufferPool;
 import org.dav95s.openNTRIP.Databases.Models.UserModel;
 import org.dav95s.openNTRIP.Network.INetworkHandler;
 import org.dav95s.openNTRIP.Network.Socket;
 import org.dav95s.openNTRIP.Servers.MountPoint;
 import org.dav95s.openNTRIP.Servers.NtripCaster;
-import org.dav95s.openNTRIP.Servers.ReferenceStation;
 import org.dav95s.openNTRIP.Tools.HttpParser;
 import org.dav95s.openNTRIP.Tools.NMEA;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 
 import java.io.IOException;
 import java.nio.ByteBuffer;
@@ -30,12 +27,15 @@ public class User implements INetworkHandler {
     final private HttpParser httpRequest;
     final static private ByteBufferPool bufferPool = new ByteBufferPool();
 
-    private ReferenceStation referenceStation;
+    private MountPoint mountPoint;
     private UserModel model;
-    private NMEA.GPSPosition position;
+    private NMEA.GPSPosition position = new NMEA().parse("");
+
+
+    public boolean authenticated = false;
 
     final private long connectTimeMark;
-    private MountPoint mountPoint;
+
 
     public User(Socket socket, HttpParser httpRequest, NtripCaster caster) {
         logger.debug(socket.toString() + "is new client.");
@@ -43,17 +43,6 @@ public class User implements INetworkHandler {
         this.httpRequest = httpRequest;
         this.caster = caster;
         this.connectTimeMark = System.currentTimeMillis();
-    }
-
-    public void subscribe(ReferenceStation referenceStation) {
-        if (referenceStation == null)
-            return;
-
-        if (this.referenceStation != null)
-            this.referenceStation.removeClient(this);
-
-        this.referenceStation = referenceStation;
-        this.referenceStation.addClient(this);
     }
 
     public void sendBadMessageAndClose() {
@@ -66,18 +55,16 @@ public class User implements INetworkHandler {
 
     @Override
     public void close() {
-        try {
-            if (this.referenceStation != null)
-                this.referenceStation.removeClient(this);
-
-            this.socket.close();
-        } catch (IOException e) {
-            logger.error(e.getMessage());
-        }
+        this.mountPoint.removeClient(this);
+        this.socket.close();
     }
 
-    public int write(ByteBuffer byteBuffer) throws IOException {
+    synchronized public int write(ByteBuffer byteBuffer) throws IOException {
         return this.socket.write(byteBuffer);
+    }
+
+    public int write(byte[] bytes) throws IOException {
+        return this.write(ByteBuffer.wrap(bytes).flip());
     }
 
     private final Queue<ByteBuffer> dataQueue = new ArrayDeque<>();
@@ -86,12 +73,12 @@ public class User implements INetworkHandler {
         ByteBuffer buffer = bufferPool.take(2048);
 
         if (socket.endOfStreamReached) {
-            throw new IOException(this.toString() + "end of stream reached.");
+            throw new IOException(this + "end of stream reached.");
         }
 
         int count = this.socket.read(buffer);
 
-        logger.debug(this.toString() + "read bytes: " + count);
+        logger.debug(this + "read bytes: " + count);
 
         if (count == 0)
             return;
@@ -110,17 +97,22 @@ public class User implements INetworkHandler {
         bufferPool.give(buffer);
 
         logger.debug(socket.toString() + " accept nmea from client -> " + line);
-        this.setPosition(line);
 
-        ReferenceStation rs = mountPoint.getReferenceStation(this);
-        this.subscribe(rs);
+        this.position = new NMEA().parse(line);
+
+        try {
+            this.mountPoint.updateReferenceStationByUser(this);
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        }
     }
 
-    public void setPosition(String nmea_str) {
-        this.position = new NMEA().parse(nmea_str);
+    public boolean isOpen() {
+        return socket.isOpen();
     }
 
     public NMEA.GPSPosition getPosition() {
+
         return position;
     }
 
