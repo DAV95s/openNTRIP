@@ -38,7 +38,7 @@ public class Analyzer {
         tasks.rtcmVersion.cancel();
     }
 
-    public void analyze(MessagePack messagePack) {
+    public void analyze(MessagesPack messagePack) {
         for (Message message : messagePack.getArray()) {
             messagePool.putData(message.getNmb(), message.getBytes());
         }

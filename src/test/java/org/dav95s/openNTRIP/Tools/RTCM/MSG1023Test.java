@@ -4,7 +4,7 @@ import org.dav95s.openNTRIP.CRSUtils.GridShift.GridNode;
 import org.dav95s.openNTRIP.Tools.Decoders.DecoderRTCM3;
 import org.dav95s.openNTRIP.Tools.RTCMStream.BitUtils;
 import org.dav95s.openNTRIP.Tools.RTCMStream.Message;
-import org.dav95s.openNTRIP.Tools.RTCMStream.MessagePack;
+import org.dav95s.openNTRIP.Tools.RTCMStream.MessagesPack;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -22,12 +22,12 @@ public class MSG1023Test {
             ByteBuffer buffer = ByteBuffer.wrap(input.readAllBytes());
 
             DecoderRTCM3 decoder = new DecoderRTCM3();
-            MessagePack pack = decoder.separate(buffer);
+            MessagesPack pack = decoder.separate(buffer);
             Message msg = pack.getMessageByNmb(1023);
 
             MSG1023 msg1023 = new MSG1023(msg.getBytes());
             System.out.println(msg1023);
-            byte[] bytes = msg1023.write();
+            byte[] bytes = msg1023.getBytes();
             MSG1023 msg10233 = new MSG1023(bytes);
             System.out.println(msg10233);
 

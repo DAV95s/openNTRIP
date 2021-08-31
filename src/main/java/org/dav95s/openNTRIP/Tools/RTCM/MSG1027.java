@@ -45,7 +45,7 @@ public class MSG1027 implements CRS3 {
         setNPC(bitUtils.getSignedLong(35) * 0.001);
     }
 
-    public byte[] write() {
+    public byte[] getBytes() {
         BitUtils bitUtils = new BitUtils();
         bitUtils.setBitString("11010011000000"); //preamble + 6 reserved bit
         bitUtils.setInt(33, 10);
@@ -53,7 +53,6 @@ public class MSG1027 implements CRS3 {
         bitUtils.setInt(SystemIdentificationNumber, 8);
         bitUtils.setInt(ProjectionType, 6);
         bitUtils.setBoolean(RectificationFlag);
-
         bitUtils.setLong(Math.round(LaPC / 0.000000011), 34);
         bitUtils.setLong(Math.round(LoPC / 0.000000011), 35);
         bitUtils.setLong(Math.round(AzIL / 0.000000011), 35);

@@ -3,7 +3,7 @@ package org.dav95s.openNTRIP.Tools.RTCMStream;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
 
-public class MessagePack {
+public class MessagesPack {
     ArrayList<Message> messagePack = new ArrayList<>();
 
     public ArrayList<Message> getArray() {

@@ -61,7 +61,7 @@ public class MSG1023 implements CRS2 {
 
     }
 
-    public byte[] write() {
+    public byte[] getBytes() {
         BitUtils bitUtils = new BitUtils();
         bitUtils.setBitString("11010011000000"); //preamble + 6 reserved bit
         bitUtils.setInt(73, 10);

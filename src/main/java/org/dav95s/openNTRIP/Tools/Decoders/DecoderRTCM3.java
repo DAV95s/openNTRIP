@@ -1,6 +1,6 @@
 package org.dav95s.openNTRIP.Tools.Decoders;
 
-import org.dav95s.openNTRIP.Tools.RTCMStream.MessagePack;
+import org.dav95s.openNTRIP.Tools.RTCMStream.MessagesPack;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -21,8 +21,8 @@ public class DecoderRTCM3 implements IDecoder {
         return decoderType;
     }
 
-    public MessagePack separate(ByteBuffer bb) throws IllegalArgumentException {
-        MessagePack messagePack = new MessagePack();
+    public MessagesPack separate(ByteBuffer bb) throws IllegalArgumentException {
+        MessagesPack messagePack = new MessagesPack();
         ByteBuffer buffer = bb;
 
         if (buffer.limit() == 0)

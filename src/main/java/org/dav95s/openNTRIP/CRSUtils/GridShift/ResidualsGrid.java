@@ -5,9 +5,11 @@ import com.harium.storage.kdtree.KeyDuplicateException;
 import com.harium.storage.kdtree.KeySizeException;
 import org.dav95s.openNTRIP.CRSUtils.Geoids.GGF;
 import org.dav95s.openNTRIP.CRSUtils.Geoids.IGeoid;
+import org.dav95s.openNTRIP.Databases.Models.CrsModel;
 import org.dav95s.openNTRIP.Databases.Models.GridModel;
 import org.dav95s.openNTRIP.Tools.NMEA;
 import org.dav95s.openNTRIP.Tools.RTCMStream.BitUtils;
+import org.json.JSONArray;
 import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -36,8 +38,9 @@ public class ResidualsGrid {
     // [N+1],[N+2],[N+3],[N+4],[N+5],[N+6],[N+7],...
     GridNode[][] grid;
 
-    public ResidualsGrid(int crs_id, JSONObject validArea, String geoidPath) {
-        geoid = initGeoid(geoidPath);
+    public ResidualsGrid(int crs_id, JSONObject json, CrsModel model) {
+        geoid = initGeoid(model.getGeoidPath());
+        JSONObject validArea = json.getJSONObject("AreaOfValidity");
         double latC = validArea.getDouble("LatCenter");
         double lonC = validArea.getDouble("LonCenter");
         double height = validArea.getDouble("Height");
@@ -68,6 +71,7 @@ public class ResidualsGrid {
         grid = new GridNode[rowCount][colCount];
 
         initGrid(crs_id);
+        backupGrid(model);
 
     }
 
@@ -106,6 +110,7 @@ public class ResidualsGrid {
             }
         }
 
+
     }
 
     private GridNode IDW(List<GeodeticPoint> gridNodes, double nodeLat, double nodeLon) {
@@ -135,6 +140,31 @@ public class ResidualsGrid {
         response.dEast = BitUtils.normalize(response.dEast, 9);
 
         return response;
+    }
+
+    public void backupGrid(CrsModel model) {
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("top", area_top);
+        jsonObject.put("bottom", area_bottom);
+        jsonObject.put("left", area_left);
+        jsonObject.put("right", area_right);
+        jsonObject.put("gridWidth", dLon0);
+        jsonObject.put("gridHeight", dLat0);
+        jsonObject.put("zone", new JSONArray());
+
+        JSONArray gridJson = new JSONArray();
+        for (int row = 0; row < rowCount; row++) {
+            for (int col = 0; col < colCount; col++) {
+                JSONArray cell = new JSONArray();
+                cell.put(grid[row][col].dNorth);
+                cell.put(grid[row][col].dEast);
+                cell.put(grid[row][col].dH);
+                gridJson.put(cell);
+            }
+        }
+        jsonObject.put("grid", gridJson);
+        model.setResidualGrid(jsonObject.toString());
+        model.update();
     }
 
     public GridNode[] get16PointsAroundUser(NMEA.GPSPosition user) {

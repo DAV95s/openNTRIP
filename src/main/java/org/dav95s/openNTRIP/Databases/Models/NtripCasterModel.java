@@ -5,7 +5,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.sql.*;
-import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.OptionalInt;
 
 public class NtripCasterModel {
@@ -113,26 +113,23 @@ public class NtripCasterModel {
         }
     }
 
-    public ArrayList<Integer> readAccessibleMountpoint() {
-        String sql = "SELECT `id` FROM `mountpoints` WHERE `caster_id` = ?";
+    public HashMap<Integer, String> getAccessibleMountpointIds() {
+        String sql = "SELECT `id`,`name` FROM `mountpoints` WHERE `caster_id` = ?";
 
-        ArrayList<Integer> response = new ArrayList<>();
+        HashMap<Integer, String> response = new HashMap<>();
 
         try (Connection con = DataSource.getConnection();
              PreparedStatement statement = con.prepareStatement(sql)) {
-
             statement.setInt(1, id);
-
             try (ResultSet rs = statement.executeQuery()) {
-
                 while (rs.next()) {
-                    response.add(rs.getInt("id"));
+                    response.put(rs.getInt("id"), rs.getString("name"));
                 }
             }
             return response;
         } catch (SQLException e) {
             logger.error("SQL Error", e);
-            return new ArrayList<>();
+            return new HashMap<Integer, String>();
         }
     }
 

@@ -6,8 +6,10 @@ import org.dav95s.openNTRIP.Network.INetworkHandler;
 import org.dav95s.openNTRIP.Network.Socket;
 import org.dav95s.openNTRIP.Servers.MountPoint;
 import org.dav95s.openNTRIP.Servers.NtripCaster;
+import org.dav95s.openNTRIP.Servers.ReferenceStation;
 import org.dav95s.openNTRIP.Tools.HttpParser;
 import org.dav95s.openNTRIP.Tools.NMEA;
+import org.dav95s.openNTRIP.Tools.Observer.IObserver;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -17,28 +19,27 @@ import java.nio.charset.StandardCharsets;
 import java.util.ArrayDeque;
 import java.util.Queue;
 
-public class User implements INetworkHandler {
+public class User implements INetworkHandler, IObserver {
     final static private Logger logger = LoggerFactory.getLogger(User.class.getName());
+    final static private ByteBufferPool bufferPool = new ByteBufferPool();
 
     final private long DELAY_POSITION_UPDATE = 30_000;
 
     final private NtripCaster caster;
     final private Socket socket;
     final private HttpParser httpRequest;
-    final static private ByteBufferPool bufferPool = new ByteBufferPool();
 
-    private MountPoint mountPoint;
+
+    private ReferenceStation myReferenceStation;
+    private MountPoint myMountPoint;
+
     private UserModel model;
-    private NMEA.GPSPosition position = new NMEA().parse("");
-
+    protected NMEA.GPSPosition position = new NMEA().parse("");
 
     public boolean authenticated = false;
-
     final private long connectTimeMark;
 
-
     public User(Socket socket, HttpParser httpRequest, NtripCaster caster) {
-        logger.debug(socket.toString() + "is new client.");
         this.socket = socket;
         this.httpRequest = httpRequest;
         this.caster = caster;
@@ -55,7 +56,11 @@ public class User implements INetworkHandler {
 
     @Override
     public void close() {
-        this.mountPoint.removeClient(this);
+        if (this.myMountPoint != null)
+            this.myMountPoint.removeClient(this);
+
+        if (this.myReferenceStation != null)
+            this.myReferenceStation.removeObserver(this);
         this.socket.close();
     }
 
@@ -64,7 +69,7 @@ public class User implements INetworkHandler {
     }
 
     public int write(byte[] bytes) throws IOException {
-        return this.write(ByteBuffer.wrap(bytes).flip());
+        return this.write(ByteBuffer.wrap(bytes));
     }
 
     private final Queue<ByteBuffer> dataQueue = new ArrayDeque<>();
@@ -96,23 +101,18 @@ public class User implements INetworkHandler {
         String line = StandardCharsets.UTF_8.decode(buffer).toString();
         bufferPool.give(buffer);
 
-        logger.debug(socket.toString() + " accept nmea from client -> " + line);
-
+        logger.debug(this + " accept from client -> " + line);
         this.position = new NMEA().parse(line);
+        logger.debug(this + " new position is -> " + this.position.toString());
 
         try {
-            this.mountPoint.updateReferenceStationByUser(this);
+            myMountPoint.updateReferenceStation(this);
         } catch (IllegalAccessException e) {
             e.printStackTrace();
         }
     }
 
-    public boolean isOpen() {
-        return socket.isOpen();
-    }
-
     public NMEA.GPSPosition getPosition() {
-
         return position;
     }
 
@@ -134,6 +134,37 @@ public class User implements INetworkHandler {
     }
 
     public void setMountPoint(MountPoint mountPoint) {
-        this.mountPoint = mountPoint;
+        this.myMountPoint = mountPoint;
+    }
+
+    public void subscribe(ReferenceStation referenceStation) {
+        if (referenceStation == null) {
+            logger.debug(this + "can't subscribes to null");
+            return;
+        }
+
+        if (myReferenceStation == referenceStation) {
+            logger.debug("Already connected to " + myReferenceStation);
+            return;
+        }
+
+        logger.debug(this + " reconnected to " + referenceStation);
+        if (myReferenceStation != null) {
+            this.myReferenceStation.removeObserver(this);
+        }
+        this.myReferenceStation = referenceStation;
+        this.myReferenceStation.registerObserver(this);
+    }
+
+    @Override
+    public void notify(ReferenceStation referenceStation, ByteBuffer buffer) {
+        try {
+            buffer.flip();
+            this.write(buffer);
+            this.myMountPoint.epochEventListener(this);
+        } catch (IOException e) {
+            this.close();
+            logger.debug("Notify error ", e);
+        }
     }
 }

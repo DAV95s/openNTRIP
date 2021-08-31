@@ -4,7 +4,6 @@ import org.dav95s.openNTRIP.Tools.RTCMStream.BitUtils;
 import org.junit.Assert;
 import org.junit.Test;
 
-import java.math.BigDecimal;
 import java.util.Arrays;
 
 public class MSG1026Test {
@@ -20,9 +19,9 @@ public class MSG1026Test {
         msg1026.setLaSP2(90);
         msg1026.setEFO(68719476.735);
         msg1026.setNFO(17179869.182);
-        byte[] result1 = msg1026.write();
+        byte[] result1 = msg1026.getBytes();
         MSG1026 msg10261 = new MSG1026(result1);
-        byte[] result2 = msg10261.write();
+        byte[] result2 = msg10261.getBytes();
         System.out.println(Arrays.toString(result1));
         System.out.println(Arrays.toString(result2));
         System.out.println(msg1026.toString());

@@ -17,6 +17,9 @@ public class CrsModel {
     String crs;
     String geoidPath;
 
+
+    String residualGrid;
+
     public CrsModel(int mountpointId) {
         this.mountpointId = mountpointId;
     }
@@ -34,6 +37,7 @@ public class CrsModel {
                     id = rs.getInt("id");
                     crs = rs.getString("crs");
                     geoidPath = rs.getString("geoid_path");
+                    residualGrid = rs.getString("residual_grid");
                     return true;
                 } else {
                     return false;
@@ -42,6 +46,22 @@ public class CrsModel {
 
         } catch (SQLException e) {
             logger.error("SQL error", e);
+            return false;
+        }
+    }
+
+    public boolean update() {
+        String sql = "UPDATE `crs` SET `residual_grid`= ? WHERE `id` = ?";
+
+        try (Connection con = DataSource.getConnection();
+             PreparedStatement statement = con.prepareStatement(sql)) {
+
+            statement.setString(1, residualGrid);
+            statement.setInt(2, id);
+
+            return statement.executeUpdate() > 0;
+        } catch (SQLException e) {
+            logger.error("SQL Error", e);
             return false;
         }
     }
@@ -61,4 +81,13 @@ public class CrsModel {
     public String getGeoidPath() {
         return geoidPath;
     }
+
+    public String getResidualGrid() {
+        return residualGrid;
+    }
+
+    public void setResidualGrid(String residualGrid) {
+        this.residualGrid = residualGrid;
+    }
+
 }

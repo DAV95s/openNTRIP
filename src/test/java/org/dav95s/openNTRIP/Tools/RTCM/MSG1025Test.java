@@ -3,7 +3,7 @@ package org.dav95s.openNTRIP.Tools.RTCM;
 import org.dav95s.openNTRIP.Tools.Decoders.DecoderRTCM3;
 import org.dav95s.openNTRIP.Tools.RTCMStream.BitUtils;
 import org.dav95s.openNTRIP.Tools.RTCMStream.Message;
-import org.dav95s.openNTRIP.Tools.RTCMStream.MessagePack;
+import org.dav95s.openNTRIP.Tools.RTCMStream.MessagesPack;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -22,12 +22,12 @@ public class MSG1025Test {
             ByteBuffer buffer = ByteBuffer.wrap(input.readAllBytes());
 
             DecoderRTCM3 decoder = new DecoderRTCM3();
-            MessagePack pack = decoder.separate(buffer);
+            MessagesPack pack = decoder.separate(buffer);
             Message msg = pack.getMessageByNmb(1025);
 
             MSG1025 msg1025 = new MSG1025(msg.getBytes());
             System.out.println(msg1025);
-            byte[] bytes = msg1025.write();
+            byte[] bytes = msg1025.getBytes();
             MSG1025 msg10235 = new MSG1025(bytes);
             System.out.println(msg10235);
 

@@ -6,4 +6,6 @@ import java.nio.ByteBuffer;
 
 public interface IObserver {
     void notify(ReferenceStation referenceStation, ByteBuffer buffer);
+
+    String toString();
 }

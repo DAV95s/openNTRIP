@@ -11,6 +11,10 @@ public class MSG1022 extends MSG1021 implements CRS1 {
     double Yp;
     double Zp;
 
+    public MSG1022() {
+        this.messageNumber = 1022;
+    }
+
     public MSG1022(byte[] msg) {
         BitUtils bitUtils = new BitUtils(msg);
         bitUtils.setPointer(24);

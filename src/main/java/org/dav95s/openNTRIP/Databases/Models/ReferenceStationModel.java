@@ -4,7 +4,7 @@ import org.dav95s.openNTRIP.Databases.DataSource;
 import org.dav95s.openNTRIP.Tools.NMEA;
 import org.dav95s.openNTRIP.Tools.RTCM.MSG1006;
 import org.dav95s.openNTRIP.Tools.RTCMStream.Message;
-import org.dav95s.openNTRIP.Tools.RTCMStream.MessagePack;
+import org.dav95s.openNTRIP.Tools.RTCMStream.MessagesPack;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -23,10 +23,10 @@ public class ReferenceStationModel {
     private String country;
     private int bitrate;
     private String misc;
-    private boolean online;
+    private boolean online = false;
     private String password;
     private int hz;
-    private NMEA.GPSPosition position = new NMEA().parse("");
+    protected NMEA.GPSPosition position = new NMEA().parse("");
     private ReplaceCoordinates replaceCoordinates;
 
     public ReferenceStationModel() {
@@ -96,7 +96,6 @@ public class ReferenceStationModel {
                     this.position.altitude = (float) rs.getDouble("alt");
                     this.bitrate = rs.getInt("bitrate");
                     this.misc = rs.getString("misc");
-                    this.online = rs.getBoolean("is_online");
                     this.password = rs.getString("password");
                     this.hz = rs.getInt("hz");
                     return true;
@@ -157,14 +156,16 @@ public class ReferenceStationModel {
         }
     }
 
-    public boolean OnlineStatus(boolean status) {
+    public boolean updateOnlineStatus(boolean status) {
         String sql = "UPDATE `reference_stations` SET `is_online` = ? WHERE id = ?";
+
+        this.online = status;
 
         try (Connection con = DataSource.getConnection();
              PreparedStatement statement = con.prepareStatement(sql)) {
 
             statement.setBoolean(1, status);
-            statement.setInt(1, id);
+            statement.setInt(2, id);
 
             return statement.executeUpdate() > 0;
 
@@ -174,7 +175,7 @@ public class ReferenceStationModel {
         }
     }
 
-    public void replaceCoordinates(MessagePack messagePack) {
+    public void replaceCoordinates(MessagesPack messagePack) {
         if (replaceCoordinates != null) {
             replaceCoordinates.handle(messagePack);
         }
@@ -336,14 +337,14 @@ public class ReferenceStationModel {
         }
     }
 
-    class ReplaceCoordinates {
+    static class ReplaceCoordinates {
         double ECEFX;
         double ECEFY;
         double ECEFZ;
         double antennaHeight;
         int stationID;
 
-        public MessagePack handle(MessagePack pack) {
+        public MessagesPack handle(MessagesPack pack) {
 
             Message msg = pack.getMessageByNmb(1005);
 

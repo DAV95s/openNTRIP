@@ -1,10 +1,10 @@
 package org.dav95s.openNTRIP.Servers;
 
+import org.dav95s.openNTRIP.Bootstrap;
 import org.dav95s.openNTRIP.Clients.User;
 import org.dav95s.openNTRIP.Databases.Models.MountPointModel;
 import org.dav95s.openNTRIP.Databases.Models.NtripCasterModel;
 import org.dav95s.openNTRIP.Network.NetworkCore;
-import org.dav95s.openNTRIP.ServerBootstrap;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -12,7 +12,6 @@ import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.nio.ByteBuffer;
 import java.nio.channels.ServerSocketChannel;
-import java.sql.SQLException;
 import java.util.HashMap;
 
 public class NtripCaster {
@@ -20,33 +19,24 @@ public class NtripCaster {
 
     final private ServerSocketChannel serverChannel;
     final private NtripCasterModel model;
+    final private Bootstrap bootstrap;
+    final private HashMap<Integer, ReferenceStation> referenceStations;
     final private HashMap<String, MountPoint> mountPoints = new HashMap<>();
 
-    public NtripCaster(NtripCasterModel model) throws IOException, SQLException {
+    public NtripCaster(int id, NetworkCore networkCore, Bootstrap bootstrap) throws IOException {
+        this.model = new NtripCasterModel(id);
+        this.bootstrap = bootstrap;
+        this.referenceStations = bootstrap.getReferenceStations();
+
         logger.debug("Caster [Port:" + model.getPort() + "] starts initialization...");
-        this.model = model;
+        this.updateListOfMountpoints();
 
         this.serverChannel = ServerSocketChannel.open();
         this.serverChannel.bind(new InetSocketAddress(model.getPort()));
         this.serverChannel.configureBlocking(false);
+        networkCore.registerServerChannel(serverChannel, this);
 
-        NetworkCore.getInstance().registerServerChannel(serverChannel, this);
-
-        this.model.readAccessibleMountpoint().forEach((id) -> {
-            MountPointModel mountPointModel = new MountPointModel(id);
-            mountPoints.put(mountPointModel.getName(), new MountPoint(mountPointModel));
-        });
-
-        logger.info("NtripCaster :" + model.getPort() + " is running!");
-    }
-
-    public void close() {
-        try {
-            ServerBootstrap.getInstance().removeCaster(this);
-            serverChannel.close();
-        } catch (IOException e) {
-            logger.warn(e.getMessage());
-        }
+        logger.info("Caster [Port:" + model.getPort() + "] is running!");
     }
 
     private byte[] sourceTable() {
@@ -68,33 +58,42 @@ public class NtripCaster {
      * @param user
      * @throws IOException
      */
-    public void clientAuthorization(User user) throws IOException, SQLException, IllegalAccessException {
-        MountPoint mountPoint = this.getMountpoint(user.getHttpHeader("GET"));
+    public void clientAuthorization(User user) throws IOException, IllegalAccessException {
+        MountPoint mountPoint = this.mountPoints.get(user.getHttpHeader("GET"));
         logger.debug(user + " requested mountpoint " + user.getHttpHeader("GET"));
 
         //The requested point does not exist. Send sourcetable.
         if (mountPoint == null) {
+            logger.debug("Caster " + model.getPort() + ": MountPoint " + user.getHttpHeader("GET") + " is not exists!");
             user.write(ByteBuffer.wrap(sourceTable()));
             user.close();
-            return;
+        } else {
+            user.setMountPoint(mountPoint);
+            mountPoint.clientAuthorization(user);
         }
-        user.setMountPoint(mountPoint);
-        mountPoint.clientAuthorization(user);
-
-        logger.debug("Caster " + model.getPort() + ": MountPoint " + user.getHttpHeader("GET") + " is not exists!");
     }
 
-    private MountPoint getMountpoint(String name) throws IllegalArgumentException {
-        return this.mountPoints.get(name);
+    public void updateListOfMountpoints() {
+        HashMap<Integer, String> mountpointIds = this.model.getAccessibleMountpointIds();
+
+        mountpointIds.forEach((id, name) -> {
+            mountPoints.putIfAbsent(name, new MountPoint(new MountPointModel(id), referenceStations));
+        });
     }
 
-    public int getId() {
-        return model.getId();
+    public void close() {
+        try {
+            bootstrap.removeCaster(model.getId());
+            serverChannel.close();
+            mountPoints.forEach((k, v) -> {
+
+            });
+        } catch (IOException e) {
+            logger.warn("Error", e);
+        }
     }
 
-    public void refresh() throws SQLException {
-        this.model.read();
-        this.model.readAccessibleMountpoint();
-        this.mountPoints.values().forEach(MountPoint::refresh);
+    public ReferenceStation getReferenceStationByName(String name) {
+        return referenceStations.values().stream().filter(r -> r.getName().equals(name)).findAny().orElse(null);
     }
 }

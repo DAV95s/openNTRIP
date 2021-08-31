@@ -13,8 +13,7 @@ import org.dav95s.openNTRIP.Tools.NMEA;
 import org.dav95s.openNTRIP.Tools.Observer.IObservable;
 import org.dav95s.openNTRIP.Tools.Observer.IObserver;
 import org.dav95s.openNTRIP.Tools.RTCMStream.Analyzer;
-import org.dav95s.openNTRIP.Tools.RTCMStream.MessagePack;
-import org.json.JSONObject;
+import org.dav95s.openNTRIP.Tools.RTCMStream.MessagesPack;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -33,7 +32,6 @@ public class ReferenceStation implements INetworkHandler, IObservable {
     static final private Logger logger = LoggerFactory.getLogger(ReferenceStation.class.getName());
     static final private int BYTE_BUFFER_SIZE = 32768;
     static final private ByteBufferPool bufferPool = new ByteBufferPool();
-
 
     final private Queue<ByteBuffer> dataQueue = new ArrayDeque<>();
     final private ReferenceStationModel model;
@@ -56,7 +54,7 @@ public class ReferenceStation implements INetworkHandler, IObservable {
     }
 
     //The reference station has removed from database.
-    protected void remove() throws IOException {
+    protected void remove() {
         this.model.setOnline(false);
         this.socket.close();
         this.close();
@@ -81,20 +79,12 @@ public class ReferenceStation implements INetworkHandler, IObservable {
         ByteBuffer buffer = dataQueue.poll();
 
         try {
-            MessagePack messagePack = decoder.separate(buffer);
+            MessagesPack messagePack = decoder.separate(buffer);
             this.model.replaceCoordinates(messagePack);
             this.notifyObservers(messagePack.getByteBuffer());
             this.analyzer.analyze(messagePack);
 
-            if (logger.isDebugEnabled()) {
-                JSONObject object = new JSONObject();
-                object.put("name", model.getName());
-                object.put("read", buffer.limit());
-                object.put("messages", messagePack.toString());
-                object.put("queue_size", this.dataQueue.size());
-                object.put("fixPosition", model.isFixPosition());
-                logger.debug(object.toString());
-            }
+            logger.debug("Name: " + model.getName() + " read;" + buffer.limit() + "; messages" + messagePack + "; queue_size");
 
         } catch (IllegalArgumentException e) {
             logger.info(model.getName() + " wrong decoder: " + decoder.getType());
@@ -111,18 +101,15 @@ public class ReferenceStation implements INetworkHandler, IObservable {
     }
 
 
-    public void referenceStationAuthentication(Socket socket, HttpParser httpParser) throws IOException {
-
+    public void authentication(Socket socket, HttpParser httpParser) throws IOException {
         //mb password wrong
         if (!this.model.getPassword().equals(httpParser.getParam("PASSWORD"))) {
-            throw new IOException(socket.toString() + " ref station " + this.toString() + " Bad password.");
+            throw new IOException(socket.toString() + " ref station " + this + " Bad password.");
         }
-
         //mb station in time connect
         if (!this.setSocket(socket)) {
-            throw new IOException(socket.toString() + " station " + this.toString() + " already use.");
+            throw new IOException(socket.toString() + " station " + this + " already use.");
         }
-
         socket.sendOkMessage();
     }
 
@@ -140,21 +127,16 @@ public class ReferenceStation implements INetworkHandler, IObservable {
         this.decoder = new DecoderRTCM3();
         this.analyzer = new Analyzer(this);
         this.socket = socket;
-        this.model.setOnline(true);
+        this.model.updateOnlineStatus(true);
     }
 
     /**
      * Distance from reference station to client position.
-     * Used for get nearest reference station for client receiver.
-     *
-     * @param position
-     * @return float
-     * @throws IllegalArgumentException
      */
     public float distance(User user) {
         NMEA.GPSPosition position = user.getPosition();
         if (!this.model.getPosition().isSet()) {
-            throw new IllegalStateException("Reference station does not have coordinates " + this.toString());
+            throw new IllegalStateException("Reference station does not have coordinates " + this);
         }
 
         double earthRadius = 6371000; //meters
@@ -199,19 +181,19 @@ public class ReferenceStation implements INetworkHandler, IObservable {
 
     @Override
     public void registerObserver(IObserver o) {
+        logger.info(model.getName() + " adds observer: " + o.toString());
         observers.add(o);
     }
 
     @Override
     public void removeObserver(IObserver o) {
+        logger.info(model.getName() + " removes observer: " + o.toString());
         observers.remove(o);
     }
 
     @Override
     public void notifyObservers(ByteBuffer buffer) {
-        observers.forEach(o -> {
-            o.notify(this, buffer);
-        });
+        observers.forEach(o -> o.notify(this, buffer));
     }
 
 }

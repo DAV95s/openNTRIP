@@ -8,7 +8,7 @@ import static com.google.common.base.Preconditions.checkArgument;
 
 public class MSG1026 implements CRS3 {
 
-    private int messageNumber;
+    private final int messageNumber;
     private int SystemIdentificationNumber;
     private int ProjectionType;
     double LaFO; // – Latitude of False Origin
@@ -36,7 +36,7 @@ public class MSG1026 implements CRS3 {
         setNFO(bitUtils.getSignedLong(35) * 0.001);
     }
 
-    public byte[] write() {
+    public byte[] getBytes() {
         BitUtils bitUtils = new BitUtils();
         bitUtils.setBitString("11010011000000"); //preamble + 6 reserved bit
         bitUtils.setInt(30, 10);//todo length message !!!!!!

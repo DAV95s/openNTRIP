@@ -2,7 +2,7 @@
 import org.dav95s.openNTRIP.Tools.Decoders.DecoderRTCM3;
 import org.dav95s.openNTRIP.Tools.RTCMStream.BitUtils;
 import org.dav95s.openNTRIP.Tools.RTCMStream.Message;
-import org.dav95s.openNTRIP.Tools.RTCMStream.MessagePack;
+import org.dav95s.openNTRIP.Tools.RTCMStream.MessagesPack;
 import org.junit.Test;
 
 import java.io.*;
@@ -19,7 +19,7 @@ public class RTCMExtractor {
             ByteBuffer buffer = ByteBuffer.wrap(input.readAllBytes());
 
             DecoderRTCM3 decoder = new DecoderRTCM3();
-            MessagePack pack = decoder.separate(buffer);
+            MessagesPack pack = decoder.separate(buffer);
 
             String new_path = "C:\\Users\\1663646\\Desktop\\1025.rtcm";
             OutputStream out = new FileOutputStream(new_path);

@@ -2,7 +2,6 @@ package org.dav95s.openNTRIP.Network;
 
 import com.github.pbbl.heap.ByteBufferPool;
 import org.dav95s.openNTRIP.Clients.User;
-import org.dav95s.openNTRIP.ServerBootstrap;
 import org.dav95s.openNTRIP.Servers.NtripCaster;
 import org.dav95s.openNTRIP.Servers.ReferenceStation;
 import org.dav95s.openNTRIP.Tools.HttpParser;
@@ -70,11 +69,7 @@ public class ConnectHandler implements INetworkHandler {
             bufferPool.give(buffer);
 
             if (logger.isDebugEnabled()) {
-                JSONObject object = new JSONObject();
-                object.put("from", "ConnectHandler");
-                object.put("socket", socket.toString());
-                object.put("request", request);
-                logger.debug(object.toString());
+                logger.debug(socket.toString() + " new connection. [" + request + "]");
             }
 
             HttpParser httpParser = new HttpParser(request);
@@ -82,14 +77,14 @@ public class ConnectHandler implements INetworkHandler {
             if (httpParser.getParam("GET") != null) {
                 //GET CONNECT
                 User user = new User(this.socket, httpParser, this.caster);
+                logger.debug(socket.toString() + "is new client.");
                 this.caster.clientAuthorization(user);
-
                 this.socket.attach(user);
             } else if (httpParser.getParam("SOURCE") != null) {
                 //SOURCE CONNECT
-                ServerBootstrap root = ServerBootstrap.getInstance();
-                ReferenceStation referenceStation = root.getReferenceStationByName(httpParser.getParam("SOURCE"));
-                referenceStation.referenceStationAuthentication(socket, httpParser);
+                String name = httpParser.getParam("SOURCE");
+                ReferenceStation referenceStation = this.caster.getReferenceStationByName(name);
+                referenceStation.authentication(socket, httpParser);
                 this.socket.attach(referenceStation);
             } else {
                 this.close();

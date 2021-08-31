@@ -23,7 +23,7 @@ public class StreamSaver {
         this.referenceStation = referenceStation;
     }
 
-    public void save(MessagePack messagePack) {
+    public void save(MessagesPack messagePack) {
         if (currentHours == null) {
             currentHours = date.getHours();
 

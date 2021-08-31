@@ -1,10 +1,10 @@
-import org.dav95s.openNTRIP.Databases.Models.MountPointModel;
 import org.dav95s.openNTRIP.Databases.Models.NtripCasterModel;
 import org.dav95s.openNTRIP.Databases.Models.ReferenceStationModel;
 import org.dav95s.openNTRIP.Databases.Models.UserModel;
 import org.junit.Assert;
 import org.junit.Test;
 
+import java.io.IOException;
 import java.sql.SQLException;
 
 public class TestDB {
@@ -57,25 +57,7 @@ public class TestDB {
 
     @Test
     public void mountpoints() throws SQLException {
-        MountPointModel model = new MountPointModel();
-        model.setName("ref");
-        model.setCaster_id(4);
 
-        model.setFormat("123");
-        Assert.assertTrue(model.create().isPresent());
-        model.setFormat("321");
-
-        Assert.assertTrue(model.read());
-        Assert.assertEquals("123", model.getFormat());
-
-        model.setFormat("321");
-        Assert.assertTrue(model.update());
-        model.setFormat("4444");
-        Assert.assertTrue(model.read());
-        Assert.assertEquals("321", model.getFormat());
-
-        Assert.assertTrue(model.delete());
-        Assert.assertFalse(model.read());
     }
 
     @Test
@@ -104,5 +86,10 @@ public class TestDB {
         //delete
         Assert.assertTrue(model.delete());
         Assert.assertFalse(model.read());
+    }
+
+    @Test
+    public void asd() throws IOException {
+
     }
 }

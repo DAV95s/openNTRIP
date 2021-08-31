@@ -5,5 +5,5 @@ package org.dav95s.openNTRIP.Tools.RTCM.Assets;
  */
 public interface CRS2 {
     int getMessageNumber();
-    byte[] write();
+    byte[] getBytes();
 }

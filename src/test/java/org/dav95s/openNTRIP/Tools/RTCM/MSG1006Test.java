@@ -1,7 +1,7 @@
 package org.dav95s.openNTRIP.Tools.RTCM;
 
 import org.dav95s.openNTRIP.Tools.Decoders.DecoderRTCM3;
-import org.dav95s.openNTRIP.Tools.RTCMStream.MessagePack;
+import org.dav95s.openNTRIP.Tools.RTCMStream.MessagesPack;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -10,8 +10,6 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.ByteBuffer;
-
-import static org.junit.Assert.*;
 
 public class MSG1006Test {
     String path = "src/test/resources/RTCM_32";
@@ -27,7 +25,7 @@ public class MSG1006Test {
             input.close();
             DecoderRTCM3 decoder = new DecoderRTCM3();
 
-            MessagePack messages = decoder.separate(byteBuffer);
+            MessagesPack messages = decoder.separate(byteBuffer);
             byte[] bytes = messages.getMessageByNmb(1006).getBytes();
 
 

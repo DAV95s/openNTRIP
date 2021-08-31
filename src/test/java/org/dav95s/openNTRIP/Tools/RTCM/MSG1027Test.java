@@ -4,8 +4,6 @@ import org.dav95s.openNTRIP.Tools.RTCMStream.BitUtils;
 import org.junit.Assert;
 import org.junit.Test;
 
-import java.math.BigDecimal;
-import java.math.RoundingMode;
 import java.util.Arrays;
 
 public class MSG1027Test {
@@ -23,9 +21,9 @@ public class MSG1027Test {
         msg1027.setEPC(68719476.735);
         msg1027.setNPC(17179869.183);
 
-        byte[] result1 = msg1027.write();
+        byte[] result1 = msg1027.getBytes();
         MSG1027 msg10271 = new MSG1027(result1);
-        byte[] result2 = msg10271.write();
+        byte[] result2 = msg10271.getBytes();
 
         System.out.println(Arrays.toString(result1));
         System.out.println(Arrays.toString(result2));

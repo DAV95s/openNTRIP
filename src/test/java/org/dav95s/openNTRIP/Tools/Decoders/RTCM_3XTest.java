@@ -1,6 +1,6 @@
 package org.dav95s.openNTRIP.Tools.Decoders;
 
-import org.dav95s.openNTRIP.Tools.RTCMStream.MessagePack;
+import org.dav95s.openNTRIP.Tools.RTCMStream.MessagesPack;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -21,7 +21,7 @@ public class RTCM_3XTest {
         FileChannel fileChannel = reader.getChannel();
 
         fileChannel.read(buffer);
-        MessagePack messagePack = rtcm3X.separate(buffer);
+        MessagesPack messagePack = rtcm3X.separate(buffer);
         Assert.assertEquals(buffer.flip(), messagePack.getByteBuffer().flip());
         Assert.assertNotNull(messagePack.getMessageByNmb(1004));
         Assert.assertNotNull(messagePack.getMessageByNmb(1005));
@@ -81,7 +81,7 @@ public class RTCM_3XTest {
 
 
 
-        MessagePack messagePack = rtcm3X.separate(buffer);
+        MessagesPack messagePack = rtcm3X.separate(buffer);
         Assert.assertEquals(buffer.flip(), messagePack.getByteBuffer().flip());
         Assert.assertNotNull(messagePack.getMessageByNmb(1004));
         Assert.assertNotNull(messagePack.getMessageByNmb(1005));

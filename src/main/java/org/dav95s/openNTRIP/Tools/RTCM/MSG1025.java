@@ -34,7 +34,7 @@ public class MSG1025 implements CRS3 {
         setFalseNorthing(bitUtils.getSignedLong(35) * 0.001d);
     }
 
-    public byte[] write() {
+    public byte[] getBytes() {
         BitUtils bitUtils = new BitUtils();
         bitUtils.setBitString("11010011000000"); //preamble + 6 reserved bit
         bitUtils.setInt(25, 10);

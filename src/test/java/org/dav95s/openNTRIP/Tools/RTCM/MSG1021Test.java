@@ -3,7 +3,7 @@ package org.dav95s.openNTRIP.Tools.RTCM;
 import org.dav95s.openNTRIP.Tools.Decoders.DecoderRTCM3;
 import org.dav95s.openNTRIP.Tools.RTCMStream.BitUtils;
 import org.dav95s.openNTRIP.Tools.RTCMStream.Message;
-import org.dav95s.openNTRIP.Tools.RTCMStream.MessagePack;
+import org.dav95s.openNTRIP.Tools.RTCMStream.MessagesPack;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -58,7 +58,7 @@ public class MSG1021Test {
             ByteBuffer buffer = ByteBuffer.wrap(input.readAllBytes());
             input.close();
             DecoderRTCM3 decoder = new DecoderRTCM3();
-            MessagePack pack = decoder.separate(buffer);
+            MessagesPack pack = decoder.separate(buffer);
             Message msg = pack.getMessageByNmb(1021);
             MSG1021 msg1021 = new MSG1021(msg.getBytes());
             byte[] bytes = msg1021.getBytes();

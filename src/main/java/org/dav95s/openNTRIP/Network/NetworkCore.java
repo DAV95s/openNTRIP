@@ -20,16 +20,10 @@ public class NetworkCore implements Runnable {
     private Selector selector;
     private Thread thread;
     private boolean isAlive = true;
-    private static NetworkCore instance;
     private final ExecutorService executor = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors());
 
-    public static NetworkCore getInstance() {
-        if (instance == null)
-            instance = new NetworkCore();
-        return instance;
-    }
 
-    private NetworkCore() {
+    public NetworkCore() {
         try {
             this.selector = Selector.open();
             this.thread = new Thread(this);
@@ -58,8 +52,6 @@ public class NetworkCore implements Runnable {
                 if (count < 1)
                     continue;
 
-                logger.debug("New event, selector have " + count + " connections");
-
                 Iterator<SelectionKey> iterator = selector.selectedKeys().iterator();
 
                 while (iterator.hasNext()) {
@@ -77,7 +69,7 @@ public class NetworkCore implements Runnable {
                             handler.readChannel();
                             executor.submit(handler);
                         } catch (IOException e) {
-                            logger.error(e.getMessage());
+                            logger.error("Main loop ", e);
                             handler.close();
                             selectionKey.cancel();
                         }
