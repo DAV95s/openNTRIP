@@ -22,59 +22,142 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="b7aa1f89-fb3e-44e2-a0de-b72c0eae2f41" name="Default Changelist" comment="save stage">
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/dav95s/openNTRIP/Bootstrap.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/dav95s/openNTRIP/Databases/Models/BootstrapModel.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/dav95s/openNTRIP/Tools/Geometry/Point.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/dav95s/openNTRIP/Tools/Geometry/Polygon.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/dav95s/openNTRIP/newImpl/ICaster.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/dav95s/openNTRIP/newImpl/IClient.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/dav95s/openNTRIP/newImpl/IMountPoint.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/dav95s/openNTRIP/newImpl/IServer.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/dav95s/openNTRIP/newImpl/Server.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/test/java/SandBox.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/test/java/org/dav95s/openNTRIP/Servers/MountPointTest.java" afterDir="false" />
+    <list default="true" id="b7aa1f89-fb3e-44e2-a0de-b72c0eae2f41" name="Default Changelist" comment="new Rtcm3Separator">
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/dav95s/openNTRIP/ServerLauncher.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/dav95s/openNTRIP/TransportTypeHolder.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/dav95s/openNTRIP/commons/GlobalStats.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/dav95s/openNTRIP/commons/Message.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/dav95s/openNTRIP/commons/StationRegistry.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/dav95s/openNTRIP/core/BaseServer.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/dav95s/openNTRIP/core/ntrip/handlers/NtripAuthHandler.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/dav95s/openNTRIP/core/ntrip/handlers/NtripServer.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/dav95s/openNTRIP/core/ntrip/handlers/RouterInboundHandler.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/dav95s/openNTRIP/core/referenceStation/ReferenceStation.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/dav95s/openNTRIP/core/referenceStation/ReferenceStationServer.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/dav95s/openNTRIP/core/referenceStation/handlers/ReferenceStationAuthHandler.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/dav95s/openNTRIP/core/referenceStation/handlers/Rtcm3InboundHandler.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/dav95s/openNTRIP/database/models/ServerModel.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/dav95s/openNTRIP/database/models/SourceTableModel.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/dav95s/openNTRIP/database/models/assets/Authenticator.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/dav95s/openNTRIP/exception/ReferenceStationNotFountException.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/dav95s/openNTRIP/exceptions/IllegalRequestException.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/dav95s/openNTRIP/users/User.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/dav95s/openNTRIP/utils/BasicAuthParser.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/dav95s/openNTRIP/utils/Config.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/dav95s/openNTRIP/utils/ParseUtil.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/dav95s/openNTRIP/utils/ServerProperties.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/dav95s/openNTRIP/utils/binaryParse/Crc24q.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/dav95s/openNTRIP/utils/binaryParse/Normalize.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/database.properties" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/test/java/org/dav95s/openNTRIP/core/Rtcm3SeparatorTest.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/test/java/org/dav95s/openNTRIP/protocols/rtcm/MSG1006Test.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/test/java/org/dav95s/openNTRIP/protocols/rtcm/MSG1023Test.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/test/java/org/dav95s/openNTRIP/protocols/rtcm/MSG1025Test.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/test/java/org/dav95s/openNTRIP/utils/BasicAuthParserTest.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/dav95s/openNTRIP/CRSUtils/GridShift/ResidualsGrid.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/dav95s/openNTRIP/CRSUtils/GridShift/ResidualsGrid.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/dav95s/openNTRIP/Clients/User.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/dav95s/openNTRIP/Clients/User.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/dav95s/openNTRIP/Databases/Models/CrsModel.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/dav95s/openNTRIP/Databases/Models/CrsModel.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/dav95s/openNTRIP/Databases/Models/MountPointModel.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/dav95s/openNTRIP/Databases/Models/MountPointModel.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/dav95s/openNTRIP/Databases/Models/NtripCasterModel.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/dav95s/openNTRIP/Databases/Models/NtripCasterModel.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/dav95s/openNTRIP/Databases/Models/ReferenceStationModel.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/dav95s/openNTRIP/Databases/Models/ReferenceStationModel.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/dav95s/openNTRIP/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/dav95s/openNTRIP/Main.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/dav95s/openNTRIP/Network/ConnectHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/dav95s/openNTRIP/Network/ConnectHandler.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/dav95s/openNTRIP/Network/NetworkCore.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/dav95s/openNTRIP/Network/NetworkCore.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/dav95s/openNTRIP/ServerBootstrap.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/dav95s/openNTRIP/Servers/Crs.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/dav95s/openNTRIP/Servers/Crs.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/dav95s/openNTRIP/Servers/MountPoint.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/dav95s/openNTRIP/Servers/MountPoint.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/dav95s/openNTRIP/Servers/NtripCaster.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/dav95s/openNTRIP/Servers/NtripCaster.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/dav95s/openNTRIP/Servers/ReferenceStation.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/dav95s/openNTRIP/Servers/ReferenceStation.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/dav95s/openNTRIP/Tools/Decoders/DecoderRTCM3.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/dav95s/openNTRIP/Tools/Decoders/DecoderRTCM3.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/dav95s/openNTRIP/Tools/Decoders/IDecoder.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/dav95s/openNTRIP/Tools/Decoders/IDecoder.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/dav95s/openNTRIP/Tools/Decoders/RAW.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/dav95s/openNTRIP/Tools/Decoders/RAW.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/dav95s/openNTRIP/Tools/Observer/IObserver.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/dav95s/openNTRIP/Tools/Observer/IObserver.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/dav95s/openNTRIP/Tools/RTCM/Assets/CRS2.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/dav95s/openNTRIP/Tools/RTCM/Assets/CRS2.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/dav95s/openNTRIP/Tools/RTCM/Assets/CRS3.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/dav95s/openNTRIP/Tools/RTCM/Assets/CRS3.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/dav95s/openNTRIP/Tools/RTCM/Assets/Plates.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/dav95s/openNTRIP/Tools/RTCM/Assets/Plates.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/dav95s/openNTRIP/Tools/RTCM/MSG1022.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/dav95s/openNTRIP/Tools/RTCM/MSG1022.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/dav95s/openNTRIP/Tools/RTCM/MSG1023.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/dav95s/openNTRIP/Tools/RTCM/MSG1023.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/dav95s/openNTRIP/Tools/RTCM/MSG1025.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/dav95s/openNTRIP/Tools/RTCM/MSG1025.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/dav95s/openNTRIP/Tools/RTCM/MSG1026.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/dav95s/openNTRIP/Tools/RTCM/MSG1026.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/dav95s/openNTRIP/Tools/RTCM/MSG1027.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/dav95s/openNTRIP/Tools/RTCM/MSG1027.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/dav95s/openNTRIP/Tools/RTCMStream/Analyzer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/dav95s/openNTRIP/Tools/RTCMStream/Analyzer.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/dav95s/openNTRIP/Tools/RTCMStream/MessagePack.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/dav95s/openNTRIP/Tools/RTCMStream/MessagesPack.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/dav95s/openNTRIP/Tools/RTCMStream/StreamSaver.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/dav95s/openNTRIP/Tools/RTCMStream/StreamSaver.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/plates.geojson" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/plates.geojson" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/RTCMExtractor.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/RTCMExtractor.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/TestDB.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/TestDB.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/org/dav95s/openNTRIP/Tools/Decoders/RTCM_3XTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/org/dav95s/openNTRIP/Tools/Decoders/RTCM_3XTest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/org/dav95s/openNTRIP/Tools/RTCM/MSG1006Test.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/org/dav95s/openNTRIP/Tools/RTCM/MSG1006Test.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/org/dav95s/openNTRIP/Tools/RTCM/MSG1021Test.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/org/dav95s/openNTRIP/Tools/RTCM/MSG1021Test.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/org/dav95s/openNTRIP/Tools/RTCM/MSG1023Test.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/org/dav95s/openNTRIP/Tools/RTCM/MSG1023Test.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/org/dav95s/openNTRIP/Tools/RTCM/MSG1025Test.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/org/dav95s/openNTRIP/Tools/RTCM/MSG1025Test.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/org/dav95s/openNTRIP/Tools/RTCM/MSG1026Test.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/org/dav95s/openNTRIP/Tools/RTCM/MSG1026Test.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/org/dav95s/openNTRIP/Tools/RTCM/MSG1027Test.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/org/dav95s/openNTRIP/Tools/RTCM/MSG1027Test.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/dav95s/openNTRIP/Bootstrap.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/dav95s/openNTRIP/CRSUtils/Geoids/GGF.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/dav95s/openNTRIP/crs/geoids/GGF.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/dav95s/openNTRIP/CRSUtils/Geoids/IGeoid.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/dav95s/openNTRIP/crs/geoids/IGeoid.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/dav95s/openNTRIP/CRSUtils/GridShift/GeodeticPoint.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/dav95s/openNTRIP/crs/gridShift/GeodeticPoint.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/dav95s/openNTRIP/CRSUtils/GridShift/GridNode.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/dav95s/openNTRIP/crs/gridShift/GridNode.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/dav95s/openNTRIP/CRSUtils/GridShift/ResidualsGrid.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/dav95s/openNTRIP/crs/gridShift/ResidualsGrid.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/dav95s/openNTRIP/Clients/Authentication/Basic.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/dav95s/openNTRIP/Clients/Authentication/Digest.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/dav95s/openNTRIP/Clients/Authentication/IAuthenticator.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/dav95s/openNTRIP/Clients/Authentication/None.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/dav95s/openNTRIP/Clients/Passwords/BCrypt.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/dav95s/openNTRIP/users/passwords/BCrypt.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/dav95s/openNTRIP/Clients/Passwords/HashAlgorithms.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/dav95s/openNTRIP/users/passwords/HashAlgorithms.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/dav95s/openNTRIP/Clients/Passwords/None.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/dav95s/openNTRIP/users/passwords/None.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/dav95s/openNTRIP/Clients/Passwords/PasswordHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/dav95s/openNTRIP/users/passwords/PasswordHandler.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/dav95s/openNTRIP/Clients/Passwords/SHA256.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/dav95s/openNTRIP/users/passwords/SHA256.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/dav95s/openNTRIP/Clients/User.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/dav95s/openNTRIP/Databases/DataSource.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/dav95s/openNTRIP/database/DataSource.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/dav95s/openNTRIP/Databases/Models/BootstrapModel.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/dav95s/openNTRIP/Databases/Models/CrsModel.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/dav95s/openNTRIP/database/models/CrsModel.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/dav95s/openNTRIP/Databases/Models/GridModel.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/dav95s/openNTRIP/database/models/GridModel.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/dav95s/openNTRIP/Databases/Models/MountPointModel.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/dav95s/openNTRIP/database/models/MountPointModel.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/dav95s/openNTRIP/Databases/Models/NtripCasterModel.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/dav95s/openNTRIP/Databases/Models/ReferenceStationModel.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/dav95s/openNTRIP/database/models/ReferenceStationModel.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/dav95s/openNTRIP/Databases/Models/UserGroupModel.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/dav95s/openNTRIP/database/models/UserGroupModel.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/dav95s/openNTRIP/Databases/Models/UserModel.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/dav95s/openNTRIP/database/models/UserModel.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/dav95s/openNTRIP/Main.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/dav95s/openNTRIP/Network/ConnectHandler.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/dav95s/openNTRIP/Network/INetworkHandler.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/dav95s/openNTRIP/Network/NetworkCore.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/dav95s/openNTRIP/Network/Socket.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/dav95s/openNTRIP/Servers/Crs.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/dav95s/openNTRIP/crs/Crs.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/dav95s/openNTRIP/Servers/MountPoint.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/dav95s/openNTRIP/Servers/NtripCaster.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/dav95s/openNTRIP/Servers/ReferenceStation.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/dav95s/openNTRIP/Tools/Config.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/dav95s/openNTRIP/Tools/Decoders/DecoderRTCM3.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/dav95s/openNTRIP/Tools/Decoders/DecoderType.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/dav95s/openNTRIP/Tools/Decoders/IDecoder.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/dav95s/openNTRIP/Tools/Decoders/RAW.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/dav95s/openNTRIP/Tools/Geometry/AngleTools.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/dav95s/openNTRIP/utils/geometry/AngleTools.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/dav95s/openNTRIP/Tools/Geometry/Point.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/dav95s/openNTRIP/utils/geometry/Point.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/dav95s/openNTRIP/Tools/Geometry/Polygon.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/dav95s/openNTRIP/utils/geometry/Polygon.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/dav95s/openNTRIP/Tools/HttpParser.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/dav95s/openNTRIP/Tools/NMEA.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/dav95s/openNTRIP/protocols/nmea/NMEA.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/dav95s/openNTRIP/Tools/Observer/IObservable.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/dav95s/openNTRIP/Tools/Observer/IObserver.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/dav95s/openNTRIP/Tools/RTCM/Assets/CRS1.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/dav95s/openNTRIP/protocols/rtcm/assets/CRS1.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/dav95s/openNTRIP/Tools/RTCM/Assets/CRS2.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/dav95s/openNTRIP/protocols/rtcm/assets/CRS2.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/dav95s/openNTRIP/Tools/RTCM/Assets/CRS3.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/dav95s/openNTRIP/protocols/rtcm/assets/CRS3.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/dav95s/openNTRIP/Tools/RTCM/Assets/Plates.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/dav95s/openNTRIP/protocols/rtcm/assets/Plates.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/dav95s/openNTRIP/Tools/RTCM/Assets/ProjectionType.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/dav95s/openNTRIP/protocols/rtcm/assets/ProjectionType.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/dav95s/openNTRIP/Tools/RTCM/Assets/TransformationType.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/dav95s/openNTRIP/protocols/rtcm/assets/TransformationType.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/dav95s/openNTRIP/Tools/RTCM/MSG1001.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/dav95s/openNTRIP/protocols/rtcm/messages/MSG1001.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/dav95s/openNTRIP/Tools/RTCM/MSG1002.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/dav95s/openNTRIP/protocols/rtcm/messages/MSG1002.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/dav95s/openNTRIP/Tools/RTCM/MSG1003.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/dav95s/openNTRIP/protocols/rtcm/messages/MSG1003.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/dav95s/openNTRIP/Tools/RTCM/MSG1004.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/dav95s/openNTRIP/protocols/rtcm/messages/MSG1004.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/dav95s/openNTRIP/Tools/RTCM/MSG1006.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/dav95s/openNTRIP/protocols/rtcm/messages/MSG1006.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/dav95s/openNTRIP/Tools/RTCM/MSG1007.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/dav95s/openNTRIP/protocols/rtcm/messages/MSG1007.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/dav95s/openNTRIP/Tools/RTCM/MSG1008.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/dav95s/openNTRIP/protocols/rtcm/messages/MSG1008.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/dav95s/openNTRIP/Tools/RTCM/MSG1012.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/dav95s/openNTRIP/protocols/rtcm/messages/MSG1012.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/dav95s/openNTRIP/Tools/RTCM/MSG1013.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/dav95s/openNTRIP/protocols/rtcm/messages/MSG1013.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/dav95s/openNTRIP/Tools/RTCM/MSG1014.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/dav95s/openNTRIP/protocols/rtcm/messages/MSG1014.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/dav95s/openNTRIP/Tools/RTCM/MSG1017.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/dav95s/openNTRIP/protocols/rtcm/messages/MSG1017.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/dav95s/openNTRIP/Tools/RTCM/MSG1019.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/dav95s/openNTRIP/protocols/rtcm/messages/MSG1019.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/dav95s/openNTRIP/Tools/RTCM/MSG1020.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/dav95s/openNTRIP/protocols/rtcm/messages/MSG1020.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/dav95s/openNTRIP/Tools/RTCM/MSG1021.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/dav95s/openNTRIP/protocols/rtcm/messages/MSG1021.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/dav95s/openNTRIP/Tools/RTCM/MSG1022.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/dav95s/openNTRIP/protocols/rtcm/messages/MSG1022.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/dav95s/openNTRIP/Tools/RTCM/MSG1023.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/dav95s/openNTRIP/protocols/rtcm/messages/MSG1023.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/dav95s/openNTRIP/Tools/RTCM/MSG1025.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/dav95s/openNTRIP/protocols/rtcm/messages/MSG1025.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/dav95s/openNTRIP/Tools/RTCM/MSG1026.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/dav95s/openNTRIP/protocols/rtcm/messages/MSG1026.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/dav95s/openNTRIP/Tools/RTCM/MSG1027.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/dav95s/openNTRIP/protocols/rtcm/messages/MSG1027.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/dav95s/openNTRIP/Tools/RTCMStream/AnalyzeTasks.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/dav95s/openNTRIP/Tools/RTCMStream/Analyzer.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/dav95s/openNTRIP/Tools/RTCMStream/BitUtils.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/dav95s/openNTRIP/utils/binaryParse/BitUtils.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/dav95s/openNTRIP/Tools/RTCMStream/Message.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/dav95s/openNTRIP/Tools/RTCMStream/MessagesPack.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/dav95s/openNTRIP/Tools/RTCMStream/StreamSaver.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/dav95s/openNTRIP/core/Rtcm3Separator.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/dav95s/openNTRIP/protocols/rtcm/Rtcm3Separator.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/dav95s/openNTRIP/newImpl/ICaster.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/dav95s/openNTRIP/newImpl/IClient.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/dav95s/openNTRIP/newImpl/IMountPoint.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/dav95s/openNTRIP/newImpl/IServer.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/dav95s/openNTRIP/newImpl/Server.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/dav95s/openNTRIP/newImpl/SocketAccepter.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/app.properties" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/app.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/RTCMExtractor.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/SandBox.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/SandBox.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/TestDB.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/org/dav95s/openNTRIP/CRSUtils/GridShift/GridShiftTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/org/dav95s/openNTRIP/crs/gridShift/GridShiftTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/org/dav95s/openNTRIP/Clients/Passwords/BCryptTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/org/dav95s/openNTRIP/users/passwords/BCryptTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/org/dav95s/openNTRIP/Clients/Passwords/NoneTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/org/dav95s/openNTRIP/users/passwords/NoneTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/org/dav95s/openNTRIP/Clients/Passwords/SHA256Test.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/org/dav95s/openNTRIP/users/passwords/SHA256Test.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/org/dav95s/openNTRIP/Servers/MountPointTest.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/org/dav95s/openNTRIP/Tools/Decoders/RTCM_3XTest.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/org/dav95s/openNTRIP/Tools/Geoids/GGFTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/org/dav95s/openNTRIP/utils/Geoids/GGFTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/org/dav95s/openNTRIP/Tools/RTCM/MSG1006Test.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/org/dav95s/openNTRIP/Tools/RTCM/MSG1021Test.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/org/dav95s/openNTRIP/protocols/rtcm/MSG1021Test.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/org/dav95s/openNTRIP/Tools/RTCM/MSG1023Test.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/org/dav95s/openNTRIP/Tools/RTCM/MSG1025Test.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/org/dav95s/openNTRIP/Tools/RTCM/MSG1026Test.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/org/dav95s/openNTRIP/protocols/rtcm/MSG1026Test.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/org/dav95s/openNTRIP/Tools/RTCM/MSG1027Test.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/org/dav95s/openNTRIP/protocols/rtcm/MSG1027Test.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/org/dav95s/openNTRIP/Tools/RTCMStream/BitUtilsTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/org/dav95s/openNTRIP/utils/binaryParse/BitUtilsTest.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -88,10 +171,10 @@
     <option name="RECENT_TEMPLATES">
       <list>
         <option value="JUnit3 Test Class" />
-        <option value="Enum" />
-        <option value="JUnit4 Test Class" />
-        <option value="Class" />
         <option value="Interface" />
+        <option value="JUnit4 Test Class" />
+        <option value="Enum" />
+        <option value="Class" />
       </list>
     </option>
   </component>
@@ -142,7 +225,7 @@
     <property name="com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrarySuperClass.JUnit4" value="" />
     <property name="extract.method.default.visibility" value="private" />
     <property name="last_directory_selection" value="$PROJECT_DIR$/src/main/java/org/adv25/ADVNTRIP/Tools" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/../webconsole" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/../JNItest" />
     <property name="project.structure.last.edited" value="Modules" />
     <property name="project.structure.proportion" value="0.15429688" />
     <property name="project.structure.side.proportion" value="0.40578035" />
@@ -153,8 +236,11 @@
   </component>
   <component name="RecentsManager">
     <key name="CreateClassDialog.RecentsKey">
+      <recent name="org.dav95s.openNTRIP.core.ntrip.handlers" />
+      <recent name="org.dav95s.openNTRIP.core.handlers" />
+      <recent name="org.dav95s.openNTRIP.Network" />
+      <recent name="org.dav95s.openNTRIP.Databases.Models" />
       <recent name="org.dav95s.openNTRIP.newImpl" />
-      <recent name="org.adv25.ADVNTRIP.Servers" />
     </key>
     <key name="CopyFile.RECENT_KEYS">
       <recent name="C:\Users\Main\Documents\ADVNTRIP\src\main\java\org\adv25\ADVNTRIP\Network" />
@@ -165,6 +251,7 @@
       <recent name="groovy.util.GroovyTestCase" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\root\Documents\openNTRIP\src\main\java\org\dav95s\openNTRIP\tools\rtcm\messages" />
       <recent name="C:\Users\root\Documents\openNTRIP\src\test\resources\geoids" />
       <recent name="C:\Users\Main\Documents\ADVNTRIP\src\main\resources" />
       <recent name="C:\Users\Main\Documents\ADVNTRIP\src\main\java\org\adv25\ADVNTRIP\Tools" />
@@ -174,22 +261,25 @@
       <recent name="org.dav95s.openNTRIP.newImpl" />
     </key>
     <key name="MoveClassesOrPackagesDialog.RECENTS_KEY">
+      <recent name="org.dav95s.openNTRIP.users" />
+      <recent name="org.dav95s.openNTRIP.utils" />
+      <recent name="org.dav95s.openNTRIP.crs" />
+      <recent name="org.dav95s.openNTRIP.tools.rtcm" />
       <recent name="" />
-      <recent name="org.dav95s.openNTRIP" />
     </key>
     <key name="CreateTestDialog.RecentsKey">
+      <recent name="org.dav95s.openNTRIP.utils" />
+      <recent name="org.dav95s.openNTRIP.core" />
+      <recent name="org.dav95s.openNTRIP.core.handlers" />
       <recent name="org.dav95s.openNTRIP.Servers" />
       <recent name="org.dav95s.openNTRIP.CRSUtils.GridShift" />
-      <recent name="org.dav95s.openNTRIP.Tools.RTCM" />
-      <recent name="org.dav95s.openNTRIP.Tools.RTCMStream" />
-      <recent name="org.dav95s.openNTRIP.Databases.Models" />
     </key>
   </component>
-  <component name="RunManager" selected="JUnit.MountPointTest">
+  <component name="RunManager" selected="JUnit.SandBox.start2">
     <configuration name="Start" type="Application" factoryName="Application">
       <option name="ALTERNATIVE_JRE_PATH" value="11" />
       <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="true" />
-      <option name="MAIN_CLASS_NAME" value="org.dav95s.openNTRIP.Main" />
+      <option name="MAIN_CLASS_NAME" value="org.dav95s.openNTRIP.ServerLauncher" />
       <module name="openNTRIP" />
       <extension name="recording" autostart="false">
         <include_pattern>
@@ -209,56 +299,74 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="MountPointTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+    <configuration name="BasicAuthParserTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="openNTRIP" />
       <extension name="coverage">
         <pattern>
-          <option name="PATTERN" value="org.dav95s.openNTRIP.Servers.*" />
+          <option name="PATTERN" value="org.dav95s.openNTRIP.utils.*" />
           <option name="ENABLED" value="true" />
         </pattern>
       </extension>
-      <option name="PACKAGE_NAME" value="org.dav95s.openNTRIP.Servers" />
-      <option name="MAIN_CLASS_NAME" value="org.dav95s.openNTRIP.Servers.MountPointTest" />
+      <option name="PACKAGE_NAME" value="org.dav95s.openNTRIP.utils" />
+      <option name="MAIN_CLASS_NAME" value="org.dav95s.openNTRIP.utils.BasicAuthParserTest" />
       <option name="TEST_OBJECT" value="class" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="RTCMExtractor.te" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+    <configuration name="BasicAuthParserTest.test1" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="openNTRIP" />
-      <option name="PACKAGE_NAME" value="" />
-      <option name="MAIN_CLASS_NAME" value="RTCMExtractor" />
-      <option name="METHOD_NAME" value="te" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="org.dav95s.openNTRIP.utils.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="org.dav95s.openNTRIP.utils" />
+      <option name="MAIN_CLASS_NAME" value="org.dav95s.openNTRIP.utils.BasicAuthParserTest" />
+      <option name="METHOD_NAME" value="test1" />
       <option name="TEST_OBJECT" value="method" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="SandBox.put" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+    <configuration name="BasicAuthParserTest.test2" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="openNTRIP" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="org.dav95s.openNTRIP.utils.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="org.dav95s.openNTRIP.utils" />
+      <option name="MAIN_CLASS_NAME" value="org.dav95s.openNTRIP.utils.BasicAuthParserTest" />
+      <option name="METHOD_NAME" value="test2" />
+      <option name="TEST_OBJECT" value="method" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="BasicAuthParserTest.test3" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="openNTRIP" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="org.dav95s.openNTRIP.utils.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="org.dav95s.openNTRIP.utils" />
+      <option name="MAIN_CLASS_NAME" value="org.dav95s.openNTRIP.utils.BasicAuthParserTest" />
+      <option name="METHOD_NAME" value="test3" />
+      <option name="TEST_OBJECT" value="method" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="SandBox.start2" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="openNTRIP" />
       <option name="PACKAGE_NAME" value="" />
       <option name="MAIN_CLASS_NAME" value="SandBox" />
-      <option name="METHOD_NAME" value="put" />
-      <option name="TEST_OBJECT" value="method" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
-    <configuration name="SandBox.start" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
-      <module name="openNTRIP" />
-      <option name="PACKAGE_NAME" value="" />
-      <option name="MAIN_CLASS_NAME" value="SandBox" />
-      <option name="METHOD_NAME" value="start" />
-      <option name="TEST_OBJECT" value="method" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
-    <configuration name="TestDB.asd" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
-      <module name="openNTRIP" />
-      <option name="PACKAGE_NAME" value="" />
-      <option name="MAIN_CLASS_NAME" value="TestDB" />
-      <option name="METHOD_NAME" value="asd" />
+      <option name="METHOD_NAME" value="start2" />
       <option name="TEST_OBJECT" value="method" />
       <method v="2">
         <option name="Make" enabled="true" />
@@ -266,19 +374,19 @@
     </configuration>
     <list>
       <item itemvalue="Application.Start" />
-      <item itemvalue="JUnit.RTCMExtractor.te" />
-      <item itemvalue="JUnit.SandBox.put" />
-      <item itemvalue="JUnit.SandBox.start" />
-      <item itemvalue="JUnit.TestDB.asd" />
-      <item itemvalue="JUnit.MountPointTest" />
+      <item itemvalue="JUnit.BasicAuthParserTest.test1" />
+      <item itemvalue="JUnit.BasicAuthParserTest.test2" />
+      <item itemvalue="JUnit.BasicAuthParserTest.test3" />
+      <item itemvalue="JUnit.BasicAuthParserTest" />
+      <item itemvalue="JUnit.SandBox.start2" />
     </list>
     <recent_temporary>
       <list>
-        <item itemvalue="JUnit.MountPointTest" />
-        <item itemvalue="JUnit.SandBox.put" />
-        <item itemvalue="JUnit.TestDB.asd" />
-        <item itemvalue="JUnit.SandBox.start" />
-        <item itemvalue="JUnit.RTCMExtractor.te" />
+        <item itemvalue="JUnit.SandBox.start2" />
+        <item itemvalue="JUnit.BasicAuthParserTest.test1" />
+        <item itemvalue="JUnit.BasicAuthParserTest" />
+        <item itemvalue="JUnit.BasicAuthParserTest.test3" />
+        <item itemvalue="JUnit.BasicAuthParserTest.test2" />
       </list>
     </recent_temporary>
   </component>
@@ -420,7 +528,14 @@
       <option name="project" value="LOCAL" />
       <updated>1627314322022</updated>
     </task>
-    <option name="localTasksCounter" value="19" />
+    <task id="LOCAL-00019" summary="new Rtcm3Separator">
+      <created>1645436205998</created>
+      <option name="number" value="00019" />
+      <option name="presentableId" value="LOCAL-00019" />
+      <option name="project" value="LOCAL" />
+      <updated>1645436205998</updated>
+    </task>
+    <option name="localTasksCounter" value="20" />
     <servers />
   </component>
   <component name="Vcs.Log.History.Properties">
@@ -462,13 +577,24 @@
     <MESSAGE value="rtree" />
     <MESSAGE value="crs development" />
     <MESSAGE value="save stage" />
-    <option name="LAST_COMMIT_MESSAGE" value="save stage" />
+    <MESSAGE value="new Rtcm3Separator" />
+    <option name="LAST_COMMIT_MESSAGE" value="new Rtcm3Separator" />
   </component>
   <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/org/dav95s/openNTRIP/utils/BasicAuthParser.java</url>
+          <line>14</line>
+          <option name="timeStamp" value="2" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
     <pin-to-top-manager>
       <pinned-members>
         <PinnedItemInfo parentTag="org.dav95s.openNTRIP.CRSUtils.GridShift.Node" memberName="distance" />
         <PinnedItemInfo parentTag="java.util.concurrent.ConcurrentHashMap$MapEntry" memberName="value" />
+        <PinnedItemInfo parentTag="org.dav95s.openNTRIP.tools.RTCMStream.MessagesPack" memberName="messagePack" />
         <PinnedItemInfo parentTag="org.dav95s.openNTRIP.CRSUtils.GridShift.GridShift" memberName="grid" />
       </pinned-members>
     </pin-to-top-manager>

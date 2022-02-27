@@ -92,6 +92,13 @@
             <version>20210307</version>
         </dependency>
 
+        <!-- https://mvnrepository.com/artifact/io.netty/netty-all -->
+        <dependency>
+            <groupId>io.netty</groupId>
+            <artifactId>netty-all</artifactId>
+            <version>4.1.69.Final</version>
+        </dependency>
+
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
@@ -105,6 +112,7 @@
             <artifactId>kdtree</artifactId>
             <version>1.0.0</version>
         </dependency>
+
 
     </dependencies>
 </project>
