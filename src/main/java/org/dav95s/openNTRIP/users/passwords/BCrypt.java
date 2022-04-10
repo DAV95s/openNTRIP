@@ -2,9 +2,9 @@ package org.dav95s.openNTRIP.users.passwords;
 
 import static at.favre.lib.crypto.bcrypt.BCrypt.verifyer;
 
-public class BCrypt implements PasswordHandler {
+public class BCrypt {
 
-    @Override
+
     public boolean compare(String DBPassword, String UserPassword) {
         if (DBPassword == null || UserPassword == null) {
             return false;
@@ -27,7 +27,7 @@ public class BCrypt implements PasswordHandler {
         return new String(rawResult);
     }
 
-    @Override
+
     public String hash(String rawPassword) {
         return hash(rawPassword, 12);
     }

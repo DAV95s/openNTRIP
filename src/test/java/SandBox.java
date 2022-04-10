@@ -1,3 +1,5 @@
+import org.dav95s.openNTRIP.database.modelsV2.ReferenceStationModel;
+import org.dav95s.openNTRIP.database.repository.ReferenceStationRepository;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.junit.Test;
@@ -14,8 +16,13 @@ public class SandBox {
             JSONArray polygon = jsonArray.getJSONArray(i);
             System.out.println(polygon.getDouble(0) + " " + polygon.getDouble(1));
         }
-
     }
 
+    @Test
+    public void start2(){
+        ReferenceStationRepository referenceStationRepository = new ReferenceStationRepository();
+        ReferenceStationModel al1 = referenceStationRepository.GetReferenceStationByName("AL2");
+        System.out.println(123);
+    }
 }
 

@@ -12,7 +12,7 @@ import java.util.ArrayList;
 public class SourceTableModel {
     //"SELECT CONCAT('STR', ';', name, ';', identifier, ';', format, ';', format_details, ';', carrier, ';', nav_system, ';', network, ';', country, ';', ROUND(latitude,2), ';', ROUND(longitude,2), ';', nmea, ';', solution, ';', generator, ';', compression, ';', authenticator, ';', fee, ';', bitrate, ';', misc) as `sourcetable` FROM mountpoints WHERE caster_id = ? AND available = ?"
     private ArrayList<String> getTable() {
-        String sql = "SELECT CONCAT_WS(';','STR', name, identifier, format, format_details, carrier, nav_system, network, country, ROUND(latitude,2), ROUND(longitude,2), nmea, solution, generator, compression, authenticator, fee, bitrate, misc) as `sourcetable` FROM mountpoints WHERE caster_id = ? AND available = ?";
+        String sql = "SELECT CONCAT_WS(';','STR', name, identifier, format, format_details, carrier, nav_system, network, country, ROUND(latitude,2), ROUND(longitude,2), nmea, solution, generator, compression, authenticator, fee, bitrate, misc) as `sourcetable` FROM mountpoints WHERE available = ?";
 
         ArrayList<String> response = new ArrayList<>();
 
@@ -20,7 +20,6 @@ public class SourceTableModel {
              PreparedStatement statement = con.prepareStatement(sql)) {
 
             statement.setInt(1, 1);
-            statement.setInt(2, 1);
 
             try (ResultSet rs = statement.executeQuery()) {
                 while (rs.next()) {
@@ -50,5 +49,9 @@ public class SourceTableModel {
         header += "Content-Length: " + bodyString.getBytes(StandardCharsets.ISO_8859_1).length + "\r\n\n";
 
         return header + bodyString;
+    }
+
+    public byte[] getBytesSourcetable() {
+        return getSourcetable().getBytes(StandardCharsets.US_ASCII);
     }
 }

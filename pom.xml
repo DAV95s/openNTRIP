@@ -64,13 +64,6 @@
             <version>3.4.3</version>
         </dependency>
 
-        <!--     ByteBuffer pool   -->
-        <dependency>
-            <groupId>com.github.jhg023</groupId>
-            <artifactId>Pbbl</artifactId>
-            <version>1.0.2</version>
-        </dependency>
-
         <!-- https://mvnrepository.com/artifact/at.favre.lib/bcrypt -->
         <dependency>
             <groupId>at.favre.lib</groupId>
